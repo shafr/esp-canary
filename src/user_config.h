@@ -11,6 +11,10 @@
 
 #define SERVER_HOST_NAME "esp_server"
 
-const int PROBING_FREQUENCY_IN_MS = 3000;
+#define TOMCAT_PORT 80
+
+#define HOST_NAME "ds214"
+
+#define MAC "00:11:32:85:ac:29"
 
 #endif

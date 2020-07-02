@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://localhost:8080/login.jsp -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line"><p><b>Type</b> Exception Report</p><p><b>Message</b> An exception occurred processing [/login.jsp] at line [20]</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>org.apache.jasper.JasperException: An exception occurred processing [/login.jsp] at line [20]
+
+17:     String fname=request.getParameter("fname");
+18:     String lname=request.getParameter("lname");
+19:     String email=request.getParameter("email");
+20:     Class.forName("com.mysql.jdbc.Driver");
+21:     java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pms","root","root");
+22:     Statement st=con.createStatement();
+23:     ResultSet rs;
+
+
+Stacktrace:
+	org.apache.jasper.servlet.JspServletWrapper.handleJspException(JspServletWrapper.java:626)
+	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:500)
+	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:385)
+	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:329)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+</pre><p><b>Root Cause</b></p><pre>javax.servlet.ServletException: java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+	org.apache.jasper.runtime.PageContextImpl.handlePageException(PageContextImpl.java:666)
+	org.apache.jsp.login._jspService(login_jsp.java:165)
+	org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:71)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:477)
+	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:385)
+	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:329)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+</pre><p><b>Root Cause</b></p><pre>java.lang.ClassNotFoundException: com.mysql.jdbc.Driver
+	org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1365)
+	org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1188)
+	org.apache.jasper.servlet.JasperLoader.loadClass(JasperLoader.java:122)
+	org.apache.jasper.servlet.JasperLoader.loadClass(JasperLoader.java:59)
+	java.lang.Class.forName0(Native Method)
+	java.lang.Class.forName(Class.java:264)
+	org.apache.jsp.login_jsp._jspService(login_jsp.java:138)
+	org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:71)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:477)
+	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:385)
+	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:329)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line"><h3>Apache Tomcat/9.0.33</h3></body></html>

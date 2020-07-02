@@ -29,36 +29,56 @@ void ConnectToWifi()
   {
     Serial.println("[ERROR], SPIFFS Initialize was not OK");
   }
-
-  if (!SPIFFS.exists("/index2.html"))
-  {
-    Serial.println("[ERROR], file cannot be found !!!");
-  }
 }
 
-AsyncWebServer server(80);
+AsyncWebServer server(TOMCAT_PORT);
+int loginCount = 0;
 
-void notFound(AsyncWebServerRequest *request)
+void serveTomcat()
 {
-  request->send(404, "text/plain", "Not found");
+  server.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
+
+  server.on("/login", HTTP_GET, [](AsyncWebServerRequest *request) {
+    if (!request->authenticate("tomcat", "tomcat"))
+    {
+      if (loginCount < 2)
+      {
+        loginCount++;
+        return request->requestAuthentication();
+      }
+
+      loginCount=0;
+      request->redirect("/401.html");
+    }
+
+    //TODO - ups, someone is here!
+
+    request->redirect("/500.html");
+  });
+
+  server.on("/examples/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->redirect("/login");
+  });
+
+  server.on("/manager/html", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->redirect("/login");
+  });
+
+  server.on("/manager/status", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->redirect("/login");
+  });
+
+  server.onNotFound([](AsyncWebServerRequest *request) {
+    request->redirect("/404.html");
+  });
+
+  server.begin();
 }
 
 void setup()
 {
   ConnectToWifi();
-
-  server.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
-
-  server
-      .serveStatic("/pass", SPIFFS, "/tomcat_9/")
-      .setDefaultFile("index.html")
-      .setAuthentication("user", "pass");
-
-  server.onNotFound(notFound);
-
-  server.begin();
+  serveTomcat();
 }
 
-void loop()
-{
-}
+void loop() {}
