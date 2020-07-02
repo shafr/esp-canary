@@ -1,9 +1,8 @@
 #include <Arduino.h>
-
 #include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
-
+#include <ESP8266mDNS.h>
 #include <ESPAsyncWebServer.h>
+
 #include "user_config.h"
 
 void ConnectToWifi()
@@ -31,6 +30,19 @@ void ConnectToWifi()
   }
 }
 
+void obfuscateHost(){
+  WiFi.hostname(HOST_NAME);
+
+  Serial.print("[OLD] ESP8266 Board MAC Address:  ");
+  Serial.println(WiFi.macAddress());
+
+  uint8_t newMACAddress[] = {0x00, 0x11, 0x32, 0x85, 0xAC, 0x29};
+  wifi_set_macaddr(STATION_IF, const_cast<uint8*>(newMACAddress));
+  
+  Serial.print("[NEW] ESP8266 Board MAC Address:  ");
+  Serial.println(WiFi.macAddress());
+}
+
 AsyncWebServer server(TOMCAT_PORT);
 int loginCount = 0;
 
@@ -50,8 +62,6 @@ void serveTomcat()
       loginCount=0;
       request->redirect("/401.html");
     }
-
-    //TODO - ups, someone is here!
 
     request->redirect("/500.html");
   });
@@ -78,6 +88,7 @@ void serveTomcat()
 void setup()
 {
   ConnectToWifi();
+  obfuscateHost();
   serveTomcat();
 }
 
