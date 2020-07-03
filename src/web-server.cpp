@@ -2,14 +2,12 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ESPAsyncWebServer.h>
+#include <AsyncMqttClient.h>
 
 #include "user_config.h"
 
 void ConnectToWifi()
 {
-  Serial.begin(115200);
-  Serial.println();
-
   Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
   WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
   while (WiFi.status() != WL_CONNECTED)
@@ -30,13 +28,26 @@ void ConnectToWifi()
   }
 }
 
+void stringToIntArray(const char* str, char sep, uint8_t* macArr, int maxBytes, int base) {
+    for (int i = 0; i < maxBytes; i++) {
+        macArr[i] = strtoul(str, NULL, 16);  
+        str = strchr(str, sep);              
+        if (str == NULL || *str == '\0') {
+            break;                            
+        }
+        str++;                                
+    }
+}
+
 void obfuscateHost(){
   WiFi.hostname(HOST_NAME);
 
   Serial.print("[OLD] ESP8266 Board MAC Address:  ");
   Serial.println(WiFi.macAddress());
 
-  uint8_t newMACAddress[] = {0x00, 0x11, 0x32, 0x85, 0xAC, 0x29};
+  uint8_t newMACAddress[6]; 
+  stringToIntArray(MAC, ':', newMACAddress, 6, 16);
+
   wifi_set_macaddr(STATION_IF, const_cast<uint8*>(newMACAddress));
   
   Serial.print("[NEW] ESP8266 Board MAC Address:  ");
@@ -87,9 +98,15 @@ void serveTomcat()
 
 void setup()
 {
-  ConnectToWifi();
+  Serial.begin(115200);
+  Serial.println();
+
   obfuscateHost();
+  ConnectToWifi();
   serveTomcat();
 }
 
-void loop() {}
+void loop()
+{
+
+}
