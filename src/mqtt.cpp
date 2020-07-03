@@ -23,14 +23,15 @@ void onMqttConnect(bool sessionPresent) {
   Serial.println(packetIdPub2);
 }
 
-void onMqttDisconnect(bool sessionPresent) {
-  Serial.println("Connected from MQTT.");
+
+void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
+  Serial.println("Disconnected from MQTT.");
 }
 
 void configMqttNotifications(){
   Serial.println("Connecting to MQTT");
   mqttClient.onConnect(onMqttConnect);
-//   mqttClient.onDisconnect(onMqttDisconnect);
+  mqttClient.onDisconnect(onMqttDisconnect);
 
   uint8_t mqttHost[4];
   stringToIntArray(MQTT_HOST, '.', mqttHost, 4, 10);
@@ -40,7 +41,13 @@ void configMqttNotifications(){
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
   
   mqttClient.connect();
+}
 
-  mqttClient.publish("/topic", 0, true, "Test");
+void notifyAttackOccured(String attackerIpAddress){
+  mqttClient.publish("/security/attack/inprogress", 0, true, "True");
+  mqttClient.publish("/security/attack/ip", 0, true, attackerIpAddress.c_str());
+}
 
+void resetAttackState(){
+    mqttClient.publish("/security/attack/inprogress", 0, false, "False");
 }
