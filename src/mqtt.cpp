@@ -6,6 +6,16 @@
 
 AsyncMqttClient mqttClient;
 
+void notifyAttackOccured(String attackerIpAddress){
+  mqttClient.publish("/security/attack/inprogress", 2, true, "True");
+  mqttClient.publish("/security/attack/ip", 2, true, attackerIpAddress.c_str());
+}
+
+void resetAttackState(){
+    Serial.println("Resetting attack state");
+    mqttClient.publish("/security/attack/inprogress", 2, false, "False");
+}
+
 void onMqttConnect(bool sessionPresent) {
   Serial.println("Connected to MQTT.");
   Serial.print("Session present: ");
@@ -25,17 +35,6 @@ void setMqttHost(){
   Serial.printf("MQTT Parsed Host: %u.%u.%u.%u", mqttHost[0], mqttHost[1], mqttHost[2], mqttHost[3]);
 
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
-}
-
-
-void notifyAttackOccured(String attackerIpAddress){
-  mqttClient.publish("/security/attack/inprogress", 2, true, "True");
-  mqttClient.publish("/security/attack/ip", 2, true, attackerIpAddress.c_str());
-}
-
-void resetAttackState(){
-    Serial.println("Resetting attack state");
-    mqttClient.publish("/security/attack/inprogress", 2, false, "False");
 }
 
 void configureMQTT(){
