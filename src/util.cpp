@@ -14,6 +14,21 @@ void stringToIntArray(const char* inString, char separator, uint8_t* resArray, i
     }
 }
 
+String IPAddressToString(int ip)
+{
+  char buf[16];
+
+  sprintf(buf, "%d.%d.%d.%d",
+          (ip)&0xFF,
+          (ip >> 8) & 0xFF,
+          (ip >> 16) & 0xFF,
+          (ip >> 24) & 0xFF        
+          );
+
+  return String(buf);
+}
+
+
 void obfuscateHost(){
   WiFi.hostname(HOST_NAME);
 
