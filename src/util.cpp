@@ -3,14 +3,14 @@
 #include <ESP8266WiFi.h>
 #include "user_config.h"
 
-void stringToIntArray(const char* str, char sep, uint8_t* macArr, int maxBytes, int base) {
-    for (int i = 0; i < maxBytes; i++) {
-        macArr[i] = strtoul(str, NULL, 16);  
-        str = strchr(str, sep);              
-        if (str == NULL || *str == '\0') {
+void stringToIntArray(const char* inString, char separator, uint8_t* resArray, int structSize, int base) {
+    for (int i = 0; i < structSize; i++) {
+        resArray[i] = strtoul(inString, NULL, base);  
+        inString = strchr(inString, separator);              
+        if (inString == NULL || *inString == '\0') {
             break;                            
         }
-        str++;                                
+        inString++;                                
     }
 }
 

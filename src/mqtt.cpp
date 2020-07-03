@@ -2,6 +2,7 @@
 #include <AsyncMqttClient.h>
 
 #include "user_config.h"
+#include "util.h"
 
 AsyncMqttClient mqttClient;
 
@@ -26,20 +27,18 @@ void onMqttDisconnect(bool sessionPresent) {
   Serial.println("Connected from MQTT.");
 }
 
-void onMqttDisconnect() {
-  Serial.println("Disconnected from MQTT.");
-}
-
 void configMqttNotifications(){
   Serial.println("Connecting to MQTT");
   mqttClient.onConnect(onMqttConnect);
 //   mqttClient.onDisconnect(onMqttDisconnect);
 
-  // uint8_t* mqttHost = ;
-  // stringToIntArray(MQTT_HOST, '.', mqttHost, 4, 10);
+  uint8_t mqttHost[4];
+  stringToIntArray(MQTT_HOST, '.', mqttHost, 4, 10);
 
-  mqttClient.setServer(IPAddress(192, 168, 137, 1), MQTT_PORT);
+  Serial.printf("MQTT Parsed Host: %u.%u.%u.%u", mqttHost[0], mqttHost[1], mqttHost[2], mqttHost[3]);
 
+  mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
+  
   mqttClient.connect();
 
   mqttClient.publish("/topic", 0, true, "Test");
