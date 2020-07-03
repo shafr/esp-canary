@@ -27,15 +27,6 @@ void setMqttHost(){
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
 }
 
-void configMqttNotifications(){
-  Serial.println("Connecting to MQTT");
-  mqttClient.onConnect(onMqttConnect);
-  mqttClient.onDisconnect(onMqttDisconnect);
-
-  setMqttHost();
-  
-  mqttClient.connect();
-}
 
 void notifyAttackOccured(String attackerIpAddress){
   mqttClient.publish("/security/attack/inprogress", 2, true, "True");
@@ -45,4 +36,14 @@ void notifyAttackOccured(String attackerIpAddress){
 void resetAttackState(){
     Serial.println("Resetting attack state");
     mqttClient.publish("/security/attack/inprogress", 2, false, "False");
+}
+
+void configureMQTT(){
+  Serial.println("Connecting to MQTT");
+  mqttClient.onConnect(onMqttConnect);
+  mqttClient.onDisconnect(onMqttDisconnect);
+
+  setMqttHost();
+  
+  mqttClient.connect();
 }

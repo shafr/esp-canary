@@ -36,7 +36,7 @@ void setup()
   obfuscateHost();
   ConnectToWifi();
   serveTomcat();
-  configMqttNotifications();
+  configureMQTT();
 }
 
 void loop()
