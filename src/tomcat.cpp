@@ -7,10 +7,9 @@
 AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
 
-void redirectToLoginPage(AsyncWebServerRequest *request) {
-  String attackerIp = IPAddressToString(request->client()->getLocalAddress());
-  notifyAttackOccured(attackerIp);
-
+void redirectToLoginPage(AsyncWebServerRequest *request)
+{
+  notifyAttackOccured(request->client()->remoteIP().toString().c_str());
   request->redirect("/login");
 }
 
@@ -28,10 +27,15 @@ void serveTomcat()
       }
 
       loginCount = 0;
-      request->redirect("/401.html");
+
+      AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/401.html", "text/html");
+      response->setCode(401);
+      request->send(response);
     }
 
-    request->redirect("/500.html");
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/500.html", "text/html");
+    response->setCode(500);
+    request->send(response);
   });
 
   tomcatServer.on("/examples/", HTTP_ANY, redirectToLoginPage);
@@ -41,9 +45,12 @@ void serveTomcat()
   tomcatServer.on("/manager/status", HTTP_ANY, redirectToLoginPage);
 
   tomcatServer.onNotFound([](AsyncWebServerRequest *request) {
-    request->redirect("/404.html");
-  });
+    notifyAttackOccured(request->client()->remoteIP().toString().c_str());
 
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/404.html", "text/html");
+    response->setCode(404);
+    request->send(response);
+  });
 
   tomcatServer.begin();
 }
