@@ -2,11 +2,15 @@
 #include <ESPAsyncWebServer.h>
 #include "util.h"
 #include "user_config.h"
+#include "mqtt.h"
 
 AsyncWebServer server(TOMCAT_PORT);
 int loginCount = 0;
 
 void redirectToLoginPage(AsyncWebServerRequest *request) {
+  String attackerIp = IPAddressToString(request->client()->getLocalAddress());
+  notifyAttackOccured(attackerIp);
+
   request->redirect("/login");
 }
 
@@ -15,8 +19,6 @@ void serveTomcat()
   server.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
 
   server.on("/login", HTTP_ANY, [](AsyncWebServerRequest *request) {
-    Serial.println(IPAddressToString(request->client()->getLocalAddress()));
-
     if (!request->authenticate("tomcat", "tomcat"))
     {
       if (loginCount < 2)
