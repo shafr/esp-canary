@@ -4,6 +4,7 @@
 #include "user_config.h"
 #include "util.h"
 #include "tomcat.h"
+#include "ssh.h"
 #include "mqtt.h"
 
 void ConnectToWifi()
@@ -37,6 +38,7 @@ void setup()
   ConnectToWifi();
   serveTomcat();
   configureMQTT();
+  serveSSH();
 }
 
 void loop()

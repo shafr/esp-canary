@@ -7,6 +7,8 @@
 AsyncMqttClient mqttClient;
 
 void notifyAttackOccured(String attackerIpAddress){
+  Serial.println("Attack occured from: " + attackerIpAddress);
+
   mqttClient.publish("/security/attack/inprogress", 2, true, "True");
   mqttClient.publish("/security/attack/ip", 2, true, attackerIpAddress.c_str());
 }
