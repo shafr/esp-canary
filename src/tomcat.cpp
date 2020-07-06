@@ -38,6 +38,16 @@ void serveTomcat()
     request->send(response);
   });
 
+  tomcatServer.on("/", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
+      AsyncWebServerResponse *response = request->beginResponse(200);
+      response->addHeader("Allow", "GET, HEAD, POST, OPTIONS");
+      response->setContentLength(0);
+      //TODO - Every request have Date header in response as well!
+      //response->addHeader("Date", "Fri, 03 Jul 2020 15:11:47 GMT");
+
+      request->send(response);
+  });
+
   tomcatServer.on("/examples/", HTTP_ANY, redirectToLoginPage);
 
   tomcatServer.on("/manager/html", HTTP_ANY, redirectToLoginPage);
