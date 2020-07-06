@@ -5,7 +5,8 @@
 #include "mqtt.h"
 
 static void handleNewClient(void* arg, AsyncClient* client) {
-	Serial.printf("\n new client has been connected to server, ip: %s", client->remoteIP().toString().c_str());
+  String attackerIp = client->remoteIP().toString().c_str();
+  notifyAttackOccured(attackerIp);
 
   String reply = "SSH-2.0-OpenSSH_7.4p1 Debian-10+deb9u7";
 
