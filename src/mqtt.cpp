@@ -9,13 +9,13 @@ AsyncMqttClient mqttClient;
 void notifyAttackOccured(String attackerIpAddress){
   Serial.println("Attack occured from: " + attackerIpAddress);
 
-  mqttClient.publish("/security/attack/inprogress", 2, true, "True");
-  mqttClient.publish("/security/attack/ip", 2, true, attackerIpAddress.c_str());
+  mqttClient.publish("/security/honeypot/attackinprogress", 2, true, "True");
+  mqttClient.publish("/security/honeypot/attackerip", 2, true, attackerIpAddress.c_str());
 }
 
 void resetAttackState(){
     Serial.println("Resetting attack state");
-    mqttClient.publish("/security/attack/inprogress", 2, false, "False");
+    mqttClient.publish("/security/honeypot/attackinprogress", 2, false, "False");
 }
 
 void onMqttConnect(bool sessionPresent) {
@@ -37,6 +37,9 @@ void setMqttHost(){
   Serial.printf("MQTT Parsed Host: %u.%u.%u.%u", mqttHost[0], mqttHost[1], mqttHost[2], mqttHost[3]);
 
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
+  mqttClient.setWill("/security/honeypot/will", 2, false);
+  mqttClient.setClientId("Honeypot");
+  mqttClient.setCredentials("honeypot", "NDCU74EJoh2N69GRhMfc");
 }
 
 void configureMQTT(){
