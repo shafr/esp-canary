@@ -3,6 +3,7 @@
 #include "util.h"
 #include "user_config.h"
 #include "mqtt.h"
+#include "ntp.h"
 
 AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
@@ -42,8 +43,7 @@ void serveTomcat()
       AsyncWebServerResponse *response = request->beginResponse(200);
       response->addHeader("Allow", "GET, HEAD, POST, OPTIONS");
       response->setContentLength(0);
-      //TODO - Every request have Date header in response as well!
-      //response->addHeader("Date", "Fri, 03 Jul 2020 15:11:47 GMT");
+      response->addHeader("Date", getFmtDate());
 
       request->send(response);
   });

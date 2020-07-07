@@ -6,7 +6,7 @@
 #include "tomcat.h"
 #include "ssh.h"
 #include "mqtt.h"
-#include "ntpclient.h"
+#include "ntp.h"
 #include "ota.h"
 #include <ArduinoOTA.h>
 
@@ -42,12 +42,12 @@ void setup()
   ConnectToWifi();
 
   configureOTA();
+  configureMQTT();
+  syncNtpTime();
 
   serveTomcat();
-  configureMQTT();
   serveSSH();
 
-  syncNtpTime();
 }
 
 void loop()

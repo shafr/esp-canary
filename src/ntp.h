@@ -3,5 +3,6 @@
 #define _TIME_CLIENT_H_
 
 void syncNtpTime();
+String getFmtDate();
 
 #endif
