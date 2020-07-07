@@ -6,6 +6,9 @@
 #include "tomcat.h"
 #include "ssh.h"
 #include "mqtt.h"
+#include "TimeClient.h"
+#include "ota.h"
+#include <ArduinoOTA.h>
 
 void ConnectToWifi()
 {
@@ -29,6 +32,7 @@ void ConnectToWifi()
   }
 }
 
+
 void setup()
 {
   Serial.begin(115200);
@@ -36,12 +40,17 @@ void setup()
 
   obfuscateHost();
   ConnectToWifi();
+
+  configureOTA();
+
   serveTomcat();
   configureMQTT();
   serveSSH();
+
+  syncNtpTime();
 }
 
 void loop()
 {
-
+  ArduinoOTA.handle();
 }
