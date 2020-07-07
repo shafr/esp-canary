@@ -18,6 +18,9 @@
 #define MAC "00:11:32:85:ac:29"
 
 #define MQTT_HOST "192.168.1.1"
+#define MQTT_TOPIC "/security/honeypot"
 #define MQTT_PORT 1883
+
+#define NTP_TIME_OFFSET 7200
 
 #endif
