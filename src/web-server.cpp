@@ -6,7 +6,7 @@
 #include "tomcat.h"
 #include "ssh.h"
 #include "mqtt.h"
-#include "TimeClient.h"
+#include "ntpclient.h"
 #include "ota.h"
 #include <ArduinoOTA.h>
 
