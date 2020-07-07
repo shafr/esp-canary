@@ -5,5 +5,6 @@
 void configureMQTT();
 void notifyAttackOccured(String attackerIpAddress);
 void resetAttackState();
+void notifyMqtt(String message);
 
 #endif

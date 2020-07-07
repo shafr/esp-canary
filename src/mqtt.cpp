@@ -6,6 +6,12 @@
 
 AsyncMqttClient mqttClient;
 
+void notifyMqtt(String message){
+  mqttClient.publish("/security/honeypot/info", 2, true, message.c_str());
+} 
+
+//TODO - subscribe to reset / configure commands in topic ?
+
 void notifyAttackOccured(String attackerIpAddress){
   Serial.println("Attack occured from: " + attackerIpAddress);
 
