@@ -8,18 +8,9 @@
 AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
 
-void redirectToLoginPage(AsyncWebServerRequest *request)
+void handleAuth(AsyncWebServerRequest *request)
 {
-  notifyAttackOccured(request->client()->remoteIP().toString().c_str());
-  request->redirect("/login");
-}
-
-void serveTomcat()
-{
-  tomcatServer.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
-
-  tomcatServer.on("/login", HTTP_ANY, [](AsyncWebServerRequest *request) {
-    if (!request->authenticate("tomcat", "tomcat"))
+  if (!request->authenticate("tomcat", "tomcat"))
     {
       if (loginCount < 2)
       {
@@ -32,27 +23,52 @@ void serveTomcat()
       AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/401.html", "text/html");
       response->setCode(401);
       request->send(response);
+      return;
     }
 
     AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/500.html", "text/html");
     response->setCode(500);
     request->send(response);
-  });
+}
 
-  tomcatServer.on("/", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
-      AsyncWebServerResponse *response = request->beginResponse(200);
-      response->addHeader("Allow", "GET, HEAD, POST, OPTIONS");
-      response->setContentLength(0);
-      response->addHeader("Date", getFmtDate());
+void redirectToLoginPage(AsyncWebServerRequest *request)
+{
+  notifyAttackOccured(request->client()->remoteIP().toString().c_str());
+  request->redirect("/");
 
+  // AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/index.html", "text/html");
+  // response->setCode(302);
+  // request->send(response);
+  
+}
+
+void serveTomcat()
+{
+  tomcatServer.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
+
+  tomcatServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+      AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/index.html", "text/html");
+      response->setCode(200);
       request->send(response);
   });
 
-  tomcatServer.on("/examples/", HTTP_ANY, redirectToLoginPage);
+  tomcatServer.on("/", HTTP_POST, handleAuth);
 
-  tomcatServer.on("/manager/html", HTTP_ANY, redirectToLoginPage);
+  tomcatServer.on("/", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
+    AsyncWebServerResponse *response = request->beginResponse(200);
+    response->addHeader("Allow", "GET, HEAD, POST, OPTIONS");
+    response->setContentLength(0);
+    
+    response->addHeader("Date", getFmtDate());
 
-  tomcatServer.on("/manager/status", HTTP_ANY, redirectToLoginPage);
+    request->send(response);
+  });
+
+  tomcatServer.on("/examples/", HTTP_ANY, handleAuth);
+
+  tomcatServer.on("/manager/html", HTTP_ANY, handleAuth);
+
+  tomcatServer.on("/manager/status", HTTP_ANY, handleAuth);
 
   tomcatServer.onNotFound([](AsyncWebServerRequest *request) {
     notifyAttackOccured(request->client()->remoteIP().toString().c_str());
