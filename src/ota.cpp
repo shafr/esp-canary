@@ -20,7 +20,15 @@ void configureOTA()
   });
 
   ArduinoOTA.setHostname(HOST_NAME);
-  // ArduinoOTA.setPassword();
+  
+  #ifdef OTA_PORT
+    ArduinoOTA.setPort(OTA_PORT);
+  #endif
+  
+  // #ifdef OTA_PASS 
+  //   ArduinoOTA.setPassword(OTA_PASS);
+  // #endif
+  
   ArduinoOTA.setRebootOnSuccess(true);
   ArduinoOTA.begin();
 }

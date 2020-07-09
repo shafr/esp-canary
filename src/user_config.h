@@ -23,4 +23,7 @@
 
 #define NTP_TIME_OFFSET 7200
 
+#define OTA_PORT 56056
+// #define OTA_PASS "H0We8Adu0SYGFUNTt25C7yuJ"
+
 #endif
