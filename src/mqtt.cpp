@@ -25,22 +25,22 @@ void resetAttackState(){
 }
 
 void onMqttConnect(bool sessionPresent) {
-  Serial.println("Connected to MQTT.");
-  Serial.print("Session present: ");
+  Serial.println("[INFO]: Connected to MQTT.");
+  Serial.print("[INFO]: Session present: ");
   Serial.println(sessionPresent);
   
   resetAttackState();
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-  Serial.println("Disconnected from MQTT.");
+  Serial.println("[DEBUG]: Disconnected from MQTT.");
 }
 
 void setMqttHost(){
   uint8_t mqttHost[4];
   stringToIntArray(MQTT_HOST, '.', mqttHost, 4, 10);
 
-  Serial.printf("MQTT Parsed Host: %u.%u.%u.%u", mqttHost[0], mqttHost[1], mqttHost[2], mqttHost[3]);
+  Serial.printf("[INFO]: MQTT Parsed Host: %u.%u.%u.%u", mqttHost[0], mqttHost[1], mqttHost[2], mqttHost[3]);
 
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
   mqttClient.setWill("/security/honeypot/will", 2, false);
@@ -49,11 +49,12 @@ void setMqttHost(){
 }
 
 void configureMQTT(){
-  Serial.println("Connecting to MQTT");
+  Serial.println("[INFO] Configuring MQTT Mmodule");
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);
 
   setMqttHost();
   
   mqttClient.connect();
+  Serial.println("[INFO] Mqtt module config complete");
 }

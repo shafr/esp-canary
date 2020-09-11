@@ -5,6 +5,10 @@
 #include "mqtt.h"
 #include "ntp.h"
 
+#ifdef ESP32
+  #include "SPIFFS.h"
+#endif
+
 AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
 
@@ -35,11 +39,6 @@ void redirectToLoginPage(AsyncWebServerRequest *request)
 {
   notifyAttackOccured(request->client()->remoteIP().toString().c_str());
   request->redirect("/");
-
-  // AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/index.html", "text/html");
-  // response->setCode(302);
-  // request->send(response);
-  
 }
 
 void serveTomcat()

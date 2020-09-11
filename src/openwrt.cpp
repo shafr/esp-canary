@@ -4,27 +4,28 @@
 #include "user_config.h"
 #include "mqtt.h"
 
+#ifdef ESP32
+    #include "SPIFFS.h"
+#endif
+
 #define OPENWRT_PORT 81
 
 AsyncWebServer openwrtServer(OPENWRT_PORT);
 
+//TODO headers
+
 void serveOpenWrt()
 {
-    //TODO headers
     openwrtServer.on("/luci", HTTP_GET, [](AsyncWebServerRequest *request) {
-        request->send(SPIFFS, "/openwrt/luci");
+        request->send(SPIFFS, "/openwrt/cgi_bin/luci");
     });
 
-
     openwrtServer.on("/luci", HTTP_POST, [](AsyncWebServerRequest *request) {
-        String attackerIp = IPAddressToString(request->client()->getRemoteAddress());
-        notifyAttackOccured(attackerIp);
+        notifyAttackOccured(request->client()->remoteIP().toString().c_str());
 
-        //return HTTP403 forbidden
-
-
-        request->redirect("/500.html");
-
+      AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/openwrt/cgi_bin/luci", "text/html");
+      response->setCode(403);
+      request->send(response);
     });
 
     openwrtServer.onNotFound([](AsyncWebServerRequest *request) {

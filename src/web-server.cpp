@@ -1,5 +1,13 @@
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+
+#ifdef ESP32
+  #include <WiFi.h>
+  #include "SPIFFS.h"
+#endif
+
+#ifdef ESP8266
+  #include <ESP8266WiFi.h>
+#endif
 
 #include "user_config.h"
 #include "util.h"

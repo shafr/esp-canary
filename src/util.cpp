@@ -1,7 +1,16 @@
 #include "Arduino.h"
-#include <ESP8266mDNS.h>
-#include <ESP8266WiFi.h>
 #include "user_config.h"
+
+#ifdef ESP32
+  #include <WiFi.h>
+  #include <esp_wifi.h>
+  #include <ESPmDNS.h>
+#endif
+
+#ifdef ESP8266
+  #include <ESP8266WiFi.h>
+  #include <ESP8266mDNS.h>
+#endif
 
 void stringToIntArray(const char* inString, char separator, uint8_t* resArray, int structSize, int base) {
     for (int i = 0; i < structSize; i++) {
@@ -30,7 +39,13 @@ String IPAddressToString(int ip)
 
 
 void obfuscateHost(){
-  WiFi.hostname(HOST_NAME);
+  #ifdef ESP8266
+      WiFi.hostname(HOST_NAME);
+  #endif
+
+  #ifdef ESP32
+    WiFi.setHostname(HOST_NAME);
+  #endif
 
   Serial.print("[OLD] ESP8266 Board MAC Address:  ");
   Serial.println(WiFi.macAddress());
@@ -38,8 +53,14 @@ void obfuscateHost(){
   uint8_t newMACAddress[6]; 
   stringToIntArray(MAC, ':', newMACAddress, 6, 16);
 
-  wifi_set_macaddr(STATION_IF, const_cast<uint8*>(newMACAddress));
+  #ifdef ESP8266
+      wifi_set_macaddr(STATION_IF, const_cast<uint8*>(newMACAddress));
+  #endif
   
+  #ifdef ESP32
+      esp_wifi_set_mac(ESP_IF_WIFI_STA, &newMACAddress[0]);
+  #endif
+
   Serial.print("[NEW] ESP8266 Board MAC Address:  ");
   Serial.println(WiFi.macAddress());
 }

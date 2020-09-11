@@ -1,5 +1,13 @@
 #include <Arduino.h>
-#include <ESPAsyncTCP.h>
+
+#ifdef ESP32
+  #include <AsyncTCP.h>
+#endif
+
+#ifdef ESP8266
+  #include <ESPAsyncTCP.h>
+#endif
+
 #include "util.h"
 #include "user_config.h"
 #include "mqtt.h"
