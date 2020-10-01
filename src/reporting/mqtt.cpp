@@ -2,24 +2,24 @@
 #include <AsyncMqttClient.h>
 
 #include "user_config.h"
-#include "util.h"
+#include "../system/util.h"
 
 AsyncMqttClient mqttClient;
 
-void notifyMqtt(String message){
+void mqttNotify(String message){
   mqttClient.publish("/security/honeypot/info", 2, true, message.c_str());
 } 
 
 //TODO - subscribe to reset / configure commands in topic ?
 
-void notifyAttackOccured(String attackerIpAddress){
+void mqttNotifyAttackOccurred(String attackerIpAddress){
   Serial.println("Attack occured from: " + attackerIpAddress);
 
   mqttClient.publish("/security/honeypot/attackinprogress", 2, true, "True");
   mqttClient.publish("/security/honeypot/attackerip", 2, true, attackerIpAddress.c_str());
 }
 
-void resetAttackState(){
+void mqttResetAttackState(){
     Serial.println("Resetting attack state");
     mqttClient.publish("/security/honeypot/attackinprogress", 2, false, "False");
 }
@@ -29,7 +29,7 @@ void onMqttConnect(bool sessionPresent) {
   Serial.print("[INFO]: Session present: ");
   Serial.println(sessionPresent);
   
-  resetAttackState();
+  mqttResetAttackState();
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
@@ -44,11 +44,11 @@ void setMqttHost(){
 
   mqttClient.setServer(IPAddress(mqttHost), MQTT_PORT);
   mqttClient.setWill("/security/honeypot/will", 2, false);
-  mqttClient.setClientId("Honeypot");
-  mqttClient.setCredentials("honeypot", "NDCU74EJoh2N69GRhMfc");
+  mqttClient.setClientId(MQTT_CLIENT_ID);
+  mqttClient.setCredentials(MQTT_USER, MQTT_PASSWORD);
 }
 
-void configureMQTT(){
+void mqttInit(){
   Serial.println("[INFO] Configuring MQTT Mmodule");
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);

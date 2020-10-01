@@ -1,19 +1,19 @@
 #include <ArduinoOTA.h>
-#include "mqtt.h"
+#include "reporting/reporting.h"
 #include "user_config.h"
 
 void configureOTA()
 {
   ArduinoOTA.onStart([]() {
-    notifyMqtt("[INFO]: Upgrade start");
+    notify("[INFO]: Upgrade start");
   });
 
   ArduinoOTA.onEnd([]() {
-    notifyMqtt("[INFO]: Upgrade finish");
+    notify("[INFO]: Upgrade finish");
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    notifyMqtt("[ERROR]: Error during OTA Upgrade!: "); //TODO - send error
+    notify("[ERROR]: Error during OTA Upgrade!: "); //TODO - send error
     Serial.println(error);
 
     ESP.restart();

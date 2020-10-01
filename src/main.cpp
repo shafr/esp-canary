@@ -10,12 +10,11 @@
 #endif
 
 #include "user_config.h"
-#include "util.h"
-#include "tomcat.h"
-#include "ssh.h"
-#include "mqtt.h"
-#include "ntp.h"
-#include "ota.h"
+#include "system/util.h"
+#include "simulation/tomcat.h"
+#include "reporting/reporting.h"
+#include "system/ntp.h"
+#include "system/ota.h"
 #include <ArduinoOTA.h>
 
 void ConnectToWifi()
@@ -50,12 +49,14 @@ void setup()
   ConnectToWifi();
 
   configureOTA();
-  configureMQTT();
-  syncNtpTime();
 
-  serveTomcat();
-  serveSSH();
+  initReporting();
 
+  // syncNtpTime();
+
+  #ifdef TOMCAT_PORT
+    serveTomcat();
+  #endif
 }
 
 void loop()

@@ -1,9 +1,8 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
-#include "util.h"
 #include "user_config.h"
-#include "mqtt.h"
-#include "ntp.h"
+#include "reporting/reporting.h"
+#include "system/ntp.h"
 
 #ifdef ESP32
   #include "SPIFFS.h"
@@ -37,21 +36,28 @@ void handleAuth(AsyncWebServerRequest *request)
 
 void redirectToLoginPage(AsyncWebServerRequest *request)
 {
-  notifyAttackOccured(request->client()->remoteIP().toString().c_str());
+  notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
   request->redirect("/");
 }
 
 void serveTomcat()
 {
+  //TODO - check what is their default .setCacheControl("max-age=31536000");
   tomcatServer.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
+
+  tomcatServer.on("/", HTTP_POST, handleAuth);
+
+  tomcatServer.on("/examples/", HTTP_ANY, handleAuth);
+
+  tomcatServer.on("/manager/html", HTTP_ANY, handleAuth);
+
+  tomcatServer.on("/manager/status", HTTP_ANY, handleAuth);
 
   tomcatServer.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
       AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/index.html", "text/html");
       response->setCode(200);
       request->send(response);
   });
-
-  tomcatServer.on("/", HTTP_POST, handleAuth);
 
   tomcatServer.on("/", HTTP_OPTIONS, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response = request->beginResponse(200);
@@ -63,14 +69,8 @@ void serveTomcat()
     request->send(response);
   });
 
-  tomcatServer.on("/examples/", HTTP_ANY, handleAuth);
-
-  tomcatServer.on("/manager/html", HTTP_ANY, handleAuth);
-
-  tomcatServer.on("/manager/status", HTTP_ANY, handleAuth);
-
   tomcatServer.onNotFound([](AsyncWebServerRequest *request) {
-    notifyAttackOccured(request->client()->remoteIP().toString().c_str());
+    notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
 
     AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/tomcat_9/404.html", "text/html");
     response->setCode(404);
