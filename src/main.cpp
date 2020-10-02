@@ -11,7 +11,15 @@
 
 #include "user_config.h"
 #include "system/util.h"
-#include "simulation/tomcat.h"
+
+#if TOMCAT_ENABLED
+  #include "simulation/tomcat.h"
+#endif
+
+#if OPENWRT_ENABLED
+  #include "simulation/openwrt.h"
+#endif
+
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
@@ -19,13 +27,19 @@
 
 void ConnectToWifi()
 {
-  Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
-  WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
+  #if WIFI_CLIENT 
+    Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
+    WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(500);
+      Serial.print(".");
+    }
+  #else
+    WiFi.mode(WIFI_AP);
+    WiFi.softAP(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
+    // IPAddress myIP = WiFi.softAPIP();
+  #endif
 
   Serial.println("");
   Serial.println("Connected!");
@@ -54,8 +68,12 @@ void setup()
 
   // syncNtpTime();
 
-  #ifdef TOMCAT_PORT
+  #if TOMCAT_ENABLED
     serveTomcat();
+  #endif
+
+  #if OPENWRT_ENABLED
+    serveOpenWRT();
   #endif
 }
 

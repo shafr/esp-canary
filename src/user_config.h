@@ -1,8 +1,11 @@
 #ifndef user_config_h
 #define user_config_h
 
+// Connect to existing WiFi (true) or Create Access Point (false)
+#define WIFI_CLIENT false
+
 #ifndef WIFI_SERVER_AP_NAME
-  #define WIFI_SERVER_AP_NAME "WFT"
+  #define WIFI_SERVER_AP_NAME "WFT2"
 #endif
 
 #ifndef WIFI_SERVER_AP_PASSWORD
@@ -11,7 +14,11 @@
 
 #define SERVER_HOST_NAME "esp_server"
 
+#define TOMCAT_ENABLED false
 #define TOMCAT_PORT 80
+
+#define OPENWRT_ENABLED true
+#define OPENWRT_PORT 81
 
 #define HOST_NAME "ds214"
 
@@ -25,7 +32,7 @@
 
 
 //============ REPORTING SECTION ================ //
-#define MQTT_ENABLED true
+#define MQTT_ENABLED false
 #define MQTT_HOST "192.168.1.1"
 #define MQTT_TOPIC "/security/honeypot"
 #define MQTT_PORT 1883
