@@ -33,6 +33,6 @@ void configureOTA()
   ArduinoOTA.begin();
 }
 
-void LoopOta(){
+void LoopOTA(){
   ArduinoOTA.handle();
 }

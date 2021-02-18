@@ -6,5 +6,6 @@ void notifyAttackOccurred(String attackerIpAddress);
 void notify(String message);
 void resetAttackState();
 void initReporting();
+void notifyLoop();
 
 #endif

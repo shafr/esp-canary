@@ -61,5 +61,6 @@ void setup()
 
 void loop()
 {
-  LoopOTA();  
+  LoopOTA();
+  notifyLoop();
 }
