@@ -1,5 +1,8 @@
 name: ESP Build
 
+on:
+  push:
+
 jobs:
   test_builds:
 
