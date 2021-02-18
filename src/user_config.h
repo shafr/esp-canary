@@ -2,7 +2,7 @@
 #define user_config_h
 
 #ifndef WIFI_SERVER_AP_NAME
-  #define WIFI_SERVER_AP_NAME "WZA23B"
+  #define WIFI_SERVER_AP_NAME "WFT"
 #endif
 
 #ifndef WIFI_SERVER_AP_PASSWORD
