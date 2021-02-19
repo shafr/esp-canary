@@ -1,7 +1,11 @@
 #include <Arduino.h>
 #include "user_config.h"
 #include <SD.h>
+
+#ifdef ESP8266
 #include <Ethernet.h>
+#endif
+
 #include <ESP_Mail_Client.h>
 
 SMTPSession smtp;
