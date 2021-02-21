@@ -13,14 +13,11 @@ void mqttNotify(String message){
 //TODO - subscribe to reset / configure commands in topic ?
 
 void mqttNotifyAttackOccurred(String attackerIpAddress){
-  Serial.println("Attack occured from: " + attackerIpAddress);
-
   mqttClient.publish("/security/honeypot/attackinprogress", 2, true, "True");
   mqttClient.publish("/security/honeypot/attackerip", 2, true, attackerIpAddress.c_str());
 }
 
 void mqttResetAttackState(){
-    Serial.println("Resetting attack state");
     mqttClient.publish("/security/honeypot/attackinprogress", 2, false, "False");
 }
 

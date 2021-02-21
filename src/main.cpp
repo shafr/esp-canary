@@ -15,7 +15,6 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
-#include <ArduinoOTA.h>
 
 void ConnectToWifi()
 {
@@ -57,9 +56,11 @@ void setup()
   #ifdef TOMCAT_PORT
     serveTomcat();
   #endif
+
 }
 
 void loop()
 {
-  ArduinoOTA.handle();
+  LoopOTA();
+  notifyLoop();
 }

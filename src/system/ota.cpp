@@ -32,3 +32,7 @@ void configureOTA()
   ArduinoOTA.setRebootOnSuccess(true);
   ArduinoOTA.begin();
 }
+
+void LoopOTA(){
+  ArduinoOTA.handle();
+}

@@ -15,7 +15,7 @@
 
 #define HOST_NAME "ds214"
 
-#define MAC "00:11:32:85:ac:29"
+#define MAC "00:11:32:85:ac:16"
 
 #define NTP_TIME_OFFSET 7200
 
@@ -25,12 +25,21 @@
 
 
 //============ REPORTING SECTION ================ //
-#define MQTT_ENABLED true
+#define MQTT_ENABLED false
 #define MQTT_HOST "192.168.1.1"
 #define MQTT_TOPIC "/security/honeypot"
 #define MQTT_PORT 1883
 #define MQTT_CLIENT_ID "Honeypot"
 #define MQTT_USER "Honeypot"
 #define MQTT_PASSWORD "NDCU74EJoh2N69GRhMfc"
+
+
+// =========== EMAIL ===========================
+#define EMAIL_ENABLED false
+#define SMTP_HOST "smtp.google.com"
+#define SMTP_PORT 465 
+#define AUTHOR_EMAIL "sender@gmail.com"
+#define AUTHOR_PASSWORD "sender_password"
+#define EMAIL_TARGET_RECEPIENT "recepient@gmail.com"
 
 #endif
