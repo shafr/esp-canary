@@ -32,19 +32,7 @@ void EmailNotifier::smtpCallback(SMTP_Status status)
   }
 }
 
-void EmailNotifier::Init(){
-  smtp.debug(1);
-
-  // smtp.callback(smtpCallback);
-
-  session.server.host_name = SMTP_HOST;
-  session.server.port = SMTP_PORT;
-  session.login.email = AUTHOR_EMAIL;
-  session.login.password = AUTHOR_PASSWORD;
-  // session.login.user_domain = "mydomain.net";
-}
-
-void EmailNotifier::sendMail(const char* subject, const char* mailBody)
+void sendMail(const char* subject, const char* mailBody)
 {
   SMTP_Message message;
 
@@ -92,4 +80,27 @@ void EmailNotifier::sendMail(const char* subject, const char* mailBody)
   /* Start sending Email and close the session */
   if (!MailClient.sendMail(&smtp, &message))
     Serial.println("Error sending Email, " + smtp.errorReason());
+}
+
+
+void EmailNotifier::Init(){
+  smtp.debug(1);
+
+  // smtp.callback(smtpCallback);
+
+  session.server.host_name = SMTP_HOST;
+  session.server.port = SMTP_PORT;
+  session.login.email = AUTHOR_EMAIL;
+  session.login.password = AUTHOR_PASSWORD;
+  // session.login.user_domain = "mydomain.net";
+}
+
+void EmailNotifier::Notify(String message){
+  sendMail(String("Notification").c_str(), message.c_str());
+}
+void EmailNotifier::NotifyAttackOccurred(String attackerIpAddress){
+  sendMail(String("Attack had occurred!").c_str(), attackerIpAddress.c_str());
+}
+void EmailNotifier::ResetAttackState(){
+  sendMail(String("Resetting attack state").c_str(), String("Resetting attack state").c_str());
 }

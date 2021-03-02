@@ -20,8 +20,10 @@ private:
 
     void smtpCallback(SMTP_Status status);
 public:
-    void sendMail(const char *subject, const char *mailBody);
     void Init();
+    void Notify(String message);
+    void NotifyAttackOccurred(String attackerIpAddress);
+    void ResetAttackState();
 };
 
 

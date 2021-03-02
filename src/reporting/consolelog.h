@@ -3,12 +3,14 @@
 #define _CONSOLE_LOG_H_
 
 #include <Arduino.h>
+#include "notifier.h"
 
-class ConsoleLogger
+class ConsoleLogger : public Notifier
 {
 public:
+    void Init();
+    void Notify(String message);
     void NotifyAttackOccurred(String attackerIpAddress);
     void ResetAttackState();
-    void Notify(String message);
 };
 #endif

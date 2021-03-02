@@ -50,7 +50,7 @@ void sendNotify(String message)
     mqttNotifier.Notify(message);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.sendMail(String("Notification").c_str(), message.c_str());
+    emailNotifier.Notify(message);
 #endif
 }
 void sendNotifyAttackOccurred(String attackerIpAddress)
@@ -61,7 +61,7 @@ void sendNotifyAttackOccurred(String attackerIpAddress)
     mqttNotifier.NotifyAttackOccurred(attackerIpAddress);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.sendMail("Attack had occurred!", attackerIpAddress.c_str());
+    emailNotifier.NotifyAttackOccurred(attackerIpAddress);
 #endif
 }
 void resetAttackState()
@@ -69,6 +69,9 @@ void resetAttackState()
     consoleLog.ResetAttackState();
 #if MQTT_ENABLED
     mqttNotifier.ResetAttackState();
+#endif
+#if EMAIL_ENABLED
+    emailNotifier.ResetAttackState();
 #endif
 }
 
