@@ -1,6 +1,6 @@
 #include "consolelog.h"
 
-void ConsoleLogger::NotifyAttackOccured(String attackerIpAddress)
+void ConsoleLogger::NotifyAttackOccurred(String attackerIpAddress)
 {
     Serial.println("[NOTIFICATION]: Attack occured from: " + attackerIpAddress);
 }

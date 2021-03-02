@@ -8,24 +8,25 @@ String attackerIpAddress = "";
 
 #if MQTT_ENABLED
 #include "mqtt.h"
+MqttNotifier mqttNotifier;
 #endif
 
 #if EMAIL_ENABLED
 #include "email.h"
+EmailNotifier emailNotifier;
 #endif
 
 #include "consolelog.h"
-
 ConsoleLogger consoleLog;
 
 void initReporting()
 {
 #if MQTT_ENABLED
-    mqttInit();
+    mqttNotifier.Init();
 #endif
 
 #if EMAIL_ENABLED
-    emailInit();
+    emailNotifier.Init();
 #endif
 }
 
@@ -46,28 +47,28 @@ void sendNotify(String message)
     consoleLog.Notify(message);
 
 #if MQTT_ENABLED
-    mqttNotify(message);
+    mqttNotifier.Notify(message);
 #endif
 #if EMAIL_ENABLED
-    sendMail(String("Notification").c_str(), message.c_str());
+    emailNotifier.sendMail(String("Notification").c_str(), message.c_str());
 #endif
 }
 void sendNotifyAttackOccurred(String attackerIpAddress)
 {
-    consoleLog.NotifyAttackOccured(attackerIpAddress);
+    consoleLog.NotifyAttackOccurred(attackerIpAddress);
 
 #if MQTT_ENABLED
-    mqttNotifyAttackOccurred(attackerIpAddress);
+    mqttNotifier.NotifyAttackOccurred(attackerIpAddress);
 #endif
 #if EMAIL_ENABLED
-    sendMail("Attack had occurred!", attackerIpAddress.c_str());
+    emailNotifier.sendMail("Attack had occurred!", attackerIpAddress.c_str());
 #endif
 }
 void resetAttackState()
 {
     consoleLog.ResetAttackState();
 #if MQTT_ENABLED
-    mqttResetAttackState();
+    mqttNotifier.ResetAttackState();
 #endif
 }
 
