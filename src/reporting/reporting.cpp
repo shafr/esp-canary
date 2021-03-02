@@ -16,6 +16,8 @@ String attackerIpAddress = "";
 
 #include "consolelog.h"
 
+ConsoleLogger consoleLog;
+
 void initReporting()
 {
 #if MQTT_ENABLED
@@ -41,7 +43,7 @@ void notifyAttackOccurred(String attackerIp)
 
 void sendNotify(String message)
 {
-    consoleLogNotify(message);
+    consoleLog.Notify(message);
 
 #if MQTT_ENABLED
     mqttNotify(message);
@@ -52,7 +54,7 @@ void sendNotify(String message)
 }
 void sendNotifyAttackOccurred(String attackerIpAddress)
 {
-    consoleLogNotifyAttackOccurred(attackerIpAddress);
+    consoleLog.NotifyAttackOccured(attackerIpAddress);
 
 #if MQTT_ENABLED
     mqttNotifyAttackOccurred(attackerIpAddress);
@@ -63,6 +65,7 @@ void sendNotifyAttackOccurred(String attackerIpAddress)
 }
 void resetAttackState()
 {
+    consoleLog.ResetAttackState();
 #if MQTT_ENABLED
     mqttResetAttackState();
 #endif

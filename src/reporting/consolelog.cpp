@@ -1,13 +1,16 @@
-#include "Arduino.h"
+#include "consolelog.h"
 
-void consoleLogNotifyAttackOccurred(String attackerIpAddress){
+void ConsoleLogger::NotifyAttackOccured(String attackerIpAddress)
+{
     Serial.println("[NOTIFICATION]: Attack occured from: " + attackerIpAddress);
 }
 
-void consoleLogResetAttackState(){
+void ConsoleLogger::ResetAttackState()
+{
     Serial.println("Resetting attack state");
 }
 
-void consoleLogNotify(String message){
-     Serial.println("[NOTIFICATION]: " +  message);
+void ConsoleLogger::Notify(String message)
+{
+    Serial.println("[NOTIFICATION]: " + message);
 }
