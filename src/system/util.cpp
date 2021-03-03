@@ -58,7 +58,7 @@ void obfuscateHost(){
   #endif
   
   #ifdef ESP32
-      esp_wifi_set_mac(ESP_IF_WIFI_STA, &newMACAddress[0]);
+      esp_wifi_set_mac(WIFI_IF_STA, &newMACAddress[0]);
   #endif
 
   Serial.print("[NEW] ESP8266 Board MAC Address:  ");
