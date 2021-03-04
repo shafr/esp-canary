@@ -14,7 +14,10 @@
 #include "simulation/tomcat.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
+
 #include "system/ota.h"
+OTA ota;
+
 
 #ifdef TOMCAT_PORT
   TomcatSimu tomcatSimu;
@@ -52,7 +55,7 @@ void setup()
   obfuscateHost();
   ConnectToWifi();
 
-  configureOTA();
+  ota.Setup();
 
   initReporting();
 
@@ -66,6 +69,6 @@ void setup()
 
 void loop()
 {
-  LoopOTA();
+  ota.Loop();
   notifyLoop();
 }

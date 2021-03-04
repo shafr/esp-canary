@@ -1,20 +1,18 @@
-#include <ArduinoOTA.h>
-#include "reporting/reporting.h"
-#include "user_config.h"
+#include "ota.h"
 
-void configureOTA()
+void OTA::Setup()
 {
   ArduinoOTA.onStart([]() {
-    notify("[INFO]: Upgrade start");
+    notify(F("[INFO]: Upgrade start"));
   });
 
   ArduinoOTA.onEnd([]() {
-    notify("[INFO]: Upgrade finish");
+    notify(F("[INFO]: Upgrade finish"));
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    notify("[ERROR]: Error during OTA Upgrade!: "); //TODO - send error
-    Serial.println(error);
+    notify(F("[ERROR]: Error during OTA Upgrade!: ")); 
+    Serial.println(error); //TODO - send error
 
     ESP.restart();
   });
@@ -33,6 +31,6 @@ void configureOTA()
   ArduinoOTA.begin();
 }
 
-void LoopOTA(){
+void OTA::Loop(){
   ArduinoOTA.handle();
 }
