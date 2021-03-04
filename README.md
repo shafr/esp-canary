@@ -21,7 +21,7 @@ The question was not `if` but `when` this would happen.
 
 * Clone project
 * Update `src/user_config.h` contents with your settings
-* Upload file system image using platformio - `PlatformIO: Upload file system image`
+* Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
 * Upload sketch using `PlatformIO: upload`
 
 [Home-Assitant configuration](web-res/ha-config.md)
@@ -46,7 +46,7 @@ Currently only Apache Tomcat server resources are included. It looks and feels l
 - [ ] add header `Content-Type: text/html;charset=UTF-8`
 
 # TODOs:
-[See TODO List](web-res/ha-config.md)
+[See TODO List](web-res/TODO.md)
 
 
 # Credits:
