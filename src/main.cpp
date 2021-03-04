@@ -18,11 +18,9 @@
 #include "system/ota.h"
 OTA ota;
 
-
-#ifdef TOMCAT_PORT
+#if TOMCAT_ENABLED
   TomcatSimu tomcatSimu;
 #endif
-
 
 void ConnectToWifi()
 {
@@ -46,7 +44,6 @@ void ConnectToWifi()
   }
 }
 
-
 void setup()
 {
   Serial.begin(115200);
@@ -61,7 +58,7 @@ void setup()
 
   // syncNtpTime();
 
-  #ifdef TOMCAT_PORT
+  #if TOMCAT_ENABLED
     tomcatSimu.Serve();
   #endif
 

@@ -1,30 +1,57 @@
 #ifndef user_config_h
 #define user_config_h
 
+//===========================================================================
+//============================= WIFI Configuration ==========================
+//===========================================================================
+
+// WIFI endpoint name where you would connect
 #ifndef WIFI_SERVER_AP_NAME
   #define WIFI_SERVER_AP_NAME "WFT"
 #endif
 
+// WIFI endpoint password where you would connect
 #ifndef WIFI_SERVER_AP_PASSWORD
   #define WIFI_SERVER_AP_PASSWORD "1234567890"
 #endif
 
-#define SERVER_HOST_NAME "esp_server"
+//===========================================================================
+//============================= ESP HOST OBFUSCATION ========================
+//===========================================================================
 
-#define TOMCAT_PORT 80
-
+// ESP Server Host name. This is how it would appear on your router or if you would ping it.
+// (also used for OTA)
 #define HOST_NAME "ds214"
 
+// New Mac address for your ESP device.
 #define MAC "00:11:32:85:ac:16"
 
-#define NTP_TIME_OFFSET 7200
+//===========================================================================
+//============================= OTHER CONFIGURATION= ========================
+//===========================================================================
 
 //Remember to change port in platformio.ini as well
 #define OTA_PORT 56056
 // #define OTA_PASS "H0We8Adu0SYGFUNTt25C7yuJ"
 
+//NTP offset in seconds- currently set to UTC +2H
+#define NTP_TIME_OFFSET 7200
 
-//============ REPORTING SECTION ================ //
+
+//===========================================================================
+//============================= SIMULATION CONFIGURATION ====================
+//===========================================================================
+
+// Tomcat-server simulation. 
+#define TOMCAT_ENABLED true
+// Port for Tomcat simulation. 
+#define TOMCAT_PORT 80
+
+//===========================================================================
+//============================= REPORTING-NOTIFICATIONS======================
+//===========================================================================
+
+// =========== MQTT ===========================
 #define MQTT_ENABLED false
 #define MQTT_HOST "192.168.1.1"
 #define MQTT_TOPIC "/security/honeypot"
@@ -32,7 +59,6 @@
 #define MQTT_CLIENT_ID "Honeypot"
 #define MQTT_USER "Honeypot"
 #define MQTT_PASSWORD "NDCU74EJoh2N69GRhMfc"
-
 
 // =========== EMAIL ===========================
 #define EMAIL_ENABLED false

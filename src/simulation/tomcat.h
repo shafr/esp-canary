@@ -8,6 +8,10 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 
+#ifdef ESP32
+#include "SPIFFS.h"
+#endif
+
 class TomcatSimu
 {
 public:

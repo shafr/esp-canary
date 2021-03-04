@@ -1,9 +1,5 @@
 #include "tomcat.h"
 
-#ifdef ESP32
-#include "SPIFFS.h"
-#endif
-
 AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
 
