@@ -68,4 +68,14 @@
 #define AUTHOR_PASSWORD "sender_password"
 #define EMAIL_TARGET_RECEPIENT "recepient@gmail.com"
 
+// =========== TELEGRAM=========================
+#define TELEGRAM_ENABLED true
+
+// This value you would get from @BotFather when you create new bot.
+#define TELEGRAM_BOT_TOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+// Use @myidbot (IDBot) to find out the chat ID of an individual or a group
+// If the chat is a group, the chat id is negative. If it is a single person, then positive.
+#define BOT_CHAT_ID "-123456789"
+
 #endif
