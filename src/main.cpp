@@ -14,7 +14,15 @@
 #include "simulation/tomcat.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
+
 #include "system/ota.h"
+OTA ota;
+
+
+#ifdef TOMCAT_PORT
+  TomcatSimu tomcatSimu;
+#endif
+
 
 void ConnectToWifi()
 {
@@ -26,15 +34,15 @@ void ConnectToWifi()
     Serial.print(".");
   }
 
-  Serial.println("");
-  Serial.println("Connected!");
+  Serial.println(F(""));
+  Serial.println(F("Connected!"));
 
-  Serial.print("IP Address: ");
+  Serial.print(F("IP Address: "));
   Serial.println(WiFi.localIP());
 
   if (!SPIFFS.begin())
   {
-    Serial.println("[ERROR], SPIFFS Initialize was not OK");
+    Serial.println(F("[ERROR], SPIFFS Initialize was not OK"));
   }
 }
 
@@ -47,20 +55,20 @@ void setup()
   obfuscateHost();
   ConnectToWifi();
 
-  configureOTA();
+  ota.Setup();
 
   initReporting();
 
   // syncNtpTime();
 
   #ifdef TOMCAT_PORT
-    serveTomcat();
+    tomcatSimu.Serve();
   #endif
 
 }
 
 void loop()
 {
-  LoopOTA();
+  ota.Loop();
   notifyLoop();
 }

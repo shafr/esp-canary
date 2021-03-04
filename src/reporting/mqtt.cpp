@@ -1,39 +1,39 @@
-#include "Arduino.h"
-#include <AsyncMqttClient.h>
-
-#include "user_config.h"
-#include "../system/util.h"
+#include "mqtt.h"
 
 AsyncMqttClient mqttClient;
 
-void mqttNotify(String message){
+void MqttNotifier::Notify(String message)
+{
   mqttClient.publish("/security/honeypot/info", 2, true, message.c_str());
-} 
+}
 
 //TODO - subscribe to reset / configure commands in topic ?
 
-void mqttNotifyAttackOccurred(String attackerIpAddress){
+void MqttNotifier::NotifyAttackOccurred(String attackerIpAddress)
+{
   mqttClient.publish("/security/honeypot/attackinprogress", 2, true, "True");
   mqttClient.publish("/security/honeypot/attackerip", 2, true, attackerIpAddress.c_str());
 }
 
-void mqttResetAttackState(){
-    mqttClient.publish("/security/honeypot/attackinprogress", 2, false, "False");
+void MqttNotifier::ResetAttackState()
+{
+  mqttClient.publish("/security/honeypot/attackinprogress", 2, false, "False");
 }
 
-void onMqttConnect(bool sessionPresent) {
-  Serial.println("[INFO]: Connected to MQTT.");
-  Serial.print("[INFO]: Session present: ");
+void onMqttConnect(bool sessionPresent)
+{
+  Serial.println(F("[INFO]: Connected to MQTT."));
+  Serial.print(F("[INFO]: Session present: "));
   Serial.println(sessionPresent);
-  
-  mqttResetAttackState();
 }
 
-void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
-  Serial.println("[DEBUG]: Disconnected from MQTT.");
+void onMqttDisconnect(AsyncMqttClientDisconnectReason reason)
+{
+  Serial.println(F("[DEBUG]: Disconnected from MQTT."));
 }
 
-void setMqttHost(){
+void setMqttHost()
+{
   uint8_t mqttHost[4];
   stringToIntArray(MQTT_HOST, '.', mqttHost, 4, 10);
 
@@ -45,13 +45,17 @@ void setMqttHost(){
   mqttClient.setCredentials(MQTT_USER, MQTT_PASSWORD);
 }
 
-void mqttInit(){
-  Serial.println("[INFO] Configuring MQTT Mmodule");
+void MqttNotifier::Init()
+{
+  Serial.println(F("[INFO] Configuring MQTT Mmodule"));
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);
 
   setMqttHost();
-  
+
   mqttClient.connect();
-  Serial.println("[INFO] Mqtt module config complete");
+
+  MqttNotifier::ResetAttackState();
+
+  Serial.println(F("[INFO] Mqtt module config complete"));
 }

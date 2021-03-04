@@ -4,7 +4,9 @@
 
 ![LOGO](web-res/logo/logo-mid.jpg)
 
-This is simple ESP-based honeypot application that acts as a server on local network and notifies you if it is being accessed or scanned.
+## What 
+
+This is simple `ESP-8266` or `ESP-32`-based honeypot application that acts as a server on local network and notifies you if it is being accessed or scanned.
 
 Ideally Nmap scan of services should return same results as real server. Any type of scan or connection attempt should notify you.
 
@@ -22,15 +24,15 @@ The question was not `if` but `when` this would happen.
 * Upload file system image using platformio - `PlatformIO: Upload file system image`
 * Upload sketch using `PlatformIO: upload`
 
-
 [Home-Assitant configuration](web-res/ha-config.md)
 
+## Nmap scan Status
 
-## Status
+It does reacts on NMap -A scan.
 
-It does reacts on NMap -A scan. Currently only Apache Tomcat server resources are included. It looks and feels like tomcat welcome page.
+## Emulation part:
 
-### Tomcat Server simulation
+Currently only Apache Tomcat server resources are included. It looks and feels like Tomcat welcome page.
 
 - [x] Index page with most links pointing to Tomcat site
 - [x] Authentication page with default username and password `tomcat` and `tomcat`
@@ -42,37 +44,10 @@ It does reacts on NMap -A scan. Currently only Apache Tomcat server resources ar
 - [ ] Handle RTSPRequest with 400
 - [ ] Handle FourOhFourRequest with 400 
 - [ ] add header `Content-Type: text/html;charset=UTF-8`
-- [ ] Test all one more time
 
 # TODOs:
-
-### TODO General
-
-- [X] Change mac address to correspond to random device (Synology NAS for example)
-- [X] Set hostname that would correspond to something juicy
-- [X] Show server that would have same web page contents (read from memory) and headers as Tomcat 
-- [X] MQTT notification
-- [ ] Telegram notification (Through Home-assistant at the moment)
-- [X] OTA updates
-- [X] Home-assistant example 
-- [ ] More MQTT messages - online, offline, etc
-- [ ] Move to LITTLEFS
-- [ ] Add watchdog. To prevent from hanging.
-- [ ] Blink when there are some issues
-- [ ] A way to reset attack state
-- [ ] Include IP and time in notification 
-- [ ] OTA password
-
-## Ease of use:
-- [ ] Documentation!
-- [ ] Configuration portal on first run ? 
-
-### Emulations:
-- [ ] SSH emulation
-- [ ] Telnet emulation
-- [ ] Add Ping handler
+[See TODO List](web-res/ha-config.md)
 
 
-
-
-Logo was generated using https://photofunia.com/ website.
+# Credits:
+Logo was generated using https://photofunia.com/ website. I would gladly accept any other.
