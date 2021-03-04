@@ -1,5 +1,7 @@
 #include "consolelog.h"
 
+#define NOTIFICATION_PREFIX "[NOTIFICATION]: "
+
 void ConsoleLogger::Init()
 {
     Serial.println("[NOTIFICATION]: Console logger INIT");

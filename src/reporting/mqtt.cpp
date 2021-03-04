@@ -22,14 +22,14 @@ void MqttNotifier::ResetAttackState()
 
 void onMqttConnect(bool sessionPresent)
 {
-  Serial.println("[INFO]: Connected to MQTT.");
-  Serial.print("[INFO]: Session present: ");
+  Serial.println(F("[INFO]: Connected to MQTT."));
+  Serial.print(F("[INFO]: Session present: "));
   Serial.println(sessionPresent);
 }
 
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason)
 {
-  Serial.println("[DEBUG]: Disconnected from MQTT.");
+  Serial.println(F("[DEBUG]: Disconnected from MQTT."));
 }
 
 void setMqttHost()
@@ -47,7 +47,7 @@ void setMqttHost()
 
 void MqttNotifier::Init()
 {
-  Serial.println("[INFO] Configuring MQTT Mmodule");
+  Serial.println(F("[INFO] Configuring MQTT Mmodule"));
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);
 
@@ -57,5 +57,5 @@ void MqttNotifier::Init()
 
   MqttNotifier::ResetAttackState();
 
-  Serial.println("[INFO] Mqtt module config complete");
+  Serial.println(F("[INFO] Mqtt module config complete"));
 }
