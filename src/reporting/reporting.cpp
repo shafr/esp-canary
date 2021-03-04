@@ -1,5 +1,4 @@
-#include "Arduino.h"
-#include "../user_config.h"
+#include "reporting.h"
 
 boolean messagesAvailable = false;
 
