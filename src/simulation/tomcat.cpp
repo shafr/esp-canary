@@ -17,13 +17,13 @@ void handleAuth(AsyncWebServerRequest *request)
 
     loginCount = 0;
 
-    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, F("/tomcat_9/401.html"), TEXT_HTML);
+    AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/401.html"), TEXT_HTML);
     response->setCode(401);
     request->send(response);
     return;
   }
 
-  AsyncWebServerResponse *response = request->beginResponse(SPIFFS, F("/tomcat_9/500.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/500.html"), TEXT_HTML);
   response->setCode(500);
   request->send(response);
 }
@@ -49,14 +49,14 @@ void handle404Request(AsyncWebServerRequest *request)
 {
   notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
 
-  AsyncWebServerResponse *response = request->beginResponse(SPIFFS, F("/tomcat_9/404.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/404.html"), TEXT_HTML);
   response->setCode(404);
   request->send(response);
 }
 
 void handleRootRequest(AsyncWebServerRequest *request)
 {
-  AsyncWebServerResponse *response = request->beginResponse(SPIFFS, F("/tomcat_9/index.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/index.html"), TEXT_HTML);
   response->setCode(200);
   request->send(response);
 }
@@ -64,7 +64,7 @@ void handleRootRequest(AsyncWebServerRequest *request)
 void TomcatSimu::Serve()
 {
   //TODO - check what is their default .setCacheControl("max-age=31536000");
-  tomcatServer.serveStatic("/", SPIFFS, "/tomcat_9/").setDefaultFile("index.html");
+  tomcatServer.serveStatic("/", LittleFS, "/tomcat_9/").setDefaultFile("index.html");
 
   tomcatServer.on("/", HTTP_POST, handleAuth);
 

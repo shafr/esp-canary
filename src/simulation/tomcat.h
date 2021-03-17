@@ -8,8 +8,16 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 
+#ifdef ESP8266
+    #include <FS.h>
+    #include <LittleFS.h>
+#endif
+
 #ifdef ESP32
-#include "SPIFFS.h"
+    #include <FS.h>
+    // #define SPIFFS LITTLEFS
+    #include <LITTLEFS.h>
+    #define LittleFS LITTLEFS
 #endif
 
 class TomcatSimu
