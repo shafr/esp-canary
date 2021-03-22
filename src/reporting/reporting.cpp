@@ -15,6 +15,11 @@ MqttNotifier mqttNotifier;
 EmailNotifier emailNotifier;
 #endif
 
+#if TELEGRAM_ENABLED
+#include "telegram.h"
+TelegramNotifier telegramNotifier;
+#endif
+
 #include "consolelog.h"
 ConsoleLogger consoleLog;
 
@@ -27,6 +32,11 @@ void initReporting()
 #if EMAIL_ENABLED
     emailNotifier.Init();
 #endif
+
+#if TELEGRAM_ENABLED
+    telegramNotifier.Init();
+#endif
+
 }
 
 void notify(String message)
@@ -51,6 +61,9 @@ void sendNotify(String message)
 #if EMAIL_ENABLED
     emailNotifier.Notify(message);
 #endif
+#if TELEGRAM_ENABLED
+    telegramNotifier.Notify(message);
+#endif
 }
 void sendNotifyAttackOccurred(String attackerIpAddress)
 {
@@ -62,6 +75,9 @@ void sendNotifyAttackOccurred(String attackerIpAddress)
 #if EMAIL_ENABLED
     emailNotifier.NotifyAttackOccurred(attackerIpAddress);
 #endif
+#if TELEGRAM_ENABLED
+    telegramNotifier.NotifyAttackOccurred(attackerIpAddress);
+#endif
 }
 void resetAttackState()
 {
@@ -71,6 +87,9 @@ void resetAttackState()
 #endif
 #if EMAIL_ENABLED
     emailNotifier.ResetAttackState();
+#endif
+#if TELEGRAM_ENABLED
+    telegramNotifier.ResetAttackState();
 #endif
 }
 

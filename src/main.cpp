@@ -3,7 +3,6 @@
 #ifdef ESP32
   #include <WiFi.h>
   #include <FS.h>
-// #define SPIFFS LITTLEFS
   #include <LITTLEFS.h>
   #define LittleFS LITTLEFS
 #endif
@@ -55,10 +54,10 @@ void setup()
   Serial.begin(115200);
   Serial.println();
 
-  // obfuscateHost();
+  obfuscateHost();
   ConnectToWifi();
 
-  // ota.Setup();
+  ota.Setup();
 
   initReporting();
 
