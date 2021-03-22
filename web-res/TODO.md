@@ -4,15 +4,15 @@
 - [X] Set hostname that would correspond to something juicy
 - [X] Show server that would have same web page contents (read from memory) and headers as Tomcat 
 - [X] MQTT notification
-- [ ] Telegram notification (Through Home-assistant at the moment)
+- [X] Telegram notification
 - [X] OTA updates
 - [ ] signed OTA updates after reboot from Release section if new version is available
-- [ ] Move to LITTLEFS
+- [X] Move to LITTLEFS
 - [ ] More MQTT messages - online, offline, etc
 - [ ] Add watchdog. To prevent from hanging.
 - [ ] Blink when there are some issues
 - [ ] A way to reset attack state
-- [ ] Include IP and time in notification 
+- [X] Include IP and time in notification (mostly done through telegram)
 - [X] Home-assistant example 
 - [ ] OTA password
 
