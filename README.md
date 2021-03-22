@@ -30,20 +30,7 @@ The question was not `if` but `when` this would happen.
 
 It does reacts on NMap -A scan.
 
-## Emulation part:
 
-Currently only Apache Tomcat server resources are included. It looks and feels like Tomcat welcome page.
-
-- [x] Index page with most links pointing to Tomcat site
-- [x] Authentication page with default username and password `tomcat` and `tomcat`
-- [x] 401 not authorized page if 3 times incorrect password
-- [x] 404 not found page
-- [x] Resolve IP address of attacker to be sent
-- [x] add header `Date: Fri, 03 Jul 2020 13:06:51 GMT`
-- [ ] Duplicate all headers
-- [ ] Handle RTSPRequest with 400
-- [ ] Handle FourOhFourRequest with 400 
-- [ ] add header `Content-Type: text/html;charset=UTF-8`
 
 # TODOs:
 [See TODO List](web-res/TODO.md)
