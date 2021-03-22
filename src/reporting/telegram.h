@@ -13,6 +13,8 @@
   #include <ESP8266WiFi.h>
 #endif
 
+#include "reporting.h"
+
 #include "AsyncTelegram.h"
 
 

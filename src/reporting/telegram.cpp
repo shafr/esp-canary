@@ -1,31 +1,46 @@
 #include "telegram.h"
 
 AsyncTelegram bot;
+TBMessage msgGroup;
+
+//For cases when Telegram is not working - we should stop sending notifications there, 
+//until issue is resolved (certificate, etc..)
+boolean initOK = false;
 
 void TelegramNotifier::Init()
 {
-    bot.setClock("CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00");
+    bot.setClock(CLOCK_TZ);
 
-    bot.setUpdateTime(2000);
+    bot.setUpdateTime(TELEGRAM_POLLING_TIME_MS);
     bot.setTelegramToken(TELEGRAM_BOT_TOKEN);
 
-    Serial.print(F("\nTest Telegram connection... "));
-    bot.begin() ? Serial.println(F("OK")) : Serial.println(F("NOK"));
-
-    Serial.print(F("Bot name: @"));
-    Serial.println(bot.userName);
-
-    Notify("ESP started with IP: " + WiFi.localIP().toString());
+    Serial.println(F("\nTest Telegram connection... "));
+    if (bot.begin()){
+        initOK = true;
+        msgGroup.chatId = BOT_CHAT_ID;
+        Serial.println(F("Telegram connection is OK!"));
+        notify("ESP started. \r\nIP: " + WiFi.localIP().toString() + "\r\nName " + bot.userName);
+    } else{
+        initOK = false;
+        Serial.println(F("Telegram connection is NOK!"));
+        notify(F("Cannot init Telegram notifications"));
+    }
 }
 
 void TelegramNotifier::Notify(String message)
 {
-    bot.sendToGroup(BOT_CHAT_ID, message);
+    if (!initOK){
+        return;
+    }
+    bot.sendMessage(msgGroup, message);
 }
 
 void TelegramNotifier::NotifyAttackOccurred(String attackerIpAddress)
 {
-    bot.sendToGroup(BOT_CHAT_ID, "Attack was performed from: " + attackerIpAddress);
+        if (!initOK){
+        return;
+    }
+    bot.sendMessage(msgGroup, "Attack was performed from: " + attackerIpAddress);
 }
 
 void TelegramNotifier::ResetAttackState()
