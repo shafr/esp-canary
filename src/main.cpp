@@ -2,54 +2,54 @@
 
 #ifdef ESP32
   #include <WiFi.h>
-  #include "SPIFFS.h"
+  #include <FS.h>
+  #include <LITTLEFS.h>
+  #define LittleFS LITTLEFS
 #endif
 
 #ifdef ESP8266
   #include <ESP8266WiFi.h>
+  #include <LittleFS.h>
 #endif
 
 #include "user_config.h"
 #include "system/util.h"
+#include "simulation/tomcat.h"
+#include "reporting/reporting.h"
+#include "system/ntp.h"
+
+#include "system/ota.h"
+OTA ota;
 
 #if TOMCAT_ENABLED
-  #include "simulation/tomcat.h"
+  TomcatSimu tomcatSimu;
 #endif
 
 #if OPENWRT_ENABLED
   #include "simulation/openwrt.h"
 #endif
 
-#include "reporting/reporting.h"
-#include "system/ntp.h"
-#include "system/ota.h"
-#include <ArduinoOTA.h>
-
 void ConnectToWifi()
 {
-  #if WIFI_CLIENT 
-    Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
-    WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(500);
-      Serial.print(".");
-    }
-  #else
-    WiFi.mode(WIFI_AP);
-    WiFi.softAP(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
-    // IPAddress myIP = WiFi.softAPIP();
-  #endif
+  Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
+  WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
 
-  Serial.println("");
-  Serial.println("Connected!");
+  Serial.println(F(""));
+  Serial.println(F("Connected!"));
 
-  Serial.print("IP Address: ");
+  Serial.print(F("IP Address: "));
   Serial.println(WiFi.localIP());
 
-  if (!SPIFFS.begin())
+  if (!LittleFS.begin())
   {
-    Serial.println("[ERROR], SPIFFS Initialize was not OK");
+    Serial.println(F("[ERROR], LittleFS Initialize was not OK"));
+  } else{
+    Serial.println(F("[INFO],  LittleFS Initialize was OK"));
   }
 }
 
@@ -62,14 +62,14 @@ void setup()
   obfuscateHost();
   ConnectToWifi();
 
-  configureOTA();
+  ota.Setup();
 
   initReporting();
 
   // syncNtpTime();
 
   #if TOMCAT_ENABLED
-    serveTomcat();
+    tomcatSimu.Serve();
   #endif
 
   #if OPENWRT_ENABLED
@@ -79,5 +79,6 @@ void setup()
 
 void loop()
 {
-  ArduinoOTA.handle();
+  ota.Loop();
+  notifyLoop();
 }

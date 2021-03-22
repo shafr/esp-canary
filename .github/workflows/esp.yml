@@ -2,8 +2,6 @@ name: ESP Build
 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   test_builds:
@@ -11,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         test-platform:
           - nodemcuv2
