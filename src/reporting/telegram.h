@@ -13,8 +13,7 @@
   #include <ESP8266WiFi.h>
 #endif
 
-#include <WiFiClientSecure.h>
-#include <UniversalTelegramBot.h>
+#include "AsyncTelegram.h"
 
 
 class TelegramNotifier  {

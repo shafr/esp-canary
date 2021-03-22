@@ -2,11 +2,14 @@
 
 #ifdef ESP32
   #include <WiFi.h>
-  #include "SPIFFS.h"
+  #include <FS.h>
+  #include <LITTLEFS.h>
+  #define LittleFS LITTLEFS
 #endif
 
 #ifdef ESP8266
   #include <ESP8266WiFi.h>
+  #include <LittleFS.h>
 #endif
 
 #include "user_config.h"
@@ -38,9 +41,11 @@ void ConnectToWifi()
   Serial.print(F("IP Address: "));
   Serial.println(WiFi.localIP());
 
-  if (!SPIFFS.begin())
+  if (!LittleFS.begin())
   {
-    Serial.println(F("[ERROR], SPIFFS Initialize was not OK"));
+    Serial.println(F("[ERROR], LittleFS Initialize was not OK"));
+  } else{
+    Serial.println(F("[INFO],  LittleFS Initialize was OK"));
   }
 }
 
