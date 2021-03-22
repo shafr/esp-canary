@@ -69,13 +69,21 @@
 #define EMAIL_TARGET_RECEPIENT "recepient@gmail.com"
 
 // =========== TELEGRAM=========================
-#define TELEGRAM_ENABLED true
+//Enable telegram notifications:
+#define TELEGRAM_ENABLED false
 
 // This value you would get from @BotFather when you create new bot.
 #define TELEGRAM_BOT_TOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 // Use @myidbot (IDBot) to find out the chat ID of an individual or a group
 // If the chat is a group, the chat id is negative. If it is a single person, then positive.
-#define BOT_CHAT_ID "-123456789"
+#define BOT_CHAT_ID -123456789
+
+// To ensure certificate validation, WiFiClientSecure needs time updated.
+//To choose correct time zone, Follow this link https://sites.google.com/a/usapiens.com/opnode/time-zones
+#define CLOCK_TZ "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
+
+// How ofter fetch data from telegram server
+#define TELEGRAM_POLLING_TIME_MS 5000
 
 #endif
