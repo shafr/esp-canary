@@ -1,4 +1,5 @@
 ![ESP Build](https://github.com/shafr/esp-honeypot/workflows/ESP%20Build/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5068cf10df544dc5acb4ff90d2e794d4)](https://www.codacy.com/gh/shafr/esp-honeypot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=shafr/esp-honeypot&amp;utm_campaign=Badge_Grade)
 
 # esp-honeypot
 
