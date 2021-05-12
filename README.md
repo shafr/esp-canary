@@ -18,8 +18,11 @@ I was looking for some simple bash script / application that would notify me whe
 
 The question was not `if` but `when` this would happen.
 
-### How to use:
+### Prerequisite:
+* Any of `ESP8266` or `ESP32` based boards.
+* `Visual Studio Code` + `Platformio plugin` in order to build and upload project
 
+### How to use:
 * Clone project
 * Update `src/user_config.h` contents with your settings
 * Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
