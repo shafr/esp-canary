@@ -18,6 +18,7 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
+#include "simulation/ping.h"
 
 Notify notifier;
 
@@ -25,6 +26,10 @@ OTA ota;
 
 #if TOMCAT_ENABLED
   TomcatSimu tomcatSimu;
+#endif
+
+#if PING_ENABLED
+  PingWatcher pingWatcher;
 #endif
 
 void ConnectToWifi()
@@ -69,10 +74,19 @@ void setup()
     tomcatSimu.Serve();
   #endif
 
+  #if PING_ENABLED
+    pingWatcher.setup();
+  #endif
+
 }
 
 void loop()
 {
   ota.Loop();
+
+  #if PING_ENABLED
+    pingWatcher.loop();
+  #endif
+
   notifier.notifyLoop();
 }
