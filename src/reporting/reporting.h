@@ -5,10 +5,21 @@
 #include "Arduino.h"
 #include "../user_config.h"
 
-void notifyAttackOccurred(String attackerIpAddress);
-void notify(String message);
-void resetAttackState();
-void initReporting();
-void notifyLoop();
+class Notify
+{
+public:
+    void notifyAttackOccurred(String attackerIpAddress);
+    void notify(String message);
+    void resetAttackState();
+    void initReporting();
+    void notifyLoop();
+    void printf_P();
+
+private:
+    void sendNotify(String message);
+    void sendNotifyAttackOccurred(String attackerIpAddress);
+};
+
+extern Notify notifier;
 
 #endif

@@ -7,8 +7,8 @@ int loginCount = 0;
 
 void handleAuth(AsyncWebServerRequest *request)
 {
-  notify(F("[Tomcat]: Handle AUTH"));
-  notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.notify(F("[Tomcat]: Handle AUTH"));
+  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
 
   if (!request->authenticate("tomcat", "tomcat"))
   {
@@ -33,15 +33,15 @@ void handleAuth(AsyncWebServerRequest *request)
 
 void redirectToLoginPage(AsyncWebServerRequest *request)
 {
-  notify(F("[Tomcat]: Redirect login"));
+  notifier.notify(F("[Tomcat]: Redirect login"));
 
-  notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
   request->redirect(F("/"));
 }
 
 void handleOptionsRequest(AsyncWebServerRequest *request)
 {
-  notify(F("[Tomcat]: Options Request"));
+  notifier.notify(F("[Tomcat]: Options Request"));
 
   AsyncWebServerResponse *response = request->beginResponse(200);
   response->addHeader(F("Allow"), F("GET, HEAD, POST, OPTIONS"));
@@ -53,8 +53,8 @@ void handleOptionsRequest(AsyncWebServerRequest *request)
 
 void handle404Request(AsyncWebServerRequest *request)
 {
-  notify(F("[Tomcat]: 404"));
-  notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.notify(F("[Tomcat]: 404"));
+  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
 
   AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/404.html"), TEXT_HTML);
   response->setCode(404);
@@ -63,8 +63,8 @@ void handle404Request(AsyncWebServerRequest *request)
 
 void handleRootRequest(AsyncWebServerRequest *request)
 {
-  notify(F("[Tomcat]: ROOT request"));
-  notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.notify(F("[Tomcat]: ROOT request"));
+  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
 
   AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/index.html"), TEXT_HTML);
   response->setCode(200);

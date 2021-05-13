@@ -17,8 +17,10 @@
 #include "simulation/tomcat.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
-
 #include "system/ota.h"
+
+Notify notifier;
+
 OTA ota;
 
 #if TOMCAT_ENABLED
@@ -59,7 +61,7 @@ void setup()
 
   ota.Setup();
 
-  initReporting();
+  notifier.initReporting();
 
   // syncNtpTime();
 
@@ -72,5 +74,5 @@ void setup()
 void loop()
 {
   ota.Loop();
-  notifyLoop();
+  notifier.notifyLoop();
 }

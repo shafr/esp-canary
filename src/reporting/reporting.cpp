@@ -23,7 +23,7 @@ TelegramNotifier telegramNotifier;
 #include "consolelog.h"
 ConsoleLogger consoleLog;
 
-void initReporting()
+void Notify::initReporting()
 {
 #if MQTT_ENABLED
     mqttNotifier.Init();
@@ -39,19 +39,19 @@ void initReporting()
 
 }
 
-void notify(String message)
+void Notify::notify(String message)
 {
     messagesAvailable = true;
     notifyMessage = message;
 }
 
-void notifyAttackOccurred(String attackerIp)
+void Notify::notifyAttackOccurred(String attackerIp)
 {
     messagesAvailable = true;
     attackerIpAddress = attackerIp;
 }
 
-void sendNotify(String message)
+void Notify::sendNotify(String message)
 {
     consoleLog.Notify(message);
 
@@ -65,7 +65,7 @@ void sendNotify(String message)
     telegramNotifier.Notify(message);
 #endif
 }
-void sendNotifyAttackOccurred(String attackerIpAddress)
+void Notify::sendNotifyAttackOccurred(String attackerIpAddress)
 {
     consoleLog.NotifyAttackOccurred(attackerIpAddress);
 
@@ -79,7 +79,7 @@ void sendNotifyAttackOccurred(String attackerIpAddress)
     telegramNotifier.NotifyAttackOccurred(attackerIpAddress);
 #endif
 }
-void resetAttackState()
+void Notify::resetAttackState()
 {
     consoleLog.ResetAttackState();
 #if MQTT_ENABLED
@@ -93,7 +93,7 @@ void resetAttackState()
 #endif
 }
 
-void notifyLoop()
+void Notify::notifyLoop()
 {
     if (!messagesAvailable)
     {

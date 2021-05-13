@@ -2,7 +2,6 @@
 
 AsyncTelegram bot;
 TBMessage msgGroup;
-
 //For cases when Telegram is not working - we should stop sending notifications there, 
 //until issue is resolved (certificate, etc..)
 boolean initOK = false;
@@ -19,11 +18,11 @@ void TelegramNotifier::Init()
         initOK = true;
         msgGroup.chatId = BOT_CHAT_ID;
         Serial.println(F("Telegram connection is OK!"));
-        notify("ESP started. \r\nIP: " + WiFi.localIP().toString() + "\r\nName " + bot.userName);
+        notifier.notify("ESP started. \r\nIP: " + WiFi.localIP().toString() + "\r\nName " + bot.userName);
     } else{
         initOK = false;
         Serial.println(F("Telegram connection is NOK!"));
-        notify(F("Cannot init Telegram notifications"));
+        notifier.notify(F("Cannot init Telegram notifications"));
     }
 }
 

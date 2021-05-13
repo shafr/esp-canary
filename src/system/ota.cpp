@@ -3,15 +3,15 @@
 void OTA::Setup()
 {
   ArduinoOTA.onStart([]() {
-    notify(F("[INFO]: Upgrade start"));
+    notifier.notify(F("[INFO]: Upgrade start"));
   });
 
   ArduinoOTA.onEnd([]() {
-    notify(F("[INFO]: Upgrade finish"));
+    notifier.notify(F("[INFO]: Upgrade finish"));
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    notify(F("[ERROR]: Error during OTA Upgrade!: ")); 
+    notifier.notify(F("[ERROR]: Error during OTA Upgrade!: ")); 
     Serial.println(error); //TODO - send error
 
     ESP.restart();
