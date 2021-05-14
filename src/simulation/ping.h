@@ -1,7 +1,6 @@
 #pragma once
 #ifndef _PING_H_
 #define _PING_H_
-#if defined(ESP8266) && PING_ENABLED
 
 #include "Arduino.h"
 #include <Netdump.h>
@@ -17,5 +16,4 @@ public:
   void loop();
 };
 
-#endif
 #endif

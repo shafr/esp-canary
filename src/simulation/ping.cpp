@@ -1,5 +1,3 @@
-#if defined(ESP8266) && PING_ENABLED
-
 #include "ping.h"
 
 Netdump netDump;
@@ -60,4 +58,3 @@ void PingWatcher::loop()
         findIPInsideICMPRequest();
     }
 }
-#endif
