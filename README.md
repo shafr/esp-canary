@@ -28,13 +28,11 @@ The question was not `if` but `when` this would happen.
 * Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
 * Upload sketch using `PlatformIO: upload`
 
-[Home-Assitant configuration](web-res/ha-config.md)
+[Home-Assistant configuration](web-res/ha-config.md)
 
 ## Nmap scan Status
 
-It does reacts on NMap -A scan.
-
-
+It does reacts on NMap -A scan (when it requests options). Just scanning for open ports will not trigger the canary.
 
 # TODOs:
 [See TODO List](web-res/TODO.md)
