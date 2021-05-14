@@ -57,10 +57,10 @@
 // =========== MQTT ===========================
 #define MQTT_ENABLED false
 #define MQTT_HOST "192.168.1.1"
-#define MQTT_TOPIC "/security/honeypot"
+#define MQTT_TOPIC "security/canary"
 #define MQTT_PORT 1883
-#define MQTT_CLIENT_ID "Honeypot"
-#define MQTT_USER "Honeypot"
+#define MQTT_CLIENT_ID "ESPCanary"
+#define MQTT_USER "Canary"
 #define MQTT_PASSWORD "NDCU74EJoh2N69GRhMfc"
 
 // =========== EMAIL ===========================
