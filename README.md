@@ -30,9 +30,18 @@ The question was not `if` but `when` this would happen.
 
 [Home-Assistant configuration](web-res/ha-config.md)
 
-## Nmap scan Status
+## Scanner tools status:
 
-It does reacts on NMap -A scan (when it requests options). Just scanning for open ports will not trigger the canary (e.g. with a net analyzer app).
+NMap:                         
+- Reacts to a NMap -A scan.
+- Does not react to a ping scan (nmap -sn), regular scan (nmap) or quick scan (nmap -T4 -F)
+- Reacts to quick scan plus (-sV -T4 -O -F --version-light ) or higher (intense or slow)
+
+Advanced IP Scanner (2.4):    
+- Reacts to a standard scan
+
+Network Analyzer 7.7 (iOS):
+- Does not react to port scan.
 
 # TODOs:
 [See TODO List](web-res/TODO.md)
