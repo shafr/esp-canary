@@ -17,12 +17,22 @@
 #include "simulation/tomcat.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
-
 #include "system/ota.h"
+
+#if defined(ESP8266) && PING_ENABLED
+#include "simulation/ping.h"
+#endif
+
+Notify notifier;
+
 OTA ota;
 
 #if TOMCAT_ENABLED
   TomcatSimu tomcatSimu;
+#endif
+
+#if defined(ESP8266) && PING_ENABLED
+  PingWatcher pingWatcher;
 #endif
 
 void ConnectToWifi()
@@ -59,7 +69,7 @@ void setup()
 
   ota.Setup();
 
-  initReporting();
+  notifier.initReporting();
 
   // syncNtpTime();
 
@@ -67,10 +77,19 @@ void setup()
     tomcatSimu.Serve();
   #endif
 
+  #if defined(ESP8266) && PING_ENABLED
+    pingWatcher.setup();
+  #endif
+
 }
 
 void loop()
 {
   ota.Loop();
-  notifyLoop();
+
+  #if defined(ESP8266) && PING_ENABLED
+    pingWatcher.loop();
+  #endif
+
+  notifier.notifyLoop();
 }
