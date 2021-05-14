@@ -42,7 +42,7 @@ ui-lovelace.yaml:
 
 ```yaml
   - type: glance
-    title: Honeypot
+    title: Network Canary
     show_name: false
     show_state: false
     entities:
@@ -52,5 +52,5 @@ ui-lovelace.yaml:
         - entity: automation.network_breach
         icon: mdi:robot-industrial
         - entity: binary_sensor.ping_canary
-        icon: mdi:beehive-outline
+        icon: mdi:bird
 ```
