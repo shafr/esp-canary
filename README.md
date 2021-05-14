@@ -28,6 +28,10 @@ The question was not `if` but `when` this would happen.
 * Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
 * Upload sketch using `PlatformIO: upload`
 
+### Home Assistant:
+![Lovelace](web-res/lovelace-image/lovelace.png)
+
+Configuration:
 [Home-Assistant configuration](web-res/ha-config.md)
 
 ## Scanner tools status:
