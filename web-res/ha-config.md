@@ -1,7 +1,7 @@
 # Home-assistant configuration:
 
 
-```yaml
+```configuration.yaml
 sensor:
   - platform: mqtt
     name: "attack_ip"
