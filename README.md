@@ -32,7 +32,7 @@ The question was not `if` but `when` this would happen.
 
 ## Nmap scan Status
 
-It does reacts on NMap -A scan (when it requests options). Just scanning for open ports will not trigger the canary.
+It does reacts on NMap -A scan (when it requests options). Just scanning for open ports will not trigger the canary (e.g. with a net analyzer app).
 
 # TODOs:
 [See TODO List](web-res/TODO.md)
