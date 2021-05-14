@@ -51,6 +51,6 @@ ui-lovelace.yaml:
         icon: mdi:ip
         - entity: automation.network_breach
         icon: mdi:robot-industrial
-        - entity: binary_sensor.ping_honeypot
+        - entity: binary_sensor.ping_canary
         icon: mdi:beehive-outline
 ```
