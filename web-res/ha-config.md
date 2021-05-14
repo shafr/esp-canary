@@ -1,6 +1,5 @@
 # Home-assistant configuration:
 
-honeypot.yaml:
 
 ```yaml
 sensor:
@@ -21,7 +20,7 @@ binary_sensor:
     name: ping_canary
     count: 2
     scan_interval: 60
-    host: 192.168.1.1
+    host: 192.168.0.66
 
 automation:
   - alias: network_breach
@@ -35,22 +34,21 @@ automation:
       - service: notify.telegram
         data:
           title: "Network breach"
-          message: "Netowrk Breach!!!"
+          message: "Someone is scanning the network"
 ```          
 
 ui-lovelace.yaml:
 
 ```yaml
-  - type: glance
-    title: Network Canary
-    show_name: false
-    show_state: false
-    entities:
-        - binary_sensor.attack_status
-        - entity: sensor.attack_ip
-        icon: mdi:ip
-        - entity: automation.network_breach
-        icon: mdi:robot-industrial
-        - entity: binary_sensor.ping_canary
-        icon: mdi:bird
+- type: glance
+  title: Network Breach Canary
+  entities:
+    - entity: binary_sensor.attack_status
+      name: Status
+    - entity: sensor.attack_ip
+      name: Last Attack IP
+      icon: 'mdi:ip'
+    - entity: binary_sensor.ping_canary
+      name: Watchdog Status
+      icon: 'mdi:bird'
 ```
