@@ -6,19 +6,19 @@ honeypot.yaml:
 sensor:
   - platform: mqtt
     name: "attack_ip"
-    state_topic: "/security/honeypot/attackerip"
+    state_topic: "security/canary/attackerip"
     value_template: "{{ value }}"
 
 binary_sensor:
   - platform: mqtt
     name: "attack_status"
-    state_topic: "/security/honeypot/attackinprogress"
+    state_topic: "security/canary/attackinprogress"
     device_class: "problem"
     payload_on: "True"
     payload_off: "False"
 
   - platform: ping
-    name: ping_honeypot
+    name: ping_canary
     count: 2
     scan_interval: 60
     host: 192.168.1.1
