@@ -18,7 +18,10 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
+
+#if defined(ESP8266) && PING_ENABLED
 #include "simulation/ping.h"
+#endif
 
 Notify notifier;
 
@@ -28,7 +31,7 @@ OTA ota;
   TomcatSimu tomcatSimu;
 #endif
 
-#if PING_ENABLED
+#if defined(ESP8266) && PING_ENABLED
   PingWatcher pingWatcher;
 #endif
 
@@ -74,7 +77,7 @@ void setup()
     tomcatSimu.Serve();
   #endif
 
-  #if PING_ENABLED
+  #if defined(ESP8266) && PING_ENABLED
     pingWatcher.setup();
   #endif
 
@@ -84,7 +87,7 @@ void loop()
 {
   ota.Loop();
 
-  #if PING_ENABLED
+  #if defined(ESP8266) && PING_ENABLED
     pingWatcher.loop();
   #endif
 
