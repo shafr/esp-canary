@@ -4,20 +4,20 @@ AsyncMqttClient mqttClient;
 
 void MqttNotifier::Notify(String message)
 {
-  mqttClient.publish("/security/canary/info", 2, true, message.c_str());
+  mqttClient.publish("security/canary/info", 2, true, message.c_str());
 }
 
 //TODO - subscribe to reset / configure commands in topic ?
 
 void MqttNotifier::NotifyAttackOccurred(String attackerIpAddress)
 {
-  mqttClient.publish("/security/canary/attackinprogress", 2, true, "True");
-  mqttClient.publish("/security/canary/attackerip", 2, true, attackerIpAddress.c_str());
+  mqttClient.publish("security/canary/attackinprogress", 2, true, "True");
+  mqttClient.publish("security/canary/attackerip", 2, true, attackerIpAddress.c_str());
 }
 
 void MqttNotifier::ResetAttackState()
 {
-  mqttClient.publish("/security/canary/attackinprogress", 2, false, "False");
+  mqttClient.publish("security/canary/attackinprogress", 2, false, "False");
 }
 
 void onMqttConnect(bool sessionPresent)
