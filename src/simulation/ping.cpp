@@ -39,7 +39,6 @@ void findIPInsideICMPRequest()
     notifier.notifyAttackOccurred(scanResult);
 }
 
-// ARP  who has 192.168.134.138 tell 192.168.134.80
 void findIpInsideArpRequest()
 {
     const String s = globalSearchString;
@@ -56,10 +55,22 @@ void findIpInsideArpRequest()
 
     const int endIndex = s.indexOf('\n', startIndex + tellString.length());
 
-    String scanResult = s.substring(startIndex + tellString.length() + 1, endIndex);
+    const String attackerIP = s.substring(startIndex + tellString.length() + 1, endIndex-1);
+
+    //Ignoring requests from Router
+    if (attackerIP.equals(WiFi.gatewayIP().toString()))
+    {
+        return;
+    }
+
+    //Each ARP <someone> -> <this> request is followed by <this> -> <someone> request  
+    if (attackerIP.equals(WiFi.localIP().toString()))
+    {
+        return;
+    }
 
     notifier.notify(F("[PING]: Ping ARP request"));
-    notifier.notifyAttackOccurred(scanResult);
+    notifier.notifyAttackOccurred(attackerIP);
 }
 
 void PingWatcher::setup()
@@ -75,13 +86,6 @@ void PingWatcher::loop()
     if (!streamString.isEmpty())
     {
         globalSearchString = streamString.readString();
-
-        //Not sure if that is necessary
-        if (globalSearchString.isEmpty())
-        {
-            Serial.println("!!!!!!!!!!!! Empty String!");
-            return;
-        }
 
         findIPInsideICMPRequest();
         findIpInsideArpRequest();
