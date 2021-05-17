@@ -23,7 +23,7 @@
 ### Emulations:
 - [ ] SSH emulation
 - [ ] Telnet emulation
-- [ ] Add Ping handler
+- [X] Add Ping handler (ARP + ICMP)
 
 # Emulation part:
 
