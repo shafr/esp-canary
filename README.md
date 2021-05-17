@@ -28,13 +28,24 @@ The question was not `if` but `when` this would happen.
 * Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
 * Upload sketch using `PlatformIO: upload`
 
-[Home-Assitant configuration](web-res/ha-config.md)
+### Home Assistant:
+![Lovelace](web-res/lovelace-image/lovelace.png)
 
-## Nmap scan Status
+Configuration:
+[Home-Assistant configuration](web-res/ha-config.md)
 
-It does reacts on NMap -A scan.
+## Scanner tools status:
 
+NMap:                         
+- Reacts to a NMap -A scan.
+- Does not react to a ping scan (nmap -sn), regular scan (nmap) or quick scan (nmap -T4 -F)
+- Reacts to quick scan plus (-sV -T4 -O -F --version-light ) or higher (intense or slow)
 
+Advanced IP Scanner (2.4):    
+- Reacts to a standard scan
+
+Network Analyzer 7.7 (iOS):
+- Does not react to port scan.
 
 # TODOs:
 [See TODO List](web-res/TODO.md)
