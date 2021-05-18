@@ -69,6 +69,13 @@ void findIpInsideArpRequest()
         return;
     }
 
+    #if MQTT_ENABLED && defined(MQTT_HOST)
+    if (attackerIP.equals(String(MQTT_HOST)))
+    {
+        return;
+    } 
+    #endif
+
     notifier.notify(F("[PING]: Ping ARP request"));
     notifier.notifyAttackOccurred(attackerIP);
 }
