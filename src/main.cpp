@@ -71,6 +71,8 @@ void setup()
 
   notifier.initReporting();
 
+  notifier.notify("Build version: " + String(VERSION));
+
   // syncNtpTime();
 
   #if TOMCAT_ENABLED
