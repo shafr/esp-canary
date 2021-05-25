@@ -5,6 +5,9 @@ boolean messagesAvailable = false;
 String notifyMessage = "";
 String attackerIpAddress = "";
 
+std::vector<String> messages;
+std::vector<Message> attackMessages;
+
 #if MQTT_ENABLED
 #include "mqtt.h"
 MqttNotifier mqttNotifier;
@@ -41,14 +44,12 @@ void Notifier::Init()
 
 void Notifier::Notify(String message)
 {
-    messagesAvailable = true;
-    notifyMessage = message;
+    messages.push_back(message);
 }
 
-void Notifier::NotifyAttackOccurred(String source, String feature, String attackerIp)
+void Notifier::NotifyAttackOccurred(Message attackMessage)
 {
-    messagesAvailable = true;
-    attackerIpAddress = attackerIp;
+    attackMessages.push_back(attackMessage);
 }
 
 void Notifier::sendNotify(String message)
@@ -65,18 +66,18 @@ void Notifier::sendNotify(String message)
     telegramNotifier.Notify(message);
 #endif
 }
-void Notifier::sendNotifyAttackOccurred(String source, String feature, String attackerIp)
+void Notifier::sendNotifyAttackOccurred(Message attackMessage)
 {
-    consoleLog.NotifyAttackOccurred(source, feature, attackerIp);
+    consoleLog.NotifyAttackOccurred(attackMessage);
 
 #if MQTT_ENABLED
-    mqttNotifier.NotifyAttackOccurred(source, feature, attackerIp);
+    mqttNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.NotifyAttackOccurred(source, feature, attackerIp);
+    emailNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 #if TELEGRAM_ENABLED
-    telegramNotifier.NotifyAttackOccurred(source, feature, attackerIp);
+    telegramNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 }
 void Notifier::ResetAttackState()
@@ -95,22 +96,18 @@ void Notifier::ResetAttackState()
 
 void Notifier::notifyLoop()
 {
-    if (!messagesAvailable)
+    if ((messages.size() < 1) || (attackMessages.size() < 1))
     {
         return;
     }
 
-    if (notifyMessage.length() > 0)
+    for (unsigned int z = 0; z < messages.size(); z++)
     {
-        sendNotify(notifyMessage);
-        notifyMessage = "";
-        messagesAvailable = false;
+        sendNotify(messages.at(z));
     }
 
-    if (attackerIpAddress.length() > 0)
+    for (unsigned int z = 0; z < attackMessages.size(); z++)
     {
-        // sendNotifyAttackOccurred(source, feature, attackerIp);
-        attackerIpAddress = "";
-        messagesAvailable = false;
+        sendNotifyAttackOccurred(attackMessages.at(z));
     }
 }

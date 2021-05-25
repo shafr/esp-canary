@@ -33,9 +33,14 @@ void findIPInsideICMPRequest()
         return;
     }
 
-    String scanResult = s.substring(end_search_index + 1, indexOfPingRequest);
+    String attackerIP = s.substring(end_search_index + 1, indexOfPingRequest);
 
-    notifier.NotifyAttackOccurred("PING", "ICMP Request", scanResult);
+    Message m;
+    m.source = F("PING");
+    m.feature = F("ICMP");
+    m.attackerIp = attackerIP;
+
+    notifier.NotifyAttackOccurred(m);
 }
 
 void findIpInsideArpRequest()
@@ -75,7 +80,11 @@ void findIpInsideArpRequest()
     } 
     #endif
 
-    notifier.NotifyAttackOccurred("PING", "ARP Request", attackerIP);
+    Message m;
+    m.source = F("PING");
+    m.feature = F("ARP");
+    m.attackerIp = attackerIP;
+    notifier.NotifyAttackOccurred(m);
 }
 
 void PingWatcher::setup()

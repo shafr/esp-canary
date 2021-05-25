@@ -4,11 +4,18 @@
 
 #include "Arduino.h"
 
+struct Message  
+{  
+   String source;  
+   String feature;  
+   String attackerIp;  
+};
+
 class NotificationSender {
 public:
    virtual void Init();
    virtual void Notify(String message);
-   virtual void NotifyAttackOccurred(String source, String feature, String attackerIp);
+   virtual void NotifyAttackOccurred(Message attackMessage);
    virtual void ResetAttackState();
 };
 

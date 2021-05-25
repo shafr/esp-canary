@@ -72,6 +72,7 @@ void setup()
   notifier.Init();
 
   notifier.Notify("Build version: " + String(VERSION));
+  notifier.Notify("IP Address: " + WiFi.localIP());
 
   // syncNtpTime();
 
@@ -82,7 +83,6 @@ void setup()
   #if defined(ESP8266) && PING_ENABLED
     pingWatcher.setup();
   #endif
-
 }
 
 void loop()

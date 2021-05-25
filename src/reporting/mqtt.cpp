@@ -19,10 +19,9 @@ void setAttackState(bool state)
   mqttClient.publish("security/canary/attackinprogress", 2, state, strState);
 }
 
-void MqttNotifier::NotifyAttackOccurred(String source, String feature, String attackerIp)
-{
+void MqttNotifier::NotifyAttackOccurred(Message attackMessage){
   setAttackState(true);  
-  mqttClient.publish("security/canary/attackerip", 2, true, attackerIp.c_str());
+  mqttClient.publish("security/canary/attackerip", 2, true, attackMessage.attackerIp.c_str());
 }
 
 void MqttNotifier::ResetAttackState()

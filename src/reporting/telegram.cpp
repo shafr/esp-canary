@@ -34,12 +34,12 @@ void TelegramNotifier::Notify(String message)
     bot.sendMessage(msgGroup, message);
 }
 
-void TelegramNotifier::NotifyAttackOccurred(String source, String feature, String attackerIp)
+void TelegramNotifier::NotifyAttackOccurred(Message attackMessage)
 {
         if (!initOK){
         return;
     }
-    bot.sendMessage(msgGroup, "Attack was performed from: " + attackerIp);
+    bot.sendMessage(msgGroup, "Attack was performed from: " + attackMessage.attackerIp);
 }
 
 void TelegramNotifier::ResetAttackState()

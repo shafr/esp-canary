@@ -98,8 +98,8 @@ void EmailNotifier::Init(){
 void EmailNotifier::Notify(String message){
   sendMail(String("Notification").c_str(), message.c_str());
 }
-void EmailNotifier::NotifyAttackOccurred(String source, String feature, String attackerIp){
-  sendMail(String("Attack had occurred!").c_str(), attackerIp.c_str());
+void EmailNotifier::NotifyAttackOccurred(Message attackMessage){
+  sendMail(String("Attack had occurred!").c_str(), attackMessage.attackerIp.c_str());
 }
 void EmailNotifier::ResetAttackState(){
   sendMail(String("Resetting attack state").c_str(), String("Resetting attack state").c_str());

@@ -23,7 +23,7 @@ class TelegramNotifier : public NotificationSender
 public:
     void Init();
     void Notify(String message);
-    void NotifyAttackOccurred(String source, String feature, String attackerIp);
+    void NotifyAttackOccurred(Message attackMessage);
     void ResetAttackState();
 };
 #endif

@@ -13,7 +13,7 @@ class MqttNotifier : public NotificationSender
 {
 public:
     void Init();
-    void NotifyAttackOccurred(String source, String feature, String attackerIp);
+    void NotifyAttackOccurred(Message attackMessage);
     void ResetAttackState();
     void Notify(String message);
 };
