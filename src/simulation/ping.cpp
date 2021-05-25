@@ -33,10 +33,14 @@ void findIPInsideICMPRequest()
         return;
     }
 
-    String scanResult = s.substring(end_search_index + 1, indexOfPingRequest);
+    String attackerIP = s.substring(end_search_index + 1, indexOfPingRequest);
 
-    notifier.notify(F("[PING]: Ping ICMP request"));
-    notifier.notifyAttackOccurred(scanResult);
+    Message m;
+    m.source = F("PING");
+    m.feature = F("ICMP");
+    m.attackerIp = attackerIP;
+
+    notifier.NotifyAttackOccurred(m);
 }
 
 void findIpInsideArpRequest()
@@ -69,15 +73,18 @@ void findIpInsideArpRequest()
         return;
     }
 
-    #if MQTT_ENABLED && defined(MQTT_HOST)
+    #if defined(MQTT_HOST)
     if (attackerIP.equals(String(MQTT_HOST)))
     {
         return;
     } 
     #endif
 
-    notifier.notify(F("[PING]: Ping ARP request"));
-    notifier.notifyAttackOccurred(attackerIP);
+    Message m;
+    m.source = F("PING");
+    m.feature = F("ARP");
+    m.attackerIp = attackerIP;
+    notifier.NotifyAttackOccurred(m);
 }
 
 void PingWatcher::setup()

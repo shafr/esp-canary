@@ -18,11 +18,12 @@
 #include "AsyncTelegram.h"
 
 
-class TelegramNotifier  {
+class TelegramNotifier : public NotificationSender 
+{
 public:
     void Init();
     void Notify(String message);
-    void NotifyAttackOccurred(String attackerIpAddress);
+    void NotifyAttackOccurred(Message attackMessage);
     void ResetAttackState();
 };
 #endif

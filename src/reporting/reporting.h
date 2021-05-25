@@ -3,23 +3,25 @@
 #define _REPORTING_H_
 
 #include "Arduino.h"
+#include <vector>
+#include "notifier.h"
 #include "../user_config.h"
 
-class Notify
+class Notifier : public NotificationSender
 {
 public:
-    void notifyAttackOccurred(String attackerIpAddress);
-    void notify(String message);
-    void resetAttackState();
-    void initReporting();
+    void Init();
+    void Notify(String message);
+    void NotifyAttackOccurred(Message attackMessage);
+    void ResetAttackState();
     void notifyLoop();
     void printf_P();
 
 private:
     void sendNotify(String message);
-    void sendNotifyAttackOccurred(String attackerIpAddress);
+    void sendNotifyAttackOccurred(Message attackMessage);
 };
 
-extern Notify notifier;
+extern Notifier notifier;
 
 #endif
