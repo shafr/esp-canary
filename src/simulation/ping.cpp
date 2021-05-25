@@ -7,6 +7,9 @@ StreamString streamString;
 //TODO - use pointers or char[] for local things
 String globalSearchString;
 
+//This are extra hosts that are causing false positive
+String HostsExceptions[] = {"192.168.1.3"};
+
 void findIPInsideICMPRequest()
 {
     const String s = globalSearchString;
@@ -91,6 +94,12 @@ void findIpInsideArpRequest()
     } 
     #endif
 
+    for (String host : HostsExceptions){
+        if (attackerIP.equals(host)){
+            return;
+        }
+    }
+    
     Message m;
     m.source = F("PING");
     m.feature = F("ARP");
