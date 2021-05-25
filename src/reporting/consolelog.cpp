@@ -12,9 +12,9 @@ void ConsoleLogger::Notify(String message)
     Serial.println("[NOTIFICATION]: " + message);
 }
 
-void ConsoleLogger::NotifyAttackOccurred(String attackerIpAddress)
+void ConsoleLogger::NotifyAttackOccurred(String source, String feature, String attackerIp)
 {
-    Serial.println("[NOTIFICATION]: Attack occured from: " + attackerIpAddress);
+    Serial.println("[NOTIFICATION]: Attack occured from: " + attackerIp);
 }
 
 void ConsoleLogger::ResetAttackState()

@@ -4,11 +4,11 @@ AsyncWebServer tomcatServer(TOMCAT_PORT);
 int loginCount = 0;
 
 #define TEXT_HTML "text/html"
+#define TOMCAT_SOURCE "TOMCAT"
 
 void handleAuth(AsyncWebServerRequest *request)
 {
-  notifier.notify(F("[Tomcat]: Handle AUTH"));
-  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.NotifyAttackOccurred(TOMCAT_SOURCE, "Handle Auth", request->client()->remoteIP().toString().c_str());
 
   if (!request->authenticate("tomcat", "tomcat"))
   {
@@ -33,15 +33,13 @@ void handleAuth(AsyncWebServerRequest *request)
 
 void redirectToLoginPage(AsyncWebServerRequest *request)
 {
-  notifier.notify(F("[Tomcat]: Redirect login"));
-
-  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
+  notifier.NotifyAttackOccurred(TOMCAT_SOURCE, "Redirect login", request->client()->remoteIP().toString().c_str());
   request->redirect(F("/"));
 }
 
 void handleOptionsRequest(AsyncWebServerRequest *request)
 {
-  notifier.notify(F("[Tomcat]: Options Request"));
+  notifier.NotifyAttackOccurred(TOMCAT_SOURCE, "Options Request", request->client()->remoteIP().toString().c_str());
 
   AsyncWebServerResponse *response = request->beginResponse(200);
   response->addHeader(F("Allow"), F("GET, HEAD, POST, OPTIONS"));
@@ -53,9 +51,8 @@ void handleOptionsRequest(AsyncWebServerRequest *request)
 
 void handle404Request(AsyncWebServerRequest *request)
 {
-  notifier.notify(F("[Tomcat]: 404"));
-  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
-
+  notifier.NotifyAttackOccurred(TOMCAT_SOURCE, "404", request->client()->remoteIP().toString().c_str());
+  
   AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/404.html"), TEXT_HTML);
   response->setCode(404);
   request->send(response);
@@ -63,9 +60,8 @@ void handle404Request(AsyncWebServerRequest *request)
 
 void handleRootRequest(AsyncWebServerRequest *request)
 {
-  notifier.notify(F("[Tomcat]: ROOT request"));
-  notifier.notifyAttackOccurred(request->client()->remoteIP().toString().c_str());
-
+  notifier.NotifyAttackOccurred(TOMCAT_SOURCE, "/ request", request->client()->remoteIP().toString().c_str());
+  
   AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/index.html"), TEXT_HTML);
   response->setCode(200);
   request->send(response);

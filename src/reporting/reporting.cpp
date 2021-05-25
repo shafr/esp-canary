@@ -23,7 +23,7 @@ TelegramNotifier telegramNotifier;
 #include "consolelog.h"
 ConsoleLogger consoleLog;
 
-void Notify::initReporting()
+void Notifier::Init()
 {
 #if MQTT_ENABLED
     mqttNotifier.Init();
@@ -39,19 +39,19 @@ void Notify::initReporting()
 
 }
 
-void Notify::notify(String message)
+void Notifier::Notify(String message)
 {
     messagesAvailable = true;
     notifyMessage = message;
 }
 
-void Notify::notifyAttackOccurred(String attackerIp)
+void Notifier::NotifyAttackOccurred(String source, String feature, String attackerIp)
 {
     messagesAvailable = true;
     attackerIpAddress = attackerIp;
 }
 
-void Notify::sendNotify(String message)
+void Notifier::sendNotify(String message)
 {
     consoleLog.Notify(message);
 
@@ -65,21 +65,21 @@ void Notify::sendNotify(String message)
     telegramNotifier.Notify(message);
 #endif
 }
-void Notify::sendNotifyAttackOccurred(String attackerIpAddress)
+void Notifier::sendNotifyAttackOccurred(String source, String feature, String attackerIp)
 {
-    consoleLog.NotifyAttackOccurred(attackerIpAddress);
+    consoleLog.NotifyAttackOccurred(source, feature, attackerIp);
 
 #if MQTT_ENABLED
-    mqttNotifier.NotifyAttackOccurred(attackerIpAddress);
+    mqttNotifier.NotifyAttackOccurred(source, feature, attackerIp);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.NotifyAttackOccurred(attackerIpAddress);
+    emailNotifier.NotifyAttackOccurred(source, feature, attackerIp);
 #endif
 #if TELEGRAM_ENABLED
-    telegramNotifier.NotifyAttackOccurred(attackerIpAddress);
+    telegramNotifier.NotifyAttackOccurred(source, feature, attackerIp);
 #endif
 }
-void Notify::resetAttackState()
+void Notifier::ResetAttackState()
 {
     consoleLog.ResetAttackState();
 #if MQTT_ENABLED
@@ -93,7 +93,7 @@ void Notify::resetAttackState()
 #endif
 }
 
-void Notify::notifyLoop()
+void Notifier::notifyLoop()
 {
     if (!messagesAvailable)
     {
@@ -109,7 +109,7 @@ void Notify::notifyLoop()
 
     if (attackerIpAddress.length() > 0)
     {
-        sendNotifyAttackOccurred(attackerIpAddress);
+        // sendNotifyAttackOccurred(source, feature, attackerIp);
         attackerIpAddress = "";
         messagesAvailable = false;
     }

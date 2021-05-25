@@ -7,12 +7,13 @@
 
 #include "user_config.h"
 #include "../system/util.h"
+#include "notifier.h"
 
-class MqttNotifier
+class MqttNotifier : public NotificationSender 
 {
 public:
     void Init();
-    void NotifyAttackOccurred(String attackerIpAddress);
+    void NotifyAttackOccurred(String source, String feature, String attackerIp);
     void ResetAttackState();
     void Notify(String message);
 };

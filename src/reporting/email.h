@@ -11,8 +11,9 @@
 #endif
 
 #include <ESP_Mail_Client.h>
+#include "notifier.h"
 
-class EmailNotifier
+class EmailNotifier : public NotificationSender
 {
 private:
     SMTPSession smtp;
@@ -22,7 +23,7 @@ private:
 public:
     void Init();
     void Notify(String message);
-    void NotifyAttackOccurred(String attackerIpAddress);
+    void NotifyAttackOccurred(String source, String feature, String attackerIp);
     void ResetAttackState();
 };
 
