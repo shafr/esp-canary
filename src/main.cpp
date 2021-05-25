@@ -72,8 +72,6 @@ void setup()
   notifier.Init();
 
   notifier.Notify("Build version: " + String(VERSION));
-  notifier.Notify("IP Address: " + WiFi.localIP());
-
   // syncNtpTime();
 
   #if TOMCAT_ENABLED

@@ -96,7 +96,7 @@ void Notifier::ResetAttackState()
 
 void Notifier::notifyLoop()
 {
-    if ((messages.size() < 1) || (attackMessages.size() < 1))
+    if (messages.empty() && attackMessages.empty())
     {
         return;
     }
@@ -106,8 +106,12 @@ void Notifier::notifyLoop()
         sendNotify(messages.at(z));
     }
 
+    messages.clear();
+
     for (unsigned int z = 0; z < attackMessages.size(); z++)
     {
         sendNotifyAttackOccurred(attackMessages.at(z));
     }
+
+    attackMessages.clear();
 }
