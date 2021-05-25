@@ -17,23 +17,34 @@ void findIPInsideICMPRequest()
         return;
     }
 
-    int end_search_index = indexOfPingRequest;
-    while (end_search_index > 0)
+    int search_index = indexOfPingRequest;
+    int end_search_index = -1;
+    int start_search_index = -1;
+
+    while (search_index > 0)
     {
         // looking for attacker IP only
-        if (s.charAt(end_search_index) == '>')
+        if (s.charAt(search_index) == '>')
         {
+            end_search_index = search_index;
+        }
+        // ICM'P'
+        if (s.charAt(search_index) == 'P')
+        {
+            start_search_index = search_index + 1;
             break;
         }
-        end_search_index--;
+
+        search_index--;
     }
 
-    if (end_search_index == -1)
+    if (end_search_index == -1 || start_search_index == -1 )
     {
+        Serial.println("IP not found");
         return;
     }
 
-    String attackerIP = s.substring(end_search_index + 1, indexOfPingRequest);
+    String attackerIP = s.substring(start_search_index + 1, end_search_index);
 
     Message m;
     m.source = F("PING");
