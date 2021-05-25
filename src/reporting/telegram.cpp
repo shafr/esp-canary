@@ -39,7 +39,9 @@ void TelegramNotifier::NotifyAttackOccurred(Message attackMessage)
         if (!initOK){
         return;
     }
-    bot.sendMessage(msgGroup, "Attack was performed from: " + attackMessage.attackerIp);
+
+    String message =  "[ " + attackMessage.source + " ] " +  "[ " + attackMessage.feature + " ] " + attackMessage.attackerIp;
+    bot.sendMessage(msgGroup, message);
 }
 
 void TelegramNotifier::ResetAttackState()
