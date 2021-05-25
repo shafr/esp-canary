@@ -5,6 +5,9 @@ boolean messagesAvailable = false;
 String notifyMessage = "";
 String attackerIpAddress = "";
 
+std::vector<String> messages;
+std::vector<Message> attackMessages;
+
 #if MQTT_ENABLED
 #include "mqtt.h"
 MqttNotifier mqttNotifier;
@@ -23,7 +26,7 @@ TelegramNotifier telegramNotifier;
 #include "consolelog.h"
 ConsoleLogger consoleLog;
 
-void Notify::initReporting()
+void Notifier::Init()
 {
 #if MQTT_ENABLED
     mqttNotifier.Init();
@@ -39,19 +42,17 @@ void Notify::initReporting()
 
 }
 
-void Notify::notify(String message)
+void Notifier::Notify(String message)
 {
-    messagesAvailable = true;
-    notifyMessage = message;
+    messages.push_back(message);
 }
 
-void Notify::notifyAttackOccurred(String attackerIp)
+void Notifier::NotifyAttackOccurred(Message attackMessage)
 {
-    messagesAvailable = true;
-    attackerIpAddress = attackerIp;
+    attackMessages.push_back(attackMessage);
 }
 
-void Notify::sendNotify(String message)
+void Notifier::sendNotify(String message)
 {
     consoleLog.Notify(message);
 
@@ -65,21 +66,21 @@ void Notify::sendNotify(String message)
     telegramNotifier.Notify(message);
 #endif
 }
-void Notify::sendNotifyAttackOccurred(String attackerIpAddress)
+void Notifier::sendNotifyAttackOccurred(Message attackMessage)
 {
-    consoleLog.NotifyAttackOccurred(attackerIpAddress);
+    consoleLog.NotifyAttackOccurred(attackMessage);
 
 #if MQTT_ENABLED
-    mqttNotifier.NotifyAttackOccurred(attackerIpAddress);
+    mqttNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.NotifyAttackOccurred(attackerIpAddress);
+    emailNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 #if TELEGRAM_ENABLED
-    telegramNotifier.NotifyAttackOccurred(attackerIpAddress);
+    telegramNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 }
-void Notify::resetAttackState()
+void Notifier::ResetAttackState()
 {
     consoleLog.ResetAttackState();
 #if MQTT_ENABLED
@@ -93,24 +94,24 @@ void Notify::resetAttackState()
 #endif
 }
 
-void Notify::notifyLoop()
+void Notifier::notifyLoop()
 {
-    if (!messagesAvailable)
+    if (messages.empty() && attackMessages.empty())
     {
         return;
     }
 
-    if (notifyMessage.length() > 0)
+    for (unsigned int z = 0; z < messages.size(); z++)
     {
-        sendNotify(notifyMessage);
-        notifyMessage = "";
-        messagesAvailable = false;
+        sendNotify(messages.at(z));
     }
 
-    if (attackerIpAddress.length() > 0)
+    messages.clear();
+
+    for (unsigned int z = 0; z < attackMessages.size(); z++)
     {
-        sendNotifyAttackOccurred(attackerIpAddress);
-        attackerIpAddress = "";
-        messagesAvailable = false;
+        sendNotifyAttackOccurred(attackMessages.at(z));
     }
+
+    attackMessages.clear();
 }

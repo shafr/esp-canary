@@ -23,7 +23,7 @@
 #include "simulation/ping.h"
 #endif
 
-Notify notifier;
+Notifier notifier;
 
 OTA ota;
 
@@ -69,10 +69,9 @@ void setup()
 
   ota.Setup();
 
-  notifier.initReporting();
+  notifier.Init();
 
-  notifier.notify("Build version: " + String(VERSION));
-
+  notifier.Notify("Build version: " + String(VERSION));
   // syncNtpTime();
 
   #if TOMCAT_ENABLED
@@ -82,7 +81,6 @@ void setup()
   #if defined(ESP8266) && PING_ENABLED
     pingWatcher.setup();
   #endif
-
 }
 
 void loop()

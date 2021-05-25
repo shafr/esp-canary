@@ -18,11 +18,11 @@ void TelegramNotifier::Init()
         initOK = true;
         msgGroup.chatId = BOT_CHAT_ID;
         Serial.println(F("Telegram connection is OK!"));
-        notifier.notify("ESP started. \r\nIP: " + WiFi.localIP().toString() + "\r\nName " + bot.userName);
+        notifier.Notify("ESP started. \r\nIP: " + WiFi.localIP().toString() + "\r\nName " + bot.userName);
     } else{
         initOK = false;
         Serial.println(F("Telegram connection is NOK!"));
-        notifier.notify(F("Cannot init Telegram notifications"));
+        notifier.Notify(F("Cannot init Telegram notifications"));
     }
 }
 
@@ -34,12 +34,14 @@ void TelegramNotifier::Notify(String message)
     bot.sendMessage(msgGroup, message);
 }
 
-void TelegramNotifier::NotifyAttackOccurred(String attackerIpAddress)
+void TelegramNotifier::NotifyAttackOccurred(Message attackMessage)
 {
         if (!initOK){
         return;
     }
-    bot.sendMessage(msgGroup, "Attack was performed from: " + attackerIpAddress);
+
+    String message =  "[ " + attackMessage.source + " ] " +  "[ " + attackMessage.feature + " ] " + attackMessage.attackerIp;
+    bot.sendMessage(msgGroup, message);
 }
 
 void TelegramNotifier::ResetAttackState()

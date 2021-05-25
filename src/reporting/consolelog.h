@@ -5,12 +5,12 @@
 #include <Arduino.h>
 #include "notifier.h"
 
-class ConsoleLogger : public Notifier
+class ConsoleLogger : public NotificationSender
 {
 public:
     void Init();
     void Notify(String message);
-    void NotifyAttackOccurred(String attackerIpAddress);
+    void NotifyAttackOccurred(Message attackMessage);
     void ResetAttackState();
 };
 #endif
