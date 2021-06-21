@@ -14,7 +14,6 @@
 
 #include "user_config.h"
 #include "system/util.h"
-#include "simulation/tomcat.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
@@ -26,10 +25,6 @@
 Notifier notifier;
 
 OTA ota;
-
-#if TOMCAT_ENABLED
-  TomcatSimu tomcatSimu;
-#endif
 
 #if defined(ESP8266) && PING_ENABLED
   PingWatcher pingWatcher;
@@ -73,10 +68,6 @@ void setup()
 
   notifier.Notify("Build version: " + String(VERSION));
   // syncNtpTime();
-
-  #if TOMCAT_ENABLED
-    tomcatSimu.Serve();
-  #endif
 
   #if defined(ESP8266) && PING_ENABLED
     pingWatcher.setup();
