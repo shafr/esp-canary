@@ -11,13 +11,8 @@ jobs:
     - name: Check out code.
       uses: actions/checkout@v1
       
-    - name: cpplint
-      uses: reviewdog/action-cpplint@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        reporter: github-pr-check
-        flags: --linelength=120
-        filter: -whitespace/tab
+    - name: Setup cppcheck
+      run: sudo apt-get install -y cppcheck
         
     - name: Setup reviewdog
       run: |
@@ -30,6 +25,7 @@ jobs:
         reporter: github-pr-check
         flags: --linelength=120
         filter: -whitespace/tab    
+        
     - name: list files
       run: ls -la
       
