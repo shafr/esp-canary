@@ -1,0 +1,7 @@
+runner:
+
+  cppcheck:
+    cmd: cppcheck --enable=all --template="{file}:{line}:{message}" src/
+    errorformat:
+      - "%f:%l:%m"
+    level: warning
