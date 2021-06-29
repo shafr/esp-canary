@@ -9,12 +9,14 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         reporter: github-pr-review
+        level: info
+        targets: --recursive src/
         flags: --linelength=50 # Optional
-        filter: "-readability/braces\
-          ,-whitespace/braces\
-          ,-whitespace/comments\
-          ,-whitespace/indent\
-          ,-whitespace/newline\
-          ,-whitespace/operators\
-          ,-whitespace/parens\
-          " # Optional
+#         filter: "-readability/braces\
+#           ,-whitespace/braces\
+#           ,-whitespace/comments\
+#           ,-whitespace/indent\
+#           ,-whitespace/newline\
+#           ,-whitespace/operators\
+#           ,-whitespace/parens\
+#           " # Optional
