@@ -30,11 +30,13 @@ jobs:
         reporter: github-pr-check
         flags: --linelength=120
         filter: -whitespace/tab    
-        
+    - name: list files
+      run: ls -la
+      
     - name: cppcheck
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        cd ${{ runner.workspace }}/src
+        cd ${{ runner.workspace }}
         cppcheck --version
         $HOME/bin/reviewdog -reporter=github-pr-check -runners=cppcheck        
