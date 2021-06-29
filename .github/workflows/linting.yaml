@@ -35,4 +35,7 @@ jobs:
       run: |
         cd ${{ runner.workspace }}
         cppcheck --version
-        $HOME/bin/reviewdog -reporter=github-pr-check -runners=cppcheck        
+        $HOME/bin/reviewdog -reporter=github-pr-check -runners=cppcheck -f 'cppcheck'        
+        
+# --enable=all --template="{file}:{line}:{message}" src/        
+        
