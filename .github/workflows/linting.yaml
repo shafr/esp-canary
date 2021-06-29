@@ -1,3 +1,7 @@
+name: ESP Build
+
+on:
+  pull_request:
 
 jobs:
   cpplint:
