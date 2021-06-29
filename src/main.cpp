@@ -2,14 +2,11 @@
 
 #ifdef ESP32
   #include <WiFi.h>
-  #include <FS.h>
-  #include <LITTLEFS.h>
-  #define LittleFS LITTLEFS
+  #include "SPIFFS.h"
 #endif
 
 #ifdef ESP8266
   #include <ESP8266WiFi.h>
-  #include <LittleFS.h>
 #endif
 
 #include "user_config.h"
@@ -18,24 +15,6 @@
 #include "reporting/reporting.h"
 #include "system/ntp.h"
 #include "system/ota.h"
-
-#if defined(ESP8266) && PING_ENABLED
-#include "simulation/ping.h"
-#endif
-
-// HELLO WORLD
-
-Notifier notifier;
-
-OTA ota;
-
-#if TOMCAT_ENABLED
-  TomcatSimu tomcatSimu;
-#endif
-
-#if defined(ESP8266) && PING_ENABLED
-  PingWatcher pingWatcher;
-#endif
 
 void ConnectToWifi()
 {
@@ -47,19 +26,20 @@ void ConnectToWifi()
     Serial.print(".");
   }
 
-  Serial.println(F(""));
-  Serial.println(F("Connected!"));
+  Serial.println("");
+  Serial.println("Connected!");
 
-  Serial.print(F("IP Address: "));
+  Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
 
-  if (!LittleFS.begin())
+  if (!SPIFFS.begin())
   {
-    Serial.println(F("[ERROR], LittleFS Initialize was not OK"));
-  } else{
-    Serial.println(F("[INFO],  LittleFS Initialize was OK"));
+    Serial.println("[ERROR], SPIFFS Initialize was not OK");
   }
 }
+
+int period = 1000;
+unsigned long time_now = 0;
 
 void setup()
 {
@@ -69,29 +49,35 @@ void setup()
   obfuscateHost();
   ConnectToWifi();
 
-  ota.Setup();
+  configureOTA();
 
-  notifier.Init();
+  initReporting();
 
-  notifier.Notify("Build version: " + String(VERSION));
   // syncNtpTime();
 
-  #if TOMCAT_ENABLED
-    tomcatSimu.Serve();
+  #ifdef TOMCAT_PORT
+    serveTomcat();
   #endif
 
-  #if defined(ESP8266) && PING_ENABLED
-    pingWatcher.setup();
-  #endif
+  time_now = millis();
 }
 
 void loop()
 {
-  ota.Loop();
+  LoopOTA();
+  notifyLoop();
 
-  #if defined(ESP8266) && PING_ENABLED
-    pingWatcher.loop();
-  #endif
+    if (millis() < time_now + period)
+  {
+    return;
+  }
 
-  notifier.notifyLoop();
+  time_now = millis();
+
+  static uint32_t myfree;
+  static uint16_t mymax;
+  static uint8_t myfrag;
+  ESP.getHeapStats(&myfree, &mymax, &myfrag);
+
+  Serial.printf("(%i) -> free: %5d - max: %5d - frag: %3d%% <- \n", millis(), myfree, mymax, myfrag);
 }

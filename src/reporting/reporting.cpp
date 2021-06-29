@@ -1,117 +1,91 @@
-#include "reporting.h"
+#include "Arduino.h"
+#include "../user_config.h"
 
 boolean messagesAvailable = false;
 
 String notifyMessage = "";
 String attackerIpAddress = "";
 
-std::vector<String> messages;
-std::vector<Message> attackMessages;
-
 #if MQTT_ENABLED
 #include "mqtt.h"
-MqttNotifier mqttNotifier;
 #endif
 
 #if EMAIL_ENABLED
 #include "email.h"
-EmailNotifier emailNotifier;
-#endif
-
-#if TELEGRAM_ENABLED
-#include "telegram.h"
-TelegramNotifier telegramNotifier;
 #endif
 
 #include "consolelog.h"
-ConsoleLogger consoleLog;
 
-void Notifier::Init()
+void initReporting()
 {
 #if MQTT_ENABLED
-    mqttNotifier.Init();
+    mqttInit();
 #endif
 
 #if EMAIL_ENABLED
-    emailNotifier.Init();
+    emailInit();
 #endif
-
-#if TELEGRAM_ENABLED
-    telegramNotifier.Init();
-#endif
-
 }
 
-void Notifier::Notify(String message)
+void notify(String message)
 {
-    messages.push_back(message);
+    messagesAvailable = true;
+    notifyMessage = message;
 }
 
-void Notifier::NotifyAttackOccurred(Message attackMessage)
+void notifyAttackOccurred(String attackerIp)
 {
-    attackMessages.push_back(attackMessage);
+    messagesAvailable = true;
+    attackerIpAddress = attackerIp;
 }
 
-void Notifier::sendNotify(String message)
+void sendNotify(String message)
 {
-    consoleLog.Notify(message);
+    consoleLogNotify(message);
 
 #if MQTT_ENABLED
-    mqttNotifier.Notify(message);
+    mqttNotify(message);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.Notify(message);
-#endif
-#if TELEGRAM_ENABLED
-    telegramNotifier.Notify(message);
+    sendMail(String("Notification").c_str(), message.c_str());
 #endif
 }
-void Notifier::sendNotifyAttackOccurred(Message attackMessage)
+void sendNotifyAttackOccurred(String attackerIpAddress)
 {
-    consoleLog.NotifyAttackOccurred(attackMessage);
+    consoleLogNotifyAttackOccurred(attackerIpAddress);
 
 #if MQTT_ENABLED
-    mqttNotifier.NotifyAttackOccurred(attackMessage);
+    mqttNotifyAttackOccurred(attackerIpAddress);
 #endif
 #if EMAIL_ENABLED
-    emailNotifier.NotifyAttackOccurred(attackMessage);
-#endif
-#if TELEGRAM_ENABLED
-    telegramNotifier.NotifyAttackOccurred(attackMessage);
+    sendMail("Attack had occurred!", attackerIpAddress.c_str());
 #endif
 }
-void Notifier::ResetAttackState()
+void resetAttackState()
 {
-    consoleLog.ResetAttackState();
 #if MQTT_ENABLED
-    mqttNotifier.ResetAttackState();
-#endif
-#if EMAIL_ENABLED
-    emailNotifier.ResetAttackState();
-#endif
-#if TELEGRAM_ENABLED
-    telegramNotifier.ResetAttackState();
+    mqttResetAttackState();
 #endif
 }
 
-void Notifier::notifyLoop()
+void notifyLoop()
 {
-    if (messages.empty() && attackMessages.empty())
+    if (!messagesAvailable)
     {
         return;
     }
 
-    for (unsigned int z = 0; z < messages.size(); z++)
+    if (notifyMessage.length() > 0)
     {
-        sendNotify(messages.at(z));
+        sendNotify(notifyMessage);
+        notifyMessage = "";
+        messagesAvailable = false;
     }
 
-    messages.clear();
-
-    for (unsigned int z = 0; z < attackMessages.size(); z++)
+    if (attackerIpAddress.length() > 0)
     {
-        sendNotifyAttackOccurred(attackMessages.at(z));
+        sendNotifyAttackOccurred(attackerIpAddress);
+        attackerIpAddress = "";
+        messagesAvailable = false;
     }
-
-    attackMessages.clear();
 }

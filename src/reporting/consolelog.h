@@ -2,15 +2,10 @@
 #ifndef _CONSOLE_LOG_H_
 #define _CONSOLE_LOG_H_
 
-#include <Arduino.h>
-#include "notifier.h"
+void consoleLogNotifyAttackOccurred(String attackerIpAddress);
 
-class ConsoleLogger : public NotificationSender
-{
-public:
-    void Init();
-    void Notify(String message);
-    void NotifyAttackOccurred(Message attackMessage);
-    void ResetAttackState();
-};
+void consoleLogResetAttackState();
+
+void consoleLogNotify(String message);
+
 #endif

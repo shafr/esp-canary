@@ -31,7 +31,7 @@ String getFmtDate()
 
 void syncNtpTime()
 {
-  Serial.println(F("[INFO] Syncing time"));
+  Serial.println("[INFO] Syncing time");
   timeClient.begin();
   timeClient.setTimeOffset(NTP_TIME_OFFSET);
   while (!timeClient.update())
@@ -39,7 +39,7 @@ void syncNtpTime()
     timeClient.forceUpdate();
   }
 
-  Serial.println(F("[INFO] Current Date:"));
+  Serial.println("[INFO] Current Date:");
   Serial.println(getFmtDate());
 }
 

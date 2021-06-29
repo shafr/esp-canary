@@ -1,35 +1,28 @@
-#include "email.h"
+#include <Arduino.h>
+#include "user_config.h"
+#include <SD.h>
+
+#ifdef ESP8266
+#include <Ethernet.h>
+#endif
+
+#include <ESP_Mail_Client.h>
 
 SMTPSession smtp;
 ESP_Mail_Session session;
 
-void EmailNotifier::smtpCallback(SMTP_Status status)
-{
-  /* Print the current status */
-  Serial.println(status.info());
+void smtpCallback(SMTP_Status status);
 
-  /* Print the sending result */
-  if (status.success())
-  {
-    Serial.println("----------------");
-    Serial.printf("Message sent success: %d\n", status.completedCount());
-    Serial.printf("Message sent failled: %d\n", status.failedCount());
-    Serial.println("----------------\n");
-    struct tm dt;
+void emailInit(){
+  smtp.debug(1);
 
-    for (size_t i = 0; i < smtp.sendingResult.size(); i++)
-    {
-      SMTP_Result result = smtp.sendingResult.getItem(i);
-      localtime_r(&result.timesstamp, &dt);
+  smtp.callback(smtpCallback);
 
-      Serial.printf("Message No: %d\n", i + 1);
-      Serial.printf("Status: %s\n", result.completed ? "success" : "failed");
-      Serial.printf("Date/Time: %d/%d/%d %d:%d:%d\n", dt.tm_year + 1900, dt.tm_mon + 1, dt.tm_mday, dt.tm_hour, dt.tm_min, dt.tm_sec);
-      Serial.printf("Recipient: %s\n", result.recipients);
-      Serial.printf("Subject: %s\n", result.subject);
-    }
-    Serial.println("----------------\n");
-  }
+  session.server.host_name = SMTP_HOST;
+  session.server.port = SMTP_PORT;
+  session.login.email = AUTHOR_EMAIL;
+  session.login.password = AUTHOR_PASSWORD;
+  // session.login.user_domain = "mydomain.net";
 }
 
 void sendMail(const char* subject, const char* mailBody)
@@ -82,26 +75,31 @@ void sendMail(const char* subject, const char* mailBody)
     Serial.println("Error sending Email, " + smtp.errorReason());
 }
 
-void EmailNotifier::Init(){
-  smtp.debug(1);
+void smtpCallback(SMTP_Status status)
+{
+  /* Print the current status */
+  Serial.println(status.info());
 
-  // smtp.callback(smtpCallback);
+  /* Print the sending result */
+  if (status.success())
+  {
+    Serial.println("----------------");
+    Serial.printf("Message sent success: %d\n", status.completedCount());
+    Serial.printf("Message sent failled: %d\n", status.failedCount());
+    Serial.println("----------------\n");
+    struct tm dt;
 
-  session.server.host_name = SMTP_HOST;
-  session.server.port = SMTP_PORT;
-  session.login.email = AUTHOR_EMAIL;
-  session.login.password = AUTHOR_PASSWORD;
-  // session.login.user_domain = "mydomain.net";
-}
+    for (size_t i = 0; i < smtp.sendingResult.size(); i++)
+    {
+      SMTP_Result result = smtp.sendingResult.getItem(i);
+      localtime_r(&result.timesstamp, &dt);
 
-void EmailNotifier::Notify(String message){
-  sendMail(String("Notification").c_str(), message.c_str());
-}
-
-void EmailNotifier::NotifyAttackOccurred(Message attackMessage){
-  sendMail(String("Attack had occurred!").c_str(), attackMessage.attackerIp.c_str());
-}
-
-void EmailNotifier::ResetAttackState(){
-  sendMail(String("Resetting attack state").c_str(), String("Resetting attack state").c_str());
+      Serial.printf("Message No: %d\n", i + 1);
+      Serial.printf("Status: %s\n", result.completed ? "success" : "failed");
+      Serial.printf("Date/Time: %d/%d/%d %d:%d:%d\n", dt.tm_year + 1900, dt.tm_mon + 1, dt.tm_mday, dt.tm_hour, dt.tm_min, dt.tm_sec);
+      Serial.printf("Recipient: %s\n", result.recipients);
+      Serial.printf("Subject: %s\n", result.subject);
+    }
+    Serial.println("----------------\n");
+  }
 }
