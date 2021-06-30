@@ -10,7 +10,6 @@ jobs:
     steps:
       - name: Run PlatformIO for nodemcuv2
         run: |
-          platformio run -e nodemcuv2 | tee log.txt
           echo "RAM_SIZE='55.3%'" >> $GITHUB_ENV
           echo "FLASH_SIZE='33.2%' >> $GITHUB_ENV
 
