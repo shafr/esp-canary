@@ -38,7 +38,6 @@ jobs:
         with:
           comment: "RAM 🗜️📝: ${RAM} | FLASH 💾 : ${FLASH}"
         env:
-          BUILD_NUMBER: 1234
           RAM: ${{ env.RAM_SIZE }}
-          FLASH: ${{ env.FLASH_SIZE }}"
+          FLASH: ${{ env.FLASH_SIZE }}
           GITHUB_TOKEN: ${{github.token}}
