@@ -1,6 +1,8 @@
 name: Size Fetching
 
-on: pull_request
+on:
+  - push
+  - pull_request
 
 jobs:
   test_builds:

@@ -1,0 +1,25 @@
+name: Type
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test_builds:
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run PlatformIO for nodemcuv2
+        run: |
+          echo "${{ github.event }}"
+
+      - name: Run PlatformIO for nodemcuv2
+        if: ${{ github.event == 'pull_request' }}
+        run: |
+          echo "pull_request!!!"
+
+      - name: Run PlatformIO for nodemcuv2
+        if: ${{ github.event == 'push' }}
+        run: |
+          echo "PUSH!!!"
+

@@ -1,6 +1,8 @@
 name: No-build test
 
-on: pull_request
+on:
+  - push
+  - pull_request
 
 jobs:
   test_builds:
@@ -14,6 +16,7 @@ jobs:
           echo "FLASH_SIZE=33.2%" >> $GITHUB_ENV
 
       - name: Print Ram Size
+
         run: echo "${{ env.RAM_SIZE }}"
 
       - name: Print Flash Size
