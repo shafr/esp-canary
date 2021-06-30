@@ -44,14 +44,14 @@ jobs:
       - name: Calculate Used Mem Size
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')}"  >> $GITHUB_ENV
+          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
           echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
 
       - name: publish size with pull request
         if: ${{ github.event_name == 'pull_request' }}
         uses: jdvr/action-add-comment@main
         with:
-          comment: "$BOARD:  [RAM : $RAM] [FLASH : $FLASH_SIZE]"
+          comment: "💾 Usage [$BOARD][RAM $RAM] [FLASH $FLASH_SIZE]"
         env:
           GITHUB_TOKEN: ${{github.token}}
           RAM: "${{ env.RAM_SIZE }}"
