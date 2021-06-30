@@ -31,10 +31,26 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run PlatformIO for ${{ matrix.test-platform }}
-        run: platformio run -e ${{ matrix.test-platform }}
+        run: platformio run -e ${{ matrix.test-platform }}  | tee log.txt
 
       - name: upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.test-platform }}
           path: .pio/build/${{ matrix.test-platform }}/firmware.bin  
+
+      - name: calculate size
+        if: ${{ github.event == 'pull_request' }}
+        run: |
+          echo "RAM_SIZE=$(cat log.txt| grep 'RAM:' | awk '{print $4}')" >> $GITHUB_ENV
+          echo "FLASH_SIZE=$(cat log.txt| grep 'Flash:' | awk '{print $4}')" >> $GITHUB_ENV
+
+      - name: publish size with pull request
+        uses: jdvr/action-add-comment@main
+        if: ${{ github.event == 'pull_request' }}
+        with:
+          comment: "RAM 💾: $RAM | FLASH 🗜 : $FLASH_SIZE"
+        env:
+          GITHUB_TOKEN: ${{github.token}}
+          RAM: "${{ env.RAM_SIZE }}"
+          FLASH: "${{ env.FLASH_SIZE }}"
