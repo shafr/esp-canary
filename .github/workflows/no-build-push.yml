@@ -15,14 +15,8 @@ jobs:
       - name: Calculate RAM size
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          [[ $(cat log.txt) =~ RAM.*\ +([0-9]{1,2}\.[0-9]{1,2})% ]]
-          echo "RAM_SIZE=$(echo ${BASH_REMATCH[1]})"  >> $GITHUB_ENV
-
-      - name: Calculate Flash size
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          [[ $(cat log.txt) =~ Flash.*\ +([0-9]{1,2}\.[0-9]{1,2})% ]]
-          echo "FLASH_SIZE=$(echo ${BASH_REMATCH[1]})"  >> $GITHUB_ENV
+          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')}"  >> $GITHUB_ENV
+          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
 
       - name: publish size with pull request
         uses: jdvr/action-add-comment@main
