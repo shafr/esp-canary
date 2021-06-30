@@ -55,4 +55,4 @@ jobs:
           GITHUB_TOKEN: ${{github.token}}
           RAM: "${{ env.RAM_SIZE }}"
           FLASH: "${{ env.FLASH_SIZE }}"
-          BOARD: ${{ matrix.test-platform }}
+          BOARD: "${{ matrix.test-platform }}"
