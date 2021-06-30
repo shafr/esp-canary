@@ -1,0 +1,27 @@
+name: No-build test
+
+on: pull_request
+
+jobs:
+  test_builds:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run PlatformIO for nodemcuv2
+        run: |
+          platformio run -e nodemcuv2 | tee log.txt
+          echo "RAM_SIZE='55.3%'" >> $GITHUB_ENV
+          echo "FLASH_SIZE='33.2%' >> $GITHUB_ENV
+
+      - name: Print Ram Size
+        run: echo "${{ env.RAM_SIZE }}"
+
+      - name: Print Flash Size
+        run: echo "${{ env.FLASH_SIZE }}"
+
+      - uses: jdvr/action-add-comment@main
+        with:
+          comment: "RAM 🗜️📝: ${RAM_SIZE} | FLASH 💾 : ${FLASH_SIZE}"
+        env:
+          GITHUB_TOKEN: ${{github.token}}
