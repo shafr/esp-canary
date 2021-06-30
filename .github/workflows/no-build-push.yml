@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out the Release
+        uses: actions/checkout@v2
+
       - name: Calculate RAM size
         if: ${{ github.event_name == 'pull_request' }}
         run: |
