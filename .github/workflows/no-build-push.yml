@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Run PlatformIO for nodemcuv2
         run: |
-          echo "RAM_SIZE='55.3%'" >> $GITHUB_ENV
-          echo "FLASH_SIZE='33.2%' >> $GITHUB_ENV
+          echo "RAM_SIZE=55.3%" >> $GITHUB_ENV
+          echo "FLASH_SIZE=33.2%" >> $GITHUB_ENV
 
       - name: Print Ram Size
         run: echo "${{ env.RAM_SIZE }}"
