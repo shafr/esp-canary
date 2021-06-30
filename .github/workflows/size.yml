@@ -42,3 +42,4 @@ jobs:
           BUILD_NUMBER: 1234
           RAM: ${{ env.RAM_SIZE }}
           FLASH: ${{ env.FLASH_SIZE }}"
+          GITHUB_TOKEN: ${{github.token}}
