@@ -14,12 +14,12 @@ jobs:
           echo "${{ github.event }}"
 
       - name: Run PlatformIO for nodemcuv2
-        if: ${{ github.event == 'pull_request' }}
+        if: ${{ github.event == pull_request }}
         run: |
           echo "pull_request!!!"
 
       - name: Run PlatformIO for nodemcuv2
-        if: ${{ github.event == 'push' }}
+        if: ${{ github.event == push }}
         run: |
           echo "PUSH!!!"
 
