@@ -1,0 +1,90 @@
+Processing nodemcuv2 (platform: espressif8266 @ 3.0.0; board: nodemcuv2; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif8266/nodemcuv2.html
+PLATFORM: Espressif 8266 (3.0.0) > NodeMCU 1.0 (ESP-12E Module)
+HARDWARE: ESP8266 80MHz, 80KB RAM, 4MB Flash
+PACKAGES:
+ - framework-arduinoespressif8266 3.30000.210519 (3.0.0)
+ - tool-esptool 1.413.0 (4.13)
+ - tool-esptoolpy 1.30000.201119 (3.0.0)
+ - toolchain-xtensa 2.100200.0 (10.2.0)
+LDF: Library Dependency Finder -> http://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain+, Compatibility ~ soft
+Found 51 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- <AsyncTelegram> 1.1.2
+|   |-- <ArduinoJson> 6.18.0
+|   |-- <ESP8266WiFi> 1.0
+|   |-- <ESP8266HTTPClient> 1.2
+|   |   |-- <ESP8266WiFi> 1.0
+|-- <ArduinoJson> 6.18.0
+|-- <ESP Async WebServer> 1.2.3
+|   |-- <ESPAsyncTCP> 1.2.2
+|   |-- <Hash> 1.0
+|   |-- <ESP8266WiFi> 1.0
+|   |-- <ArduinoJson> 6.18.0
+|-- <AsyncMqttClient> 0.8.2
+|   |-- <ESPAsyncTCP> 1.2.2
+|-- <NTPClient> 3.1.0
+|-- <ESP Mail Client> 1.2.0
+|   |-- <ESP8266WiFi> 1.0
+|   |-- <SD(esp8266)> 2.0.0
+|   |   |-- <SDFS> 0.1.0
+|   |   |   |-- <SPI> 1.0
+|   |   |   |-- <ESP8266SdFat> 2.0.2
+|   |   |   |   |-- <SPI> 1.0
+|   |   |-- <SPI> 1.0
+|   |   |-- <ESP8266SdFat> 2.0.2
+|   |   |   |-- <SPI> 1.0
+|   |-- <SDFS> 0.1.0
+|   |   |-- <SPI> 1.0
+|   |   |-- <ESP8266SdFat> 2.0.2
+|   |   |   |-- <SPI> 1.0
+|   |-- <SPI> 1.0
+|   |-- <ESP8266SdFat> 2.0.2
+|   |   |-- <SPI> 1.0
+|-- <ESP8266WiFi> 1.0
+|-- <LittleFS(esp8266)> 0.1.0
+|-- <ArduinoOTA> 1.0
+|   |-- <ESP8266WiFi> 1.0
+|   |-- <ESP8266mDNS> 1.2
+|   |   |-- <ESP8266WiFi> 1.0
+|-- <SD(esp8266)> 2.0.0
+|   |-- <SDFS> 0.1.0
+|   |   |-- <SPI> 1.0
+|   |   |-- <ESP8266SdFat> 2.0.2
+|   |   |   |-- <SPI> 1.0
+|   |-- <SPI> 1.0
+|   |-- <ESP8266SdFat> 2.0.2
+|   |   |-- <SPI> 1.0
+|-- <SDFS> 0.1.0
+|   |-- <SPI> 1.0
+|   |-- <ESP8266SdFat> 2.0.2
+|   |   |-- <SPI> 1.0
+|-- <SPI> 1.0
+|-- <ESP8266SdFat> 2.0.2
+|   |-- <SPI> 1.0
+|-- <Ethernet> 2.0.0
+|   |-- <SPI> 1.0
+|-- <ESPAsyncTCP> 1.2.2
+|-- <ESP8266HTTPClient> 1.2
+|   |-- <ESP8266WiFi> 1.0
+|-- <NetDump> 2
+|   |-- <ESP8266WiFi> 1.0
+|-- <ESP8266mDNS> 1.2
+|   |-- <ESP8266WiFi> 1.0
+Building in release mode
+Replace MKSPIFFSTOOL with mklittlefs
+Retrieving maximum program size .pio/build/nodemcuv2/firmware.elf
+Checking size .pio/build/nodemcuv2/firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [====      ]  41.8% (used 34264 bytes from 81920 bytes)
+Flash: [=====     ]  52.7% (used 550631 bytes from 1044464 bytes)
+========================= [SUCCESS] Took 2.48 seconds =========================
+
+Environment    Status    Duration
+-------------  --------  ------------
+nodemcuv2      SUCCESS   00:00:02.476
+========================= 1 succeeded in 00:00:02.476 =========================

@@ -1,0 +1,33 @@
+name: No-build test
+
+on:
+  - pull_request
+
+jobs:
+  test_builds:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Calculate RAM size
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          [[ $(cat log.txt) =~ RAM.*\ +([0-9]{1,2}\.[0-9]{1,2})% ]]
+          echo "RAM_SIZE=$(echo ${BASH_REMATCH[1]})"  >> $GITHUB_ENV
+
+      - name: Calculate Flash size
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          [[ $(cat log.txt) =~ Flash.*\ +([0-9]{1,2}\.[0-9]{1,2})% ]]
+          echo "FLASH_SIZE=$(echo ${BASH_REMATCH[1]})"  >> $GITHUB_ENV
+
+      - name: publish size with pull request
+        uses: jdvr/action-add-comment@main
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          comment: "$BOARD:  [RAM : $RAM] [FLASH : $FLASH_SIZE]"
+        env:
+          GITHUB_TOKEN: ${{github.token}}
+          RAM: "${{ env.RAM_SIZE }}"
+          FLASH: "${{ env.FLASH_SIZE }}"
+          BOARD: "$GITHUB_SHA"
