@@ -34,3 +34,11 @@ jobs:
 
       - name: Print Flash Size
         run: echo "${{ env.FLASH_SIZE }}"
+
+      - uses: jdvr/action-add-comment@main
+        with:
+          comment: "RAM 📝: ${RAM} | FLASH :clamp::floppy_disk: : ${FLASH}"
+        env:
+          BUILD_NUMBER: 1234
+          RAM: ${{ env.RAM_SIZE }}
+          FLASH: ${{ env.FLASH_SIZE }}"
