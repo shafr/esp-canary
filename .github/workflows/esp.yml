@@ -41,14 +41,14 @@ jobs:
           path: .pio/build/${{ matrix.test-platform }}/firmware.bin  
 
       - name: calculate size
-        if: ${{ github.event == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           echo "RAM_SIZE=$(cat log.txt| grep 'RAM:' | awk '{print $4}')" >> $GITHUB_ENV
           echo "FLASH_SIZE=$(cat log.txt| grep 'Flash:' | awk '{print $4}')" >> $GITHUB_ENV
 
       - name: publish size with pull request
         uses: jdvr/action-add-comment@main
-        if: ${{ github.event == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           comment: "$BOARD:  [RAM : $RAM] [FLASH : $FLASH_SIZE]"
         env:
