@@ -36,8 +36,6 @@ jobs:
 
       - uses: jdvr/action-add-comment@main
         with:
-          comment: "RAM 🗜️📝: ${RAM} | FLASH 💾 : ${FLASH}"
+          comment: "RAM 🗜️📝: ${RAM_SIZE} | FLASH 💾 : ${FLASH_SIZE}"
         env:
-          RAM: ${{ env.RAM_SIZE }}
-          FLASH: ${{ env.FLASH_SIZE }}
           GITHUB_TOKEN: ${{github.token}}
