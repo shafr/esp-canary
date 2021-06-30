@@ -26,9 +26,11 @@ jobs:
       - name: Run PlatformIO for nodemcuv2
         run: |
           platformio run -e nodemcuv2 | tee log.txt
-          RAM_SIZE=$(cat log.txt| grep RAM: | awk '{print $4}')
-          echo "RAM_SIZE=${RAM_SIZE}" >> $GITHUB_ENV
+          echo "RAM_SIZE=$(cat log.txt| grep 'RAM:' | awk '{print $4}')" >> $GITHUB_ENV
+          echo "FLASH_SIZE=$(cat log.txt| grep 'Flash:' | awk '{print $4}')" >> $GITHUB_ENV
 
-      - name: Set ram size
+      - name: Print Ram Size
         run: echo "${{ env.RAM_SIZE }}"
 
+      - name: Print Flash Size
+        run: echo "${{ env.FLASH_SIZE }}"
