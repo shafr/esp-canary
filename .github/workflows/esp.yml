@@ -49,8 +49,9 @@ jobs:
         uses: jdvr/action-add-comment@main
         if: ${{ github.event == 'pull_request' }}
         with:
-          comment: "RAM 💾: $RAM | FLASH 🗜 : $FLASH_SIZE"
+          comment: "$BOARD:  [RAM : $RAM] [FLASH : $FLASH_SIZE]"
         env:
           GITHUB_TOKEN: ${{github.token}}
           RAM: "${{ env.RAM_SIZE }}"
           FLASH: "${{ env.FLASH_SIZE }}"
+          BOARD: ${{ matrix.test-platform }}
