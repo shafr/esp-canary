@@ -45,10 +45,10 @@ jobs:
         id: memsizecalc
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          echo "::set-output name=flash_${{ matrix.board }}::$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-#          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
-#          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
+          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
+          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
+          echo "::set-output name=ram_${{ matrix.board }}::${RAM_SIZE}"
+          echo "::set-output name=flash_${{ matrix.board }}::${FLASH_SIZE}"
 
   size_current:
     runs-on: ubuntu-latest
