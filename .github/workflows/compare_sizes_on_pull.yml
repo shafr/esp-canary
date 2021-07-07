@@ -1,10 +1,10 @@
-name: ESP Build
+name: Calculate Firmware Size
 
 on:
   - pull_request
 
 jobs:
-  size_master:
+  size_origin:
     runs-on: ubuntu-latest
 
     strategy:
@@ -96,7 +96,7 @@ jobs:
   publish_size:
     runs-on: ubuntu-latest
     needs:
-      - size_master
+      - size_origin
       - size_fork
     steps:
       - name: publish size with pull request
@@ -110,14 +110,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{github.token}}
 
-          R_8_ORIGIN: "${{needs.size_master.outputs.ram-esp8266}}"
+          R_8_ORIGIN: "${{needs.size_origin.outputs.ram-esp8266}}"
           R_8_FORK: "${{needs.size_fork.outputs.ram-esp8266}}"
-          F_8_ORIGIN: "${{needs.size_master.outputs.flash-esp8266}}"
+          F_8_ORIGIN: "${{needs.size_origin.outputs.flash-esp8266}}"
           F_8_FORK : "${{needs.size_fork.outputs.flash-esp8266}}"
 
-          R_32_ORIGIN: "${{needs.size_master.outputs.ram-esp32}}"
+          R_32_ORIGIN: "${{needs.size_origin.outputs.ram-esp32}}"
           R_32_FORK: "${{needs.size_fork.outputs.ram-esp32}}"
-          F_32_ORIGIN: "${{needs.size_master.outputs.flash-esp32}}"
+          F_32_ORIGIN: "${{needs.size_origin.outputs.flash-esp32}}"
           F_32_FORK : "${{needs.size_fork.outputs.flash-esp32}}"
-
-          BOARD: "esp-8266"
