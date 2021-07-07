@@ -21,12 +21,6 @@ jobs:
       flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
 
     steps:
-      - name: Check out master
-        uses: actions/checkout@v2
-        with:
-         repository: 'shafr/esp-canary'
-         ref: 'master'
-
       - name: Calculate Used Mem Size
         id: memsizecalc
         if: ${{ github.event_name == 'pull_request' }}
@@ -44,10 +38,10 @@ jobs:
         uses: jdvr/action-add-comment@main
         with:
           comment: |
-            "| Board   | RAM Origin | RAM Fork / Branch | Flash Origin | Flash Fork |"
-            "|---------|------------|-------------------|--------------|------------|"
-            "| nodemcu | 16%        | 32 %              | 25%          | 40%        |"
-            "| esp32   | 22%        | 44 %              | 55%          | 66%        |"
+            | Board   | RAM Origin | RAM Fork / Branch | Flash Origin | Flash Fork |
+            |---------|------------|-------------------|--------------|------------|
+            | nodemcu | 16%        | 32 %              | 25%          | 40%        |
+            | esp32   | 22%        | 44 %              | 55%          | 66%        |
 #          "[CURRENT][$BOARD][RAM $RAM_NEW] [FLASH $FLASH_NEW]"
         env:
           GITHUB_TOKEN: ${{github.token}}
