@@ -1,26 +1,24 @@
-#include "email.h"
+#include "reporting/email.h"
 
 SMTPSession smtp;
 ESP_Mail_Session session;
 
-void EmailNotifier::smtpCallback(SMTP_Status status)
-{
+void EmailNotifier::smtpCallback(SMTP_Status status) {
   /* Print the current status */
   Serial.println(status.info());
 
   /* Print the sending result */
-  if (status.success())
-  {
+  if (status.success()) {
     Serial.println("----------------");
     Serial.printf("Message sent success: %d\n", status.completedCount());
     Serial.printf("Message sent failled: %d\n", status.failedCount());
     Serial.println("----------------\n");
     struct tm dt;
 
-    for (size_t i = 0; i < smtp.sendingResult.size(); i++)
-    {
+    for (size_t i = 0; i < smtp.sendingResult.size(); i++) {
       SMTP_Result result = smtp.sendingResult.getItem(i);
-      localtime_r(&result.timesstamp, &dt);
+      time_t ts = (time_t)result.timestamp;
+      localtime_r(&ts, &dt);
 
       Serial.printf("Message No: %d\n", i + 1);
       Serial.printf("Status: %s\n", result.completed ? "success" : "failed");
