@@ -15,10 +15,10 @@ jobs:
           - esp32
 
     outputs:
-      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
-      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
-      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
-      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+      ram_esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+      ram_esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+      flash_esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+      flash_esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
 
     steps:
       - name: Select Python 3.7
@@ -110,14 +110,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{github.token}}
 
-          R_8_ORIGIN: "${{needs.size_master.outputs.ram-esp8266}}"
+          R_8_ORIGIN: "${{needs.size_master.outputs.ram_esp8266}}"
           R_8_FORK: "${{needs.size_fork.outputs.ram-esp8266}}"
-          F_8_ORIGIN: "${{needs.size_master.outputs.flash-esp8266}}"
+          F_8_ORIGIN: "${{needs.size_master.outputs.flash_esp8266}}"
           F_8_FORK : "${{needs.size_fork.outputs.flash-esp8266}}"
 
-          R_32_ORIGIN: "${{needs.size_master.outputs.ram-esp32}}"
+          R_32_ORIGIN: "${{needs.size_master.outputs.ram_esp32}}"
           R_32_FORK: "${{needs.size_fork.outputs.ram-esp32}}"
-          F_32_ORIGIN: "${{needs.size_master.outputs.flash-esp32}}"
+          F_32_ORIGIN: "${{needs.size_master.outputs.flash_esp32}}"
           F_32_FORK : "${{needs.size_fork.outputs.flash-esp32}}"
 
           BOARD: "esp-8266"
