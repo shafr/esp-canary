@@ -38,13 +38,17 @@ jobs:
         uses: jdvr/action-add-comment@main
         with:
           comment: |
-            | Board   | RAM Origin | RAM Fork / Branch | Flash Origin | Flash Fork |
-            |---------|------------|-------------------|--------------|------------|
-            | nodemcu | 16%        | 32 %              | 25%          | 40%        |
-            | esp32   | 22%        | 44 %              | 55%          | 66%        |
+            | Board   | RAM Origin  | RAM Fork / Branch | Flash Origin | Flash Fork |
+            |---------|------------ |-------------------|--------------|------------|
+            | nodemcu | $R_8_ORIGIN | $R_8_FORK         | $F_8_ORIGIN  | $F_8_FORK  |
+            | esp32   | $R_32_ORIGIN| $R_32_FORK        | $F_32_ORIGIN | $F_32_FORK |
 #          "[CURRENT][$BOARD][RAM $RAM_NEW] [FLASH $FLASH_NEW]"
         env:
           GITHUB_TOKEN: ${{github.token}}
-          RAM_NEW: "${{needs.size_master.outputs.ram-esp8266}}"
-          FLASH_NEW: "${{needs.size_master.outputs.flash-esp8266}}"
+
+          R_8_ORIGIN: "${{needs.size_master.outputs.ram-esp8266}}"
+          R_8_FORK: "${{needs.size_fork.outputs.ram-esp8266}}"
+          F_8_ORIGIN: "${{needs.size_master.outputs.flash-esp8266}}"
+          F_8_FORK : "${{needs.size_fork.outputs.flash-esp8266}}"
+
           BOARD: "esp-8266"
