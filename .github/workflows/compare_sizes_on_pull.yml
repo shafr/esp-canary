@@ -12,13 +12,13 @@ jobs:
       matrix:
         test-platform:
           - nodemcuv2
-          - esp32
+#          - esp32
 
     outputs:
-      ram_esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
-      ram_esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
-      flash_esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
-      flash_esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
 
     steps:
       - name: Select Python 3.7
@@ -43,11 +43,9 @@ jobs:
 
       - name: Calculate Used Mem Size
         id: memsizecalc
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
           echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
-          echo "::set-output name=ram_${{ matrix.board }}::${RAM_SIZE}"
+          echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           echo "::set-output name=flash_${{ matrix.board }}::${FLASH_SIZE}"
 
   size_current:
@@ -58,7 +56,7 @@ jobs:
       matrix:
         test-platform:
           - nodemcuv2
-          - esp32
+#          - esp32
 
     outputs:
       ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
@@ -86,10 +84,9 @@ jobs:
 
       - name: Calculate Used Mem Size
         id: memsizecalc
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::TEST1"
-          echo "::set-output name=flash_${{ matrix.board }}::TEST2"
+          echo "::set-output name=ram_${{ matrix.board }}::'TEST1'"
+          echo "::set-output name=flash_${{ matrix.board }}::'TEST2'"
 
   publish_size:
     runs-on: ubuntu-latest
@@ -97,8 +94,10 @@ jobs:
       - size_master
       - size_current
     steps:
+      - name: print env var
+        run: |
+          echo "${{needs.size_master.outputs.ram-esp8266}}"
       - name: publish size with pull request
-        if: ${{ github.event_name == 'pull_request' }}
         uses: jdvr/action-add-comment@main
         with:
           comment: |
@@ -106,18 +105,17 @@ jobs:
             |---------|------------ |-------------------|--------------|------------|
             | nodemcu | $R_8_ORIGIN | $R_8_FORK         | $F_8_ORIGIN  | $F_8_FORK  |
             | esp32   | $R_32_ORIGIN| $R_32_FORK        | $F_32_ORIGIN | $F_32_FORK |
-        #          "[CURRENT][$BOARD][RAM $RAM_NEW] [FLASH $FLASH_NEW]"
         env:
           GITHUB_TOKEN: ${{github.token}}
 
-          R_8_ORIGIN: "${{needs.size_master.outputs.ram_esp8266}}"
+          R_8_ORIGIN: "${{needs.size_master.outputs.ram-esp8266}}"
           R_8_FORK: "${{needs.size_fork.outputs.ram-esp8266}}"
-          F_8_ORIGIN: "${{needs.size_master.outputs.flash_esp8266}}"
+          F_8_ORIGIN: "${{needs.size_master.outputs.flash-esp8266}}"
           F_8_FORK : "${{needs.size_fork.outputs.flash-esp8266}}"
 
-          R_32_ORIGIN: "${{needs.size_master.outputs.ram_esp32}}"
+          R_32_ORIGIN: "${{needs.size_master.outputs.ram-esp32}}"
           R_32_FORK: "${{needs.size_fork.outputs.ram-esp32}}"
-          F_32_ORIGIN: "${{needs.size_master.outputs.flash_esp32}}"
+          F_32_ORIGIN: "${{needs.size_master.outputs.flash-esp32}}"
           F_32_FORK : "${{needs.size_fork.outputs.flash-esp32}}"
 
           BOARD: "esp-8266"
