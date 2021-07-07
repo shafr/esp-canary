@@ -28,8 +28,9 @@ jobs:
           
       - name: Check out current build
         uses: actions/checkout@v2
-        repository: 'shafr/esp-canary'
-        branch: 'master'
+        with:
+         repository: 'shafr/esp-canary'
+         branch: 'master'
 
       - name: Run PlatformIO for ${{ matrix.test-platform }}
         run: platformio run -e ${{ matrix.test-platform }}  | tee log.txt
