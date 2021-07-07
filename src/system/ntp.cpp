@@ -1,7 +1,7 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-#include "user_config.h"
+#include "system/ntp.h"
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
@@ -11,7 +11,7 @@ const String months[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
 String getFmtDate() {
-  unsigned long epochTime = timeClient.getEpochTime();
+  auto epochTime = timeClient.getEpochTime();
   String weekDay = weekDays[timeClient.getDay()];
   struct tm *ptm = gmtime((time_t *)&epochTime);
   int day = ptm->tm_mday;
