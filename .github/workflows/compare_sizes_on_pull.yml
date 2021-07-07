@@ -103,10 +103,10 @@ jobs:
         uses: jdvr/action-add-comment@main
         with:
           comment: |
-            | Board   | RAM Origin  | RAM Fork / Branch | Flash Origin | Flash Fork |
-            |---------|------------ |-------------------|--------------|------------|
-            | nodemcu | $R_8_ORIGIN | $R_8_FORK         | $F_8_ORIGIN  | $F_8_FORK  |
-            | esp32   | $R_32_ORIGIN| $R_32_FORK        | $F_32_ORIGIN | $F_32_FORK |
+            | Board  | \|  | ESP8266 RAM | ESP8266 Flash | \|  | ESP32 RAM    | ESP32 Flash  |
+            |--------|-----|-------------|---------------|-----|--------------|--------------|
+            | Origin | \|  | $R_8_ORIGIN | $F_8_ORIGIN   | \|  | $R_32_ORIGIN | $F_32_ORIGIN |
+            | Fork   | \|  | $R_8_FORK   | $F_8_FORK     | \|  | $R_32_FORK   | $F_32_FORK   |
         env:
           GITHUB_TOKEN: ${{github.token}}
 
