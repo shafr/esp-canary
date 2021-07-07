@@ -19,7 +19,6 @@ jobs:
       ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
       flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
       flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
-      test: "TEST"
 
     steps:
       - name: Select Python 3.7
@@ -47,8 +46,9 @@ jobs:
         run: |
           export RAM=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          echo "::set-output name=flash_${{ matrix.board }}::$FLASH_SIZE"
+
+          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
+          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
 
   size_current:
     runs-on: ubuntu-latest
@@ -87,9 +87,11 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::TEST1"
-          export RES="1234"
-          echo "::set-output name=flash_${{ matrix.board }}::${RES}"
+          export RAM=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+
+          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
+          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
 
   publish_size:
     runs-on: ubuntu-latest
