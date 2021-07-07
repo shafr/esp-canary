@@ -87,13 +87,6 @@ void findIpInsideArpRequest()
         return;
     }
 
-    #if defined(MQTT_HOST)
-    if (attackerIP.equals(String(MQTT_HOST)))
-    {
-        return;
-    } 
-    #endif
-
     for (String host : HostsExceptions){
         if (attackerIP.equals(host)){
             return;
