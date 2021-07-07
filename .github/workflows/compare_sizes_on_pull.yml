@@ -90,8 +90,8 @@ jobs:
           export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
 
-          echo "::set-output name=ram_${{ matrix.board }}::${ RAM }"
-          echo "::set-output name=flash_${{ matrix.board }}::${ FLASH_SIZE }"
+          echo "::set-output name=ram_${{ matrix.board }}::${RAM}"
+          echo "::set-output name=flash_${{ matrix.board }}::${FLASH_SIZE}"
 
   publish_size:
     runs-on: ubuntu-latest
