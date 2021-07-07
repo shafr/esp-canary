@@ -10,90 +10,41 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-platform:
+        board:
           - nodemcuv2
           - esp32
 
-    steps:
-      - name: Select Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-          architecture: 'x64'
+    outputs:
+      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
 
-      - name: Install PlatformIO
-        run: |
-          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
-          platformio update
-          
+    steps:
       - name: Check out master
         uses: actions/checkout@v2
         with:
          repository: 'shafr/esp-canary'
          ref: 'master'
 
-      - name: Run PlatformIO for ${{ matrix.test-platform }}
-        run: platformio run -e ${{ matrix.test-platform }}  | tee log.txt
-
       - name: Calculate Used Mem Size
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
-          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
+           echo "::set-output name=ram_${{ matrix.board }}::${{ matrix.board }}"
 
-      - name: publish size with pull request
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: jdvr/action-add-comment@main
-        with:
-          comment: "[MASTER][$BOARD][RAM $RAM] [FLASH $FLASH_SIZE]"
-        env:
-          GITHUB_TOKEN: ${{github.token}}
-          RAM: "${{ env.RAM_SIZE }}"
-          FLASH: "${{ env.FLASH_SIZE }}"
-          BOARD: "${{ matrix.test-platform }}"
-
-
-  size_current:
+  publish_size:
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        test-platform:
-          - nodemcuv2
-          - esp32
-
+    needs: [size_current]
     steps:
-      - name: Select Python 3.7
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.7'
-          architecture: 'x64'
-
-      - name: Install PlatformIO
-        run: |
-          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
-          platformio update
-          
-      - name: Check out current build
-        uses: actions/checkout@v2
-
-      - name: Run PlatformIO for ${{ matrix.test-platform }}
-        run: platformio run -e ${{ matrix.test-platform }}  | tee log.txt
-
-      - name: Calculate Used Mem Size
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          echo "RAM_SIZE=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
-          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
-
       - name: publish size with pull request
         if: ${{ github.event_name == 'pull_request' }}
         uses: jdvr/action-add-comment@main
         with:
-          comment: "[CURRENT][$BOARD][RAM $RAM] [FLASH $FLASH_SIZE]"
+          comment: "[CURRENT][$BOARD][RAM $RAM_NEW] [FLASH $FLASH_NEW]"
         env:
           GITHUB_TOKEN: ${{github.token}}
-          RAM: "${{ env.RAM_SIZE }}"
-          FLASH: "${{ env.FLASH_SIZE }}"
-          BOARD: "${{ matrix.test-platform }}"
+          RAM_NEW: "${{needs.size_current.outputs.ram-esp8266}}"
+          FLASH_NEW: "${{needs.size_current.outputs.flash-esp8266}}"
+          RAM_OLD: "${{ env.RAM_SIZE }}"
+          FLASH_OLD: "${{ env.RAM_SIZE }}"
+          BOARD: "esp-8266"
