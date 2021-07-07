@@ -44,8 +44,8 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          export RAM=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          export RAM=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')
+          export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')
 
           echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
           echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
@@ -87,8 +87,8 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          export RAM=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          export RAM=$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')
+          export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')
 
           echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
           echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
