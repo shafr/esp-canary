@@ -25,8 +25,8 @@ jobs:
         id: memsizecalc
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::${{ matrix.board}}-ram"
-          echo "::set-output name=flash_${{ matrix.board }}::${{ matrix.board}}-flash"
+          echo "::set-output name=ram_${{ matrix.board }}::$(date)"
+          echo "::set-output name=flash_${{ matrix.board }}::$(pwd)"
 
   publish_size:
     runs-on: ubuntu-latest
