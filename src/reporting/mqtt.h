@@ -5,16 +5,15 @@
 #include <Arduino.h>
 #include <AsyncMqttClient.h>
 
-#include "user_config.h"
 #include "../system/util.h"
-#include "notifier.h"
+#include "../user_config.h"
+#include "reporting/notifier.h"
 
-class MqttNotifier : public NotificationSender 
-{
-public:
-    void Init();
-    void NotifyAttackOccurred(Message attackMessage);
-    void ResetAttackState();
-    void Notify(String message);
+class MqttNotifier : public NotificationSender {
+ public:
+  void Init();
+  void NotifyAttackOccurred(Message attackMessage);
+  void ResetAttackState();
+  void Notify(String message);
 };
 #endif

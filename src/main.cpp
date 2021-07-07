@@ -39,8 +39,7 @@ void ConnectToWifi()
 {
   Serial.printf("Connecting to %s ", WIFI_SERVER_AP_NAME);
   WiFi.begin(WIFI_SERVER_AP_NAME, WIFI_SERVER_AP_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -51,10 +50,9 @@ void ConnectToWifi()
   Serial.print(F("IP Address: "));
   Serial.println(WiFi.localIP());
 
-  if (!LittleFS.begin())
-  {
+  if (!LittleFS.begin()) {
     Serial.println(F("[ERROR], LittleFS Initialize was not OK"));
-  } else{
+  } else {
     Serial.println(F("[INFO],  LittleFS Initialize was OK"));
   }
 }
@@ -83,8 +81,7 @@ void setup()
   #endif
 }
 
-void loop()
-{
+void loop() {
   ota.Loop();
 
   #if defined(ESP8266) && PING_ENABLED
