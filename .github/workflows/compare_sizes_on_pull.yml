@@ -87,7 +87,7 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          echo "log.txt"
+          cat log.txt
           echo "-------"
           echo "-------"
 
