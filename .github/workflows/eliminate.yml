@@ -23,9 +23,9 @@ jobs:
     steps:
       - name: Run PlatformIO for ${{ matrix.board }}
         run: |
-          echo "RAM: [ ====== ]  56.6% (used 46344 bytes from 81920 bytes)" > log.txt
-          echo "Flash: [ ======= ]  73.5% (used 767787 bytes from 1044464 bytes)" > log.txt
-          echo "Building .pio/build/nodemcuv2/firmware.bin" > log.txt
+          echo "RAM: [ ====== ]  56.6% (used 46344 bytes from 81920 bytes)" >> log.txt
+          echo "Flash: [ ======= ]  73.5% (used 767787 bytes from 1044464 bytes)" >> log.txt
+          echo "Building .pio/build/nodemcuv2/firmware.bin" >> log.txt
 
       - name: Calculate Used Mem Size
         id: memsizecalc
