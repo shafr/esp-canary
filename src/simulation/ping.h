@@ -3,15 +3,15 @@
 #define _PING_H_
 
 #include "Arduino.h"
+#include "reporting/reporting.h"
 #include <Netdump.h>
 #include <StreamString.h>
-#include "reporting/reporting.h"
 
-using namespace NetCapture;
+using NetCapture::Netdump;
+using NetCapture::Packet;
 
-class PingWatcher
-{
-public:
+class PingWatcher {
+ public:
   void setup();
   void loop();
 };

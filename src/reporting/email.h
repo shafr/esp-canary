@@ -10,22 +10,21 @@
 #include <Ethernet.h>
 #endif
 
+#include "reporting/notifier.h"
 #include <ESP_Mail_Client.h>
-#include "notifier.h"
 
-class EmailNotifier : public NotificationSender
-{
-private:
-    SMTPSession smtp;
-    ESP_Mail_Session session;
+class EmailNotifier : public NotificationSender {
+ private:
+  SMTPSession smtp;
+  ESP_Mail_Session session;
 
-    void smtpCallback(SMTP_Status status);
-public:
-    void Init();
-    void Notify(String message);
-    void NotifyAttackOccurred(Message attackMessage);
-    void ResetAttackState();
+  void smtpCallback(SMTP_Status status);
+
+ public:
+  void Init();
+  void Notify(String message);
+  void NotifyAttackOccurred(Message attackMessage);
+  void ResetAttackState();
 };
-
 
 #endif

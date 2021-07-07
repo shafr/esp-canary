@@ -4,22 +4,22 @@
 
 #include "Arduino.h"
 #include <vector>
-#include "notifier.h"
+
 #include "../user_config.h"
+#include "reporting/notifier.h"
 
-class Notifier : public NotificationSender
-{
-public:
-    void Init();
-    void Notify(String message);
-    void NotifyAttackOccurred(Message attackMessage);
-    void ResetAttackState();
-    void notifyLoop();
-    void printf_P();
+class Notifier : public NotificationSender {
+ public:
+  void Init();
+  void Notify(String message);
+  void NotifyAttackOccurred(Message attackMessage);
+  void ResetAttackState();
+  void notifyLoop();
+  void printf_P();
 
-private:
-    void sendNotify(String message);
-    void sendNotifyAttackOccurred(Message attackMessage);
+ private:
+  void sendNotify(String message);
+  void sendNotifyAttackOccurred(Message attackMessage);
 };
 
 extern Notifier notifier;

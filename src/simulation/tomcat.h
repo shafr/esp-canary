@@ -4,6 +4,7 @@
 
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
+
 #include "user_config.h"
 #include "reporting/reporting.h"
 #include "system/ntp.h"
@@ -20,9 +21,8 @@
     #define LittleFS LITTLEFS
 #endif
 
-class TomcatSimu
-{
-public:
-    void Serve();
+class TomcatSimu {
+ public:
+  void Serve();
 };
 #endif

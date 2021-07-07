@@ -3,14 +3,14 @@
 #define _OTA_H_
 
 #include <ArduinoOTA.h>
+
 #include "reporting/reporting.h"
 #include "user_config.h"
 
-class OTA
-{
+class OTA {
 public:
-    void Setup();
-    void Loop();
-}; 
+  void Setup();
+  void Loop();
+};
 
 #endif
