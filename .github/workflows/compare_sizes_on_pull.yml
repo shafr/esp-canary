@@ -47,6 +47,8 @@ jobs:
           echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
           echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           echo "::set-output name=flash_${{ matrix.board }}::${FLASH_SIZE}"
+          echo $FLASH_SIZE
+          $(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')
 
   size_current:
     runs-on: ubuntu-latest
