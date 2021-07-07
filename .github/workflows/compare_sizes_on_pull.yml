@@ -26,11 +26,11 @@ jobs:
           pip install -U https://github.com/platformio/platformio-core/archive/master.zip
           platformio update
           
-      - name: Check out current build
+      - name: Check out master
         uses: actions/checkout@v2
         with:
          repository: 'shafr/esp-canary'
-         branch: 'master'
+         ref: 'master'
 
       - name: Run PlatformIO for ${{ matrix.test-platform }}
         run: platformio run -e ${{ matrix.test-platform }}  | tee log.txt
