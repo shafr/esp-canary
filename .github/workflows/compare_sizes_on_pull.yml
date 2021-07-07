@@ -28,9 +28,11 @@ jobs:
          ref: 'master'
 
       - name: Calculate Used Mem Size
+        id: memsizecalc
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-           echo "::set-output name=ram_${{ matrix.board }}::${{ matrix.board }}"
+          echo "::set-output name=ram_${{ matrix.board }}::${{ matrix.board-ram }}"
+          echo "::set-output name=flash_${{ matrix.board }}::${{ matrix.board-flash }}"
 
   publish_size:
     runs-on: ubuntu-latest
@@ -46,6 +48,4 @@ jobs:
           GITHUB_TOKEN: ${{github.token}}
           RAM_NEW: "${{needs.size_current.outputs.ram-esp8266}}"
           FLASH_NEW: "${{needs.size_current.outputs.flash-esp8266}}"
-          RAM_OLD: "${{ env.RAM_SIZE }}"
-          FLASH_OLD: "${{ env.RAM_SIZE }}"
           BOARD: "esp-8266"
