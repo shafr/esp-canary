@@ -1,0 +1,123 @@
+name: ESP Build
+
+on:
+  - pull_request
+
+jobs:
+  size_master:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - nodemcuv2
+#          - esp32
+
+    outputs:
+      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+
+    steps:
+#      - name: Select Python 3.7
+#        uses: actions/setup-python@v1
+#        with:
+#          python-version: '3.7'
+#          architecture: 'x64'
+#
+#      - name: Install PlatformIO
+#        run: |
+#          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
+#          platformio update
+#
+#      - name: Check out master
+#        uses: actions/checkout@v2
+#        with:
+#         repository: 'shafr/esp-canary'
+#         ref: 'master'
+#
+#      - name: Run PlatformIO for ${{ matrix.board }}
+#        run: platformio run -e ${{ matrix.board }}  | tee log.txt
+
+      - name: Calculate Used Mem Size
+        id: memsizecalc
+        run: |
+          export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+
+          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
+          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
+
+  size_fork:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - nodemcuv2
+#          - esp32
+
+    outputs:
+      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+
+    steps:
+#      - name: Select Python 3.7
+#        uses: actions/setup-python@v1
+#        with:
+#          python-version: '3.7'
+#          architecture: 'x64'
+#
+#      - name: Install PlatformIO
+#        run: |
+#          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
+#          platformio update
+#
+#      - name: Check out current build
+#        uses: actions/checkout@v2
+#
+#      - name: Run PlatformIO for ${{ matrix.board }}
+#        run: platformio run -e ${{ matrix.board }}  | tee log.txt
+
+      - name: Calculate Used Mem Size
+        id: memsizecalc
+        run: |
+          export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+
+          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
+          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
+
+  publish_size:
+    runs-on: ubuntu-latest
+    needs:
+      - size_master
+      - size_fork
+    steps:
+      - name: publish size with pull request
+        uses: jdvr/action-add-comment@main
+        with:
+          comment: |
+            | Board   | RAM Origin  | RAM Fork / Branch | Flash Origin | Flash Fork |
+            |---------|------------ |-------------------|--------------|------------|
+            | nodemcu | $R_8_ORIGIN | $R_8_FORK         | $F_8_ORIGIN  | $F_8_FORK  |
+            | esp32   | $R_32_ORIGIN| $R_32_FORK        | $F_32_ORIGIN | $F_32_FORK |
+        env:
+          GITHUB_TOKEN: ${{github.token}}
+
+          R_8_ORIGIN: "${{needs.size_master.outputs.ram-esp8266}}"
+          R_8_FORK: "${{needs.size_fork.outputs.ram-esp8266}}"
+          F_8_ORIGIN: "${{needs.size_master.outputs.flash-esp8266}}"
+          F_8_FORK : "${{needs.size_fork.outputs.flash-esp8266}}"
+
+          R_32_ORIGIN: "${{needs.size_master.outputs.ram-esp32}}"
+          R_32_FORK: "${{needs.size_fork.outputs.ram-esp32}}"
+          F_32_ORIGIN: "${{needs.size_master.outputs.flash-esp32}}"
+          F_32_FORK : "${{needs.size_fork.outputs.flash-esp32}}"
+
+          BOARD: "esp-8266"

@@ -80,8 +80,8 @@ Replace MKSPIFFSTOOL with mklittlefs
 Retrieving maximum program size .pio/build/nodemcuv2/firmware.elf
 Checking size .pio/build/nodemcuv2/firmware.elf
 Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
-RAM:   [====      ]  41.8% (used 34264 bytes from 81920 bytes)
-Flash: [=====     ]  52.7% (used 550631 bytes from 1044464 bytes)
+RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)
+Flash: [=======   ]  72.7% (used 758907 bytes from 1044464 bytes)
 ========================= [SUCCESS] Took 2.48 seconds =========================
 
 Environment    Status    Duration
