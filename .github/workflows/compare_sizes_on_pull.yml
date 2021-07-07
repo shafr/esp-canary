@@ -88,8 +88,8 @@ jobs:
         id: memsizecalc
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          echo "::set-output name=flash_${{ matrix.board }}::$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          echo "::set-output name=ram_${{ matrix.board }}::TEST1"
+          echo "::set-output name=flash_${{ matrix.board }}::TEST2"
 
   publish_size:
     runs-on: ubuntu-latest
