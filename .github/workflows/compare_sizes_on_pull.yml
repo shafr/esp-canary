@@ -12,7 +12,7 @@ jobs:
       matrix:
         board:
           - nodemcuv2
-#          - esp32
+          - esp32
 
     outputs:
       ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
@@ -58,7 +58,7 @@ jobs:
       matrix:
         board:
           - nodemcuv2
-#          - esp32
+          - esp32
 
     outputs:
       ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
