@@ -15,7 +15,8 @@ String getFmtDate() {
   String weekDay = weekDays[timeClient.getDay()];
   
   struct tm *ptm = gmtime((time_t *)&epochTime);
-  struct tm *ptm = gmtime((time_t *)&epochTime);
+  // TODO(DIMI) - replace when time is right:
+  // gmtime_r(reinterpret_cast<time_t *>(&epochTime), ptm);
 
 
   int day = ptm->tm_mday;
