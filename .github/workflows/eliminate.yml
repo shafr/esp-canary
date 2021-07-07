@@ -35,7 +35,7 @@ jobs:
           cat log.txt
           echo $RAM
           echo $FLASH_SIZE
-          echo "::set-output name=ram_${{ matrix.board }}::$(date)"
+          echo "::set-output name=ram_${{ matrix.board }}::$RAM"
           echo "::set-output name=flash_${{ matrix.board }}::$FLASH_SIZE"
 
   size_fork:
@@ -57,15 +57,15 @@ jobs:
     steps:
       - name: Run PlatformIO for ${{ matrix.board }}
         run: |
-          echo "RAM: [ ====== ]  56.6% (used 46344 bytes from 81920 bytes)" > log.txt
-          echo "Flash: [ ======= ]  73.5% (used 767787 bytes from 1044464 bytes)" > log.txt
-          echo "Building .pio/build/nodemcuv2/firmware.bin" > log.txt
+          echo "RAM: [ ====== ]  56.6% (used 46344 bytes from 81920 bytes)" >> log.txt
+          echo "Flash: [ ======= ]  73.5% (used 767787 bytes from 1044464 bytes)" >> log.txt
+          echo "Building .pio/build/nodemcuv2/firmware.bin" >> log.txt
 
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::TEST1"
           export RES="1234"
+          echo "::set-output name=ram_${{ matrix.board }}::$RES"
           echo "::set-output name=flash_${{ matrix.board }}::${RES}"
 
   publish_size:
