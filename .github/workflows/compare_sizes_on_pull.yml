@@ -12,7 +12,7 @@ jobs:
       matrix:
         board:
           - nodemcuv2
-          - esp32
+#          - esp32
 
     outputs:
       ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
@@ -46,6 +46,6 @@ jobs:
           comment: "[CURRENT][$BOARD][RAM $RAM_NEW] [FLASH $FLASH_NEW]"
         env:
           GITHUB_TOKEN: ${{github.token}}
-          RAM_NEW: "${{needs.size_current.outputs.ram-esp8266}}"
-          FLASH_NEW: "${{needs.size_current.outputs.flash-esp8266}}"
+          RAM_NEW: "${{needs.size_master.outputs.ram-esp8266}}"
+          FLASH_NEW: "${{needs.size_master.outputs.flash-esp8266}}"
           BOARD: "esp-8266"
