@@ -34,7 +34,7 @@ jobs:
           export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           cat log.txt
           echo $RAM
-          echo $FLASH
+          echo $FLASH_SIZE
           echo "::set-output name=ram_${{ matrix.board }}::$(date)"
           echo "::set-output name=flash_${{ matrix.board }}::$FLASH_SIZE"
 
