@@ -41,6 +41,12 @@ jobs:
 #      - name: Run PlatformIO for ${{ matrix.board }}
 #        run: platformio run -e ${{ matrix.board }}  | tee log.txt
 
+      - name: dummy text
+        run: |
+          echo 'Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"' >> log.txt
+          echo 'RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)'  >> log.txt
+          echo 'Flash: [=======   ]  72.7% (used 758907 bytes from 1044464 bytes)' >> log.txt
+
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
@@ -83,6 +89,12 @@ jobs:
 #
 #      - name: Run PlatformIO for ${{ matrix.board }}
 #        run: platformio run -e ${{ matrix.board }}  | tee log.txt
+
+       - name: dummy text
+        run: |
+          echo 'Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"' >> log.txt
+          echo 'RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)'  >> log.txt
+          echo 'Flash: [=======   ]  72.7% (used 758907 bytes from 1044464 bytes)' >> log.txt
 
       - name: Calculate Used Mem Size
         id: memsizecalc
