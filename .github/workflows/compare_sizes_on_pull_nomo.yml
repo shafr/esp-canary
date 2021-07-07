@@ -53,63 +53,69 @@ jobs:
           export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
 
+          echo "---"
+          echo $RAM
+          echo ${{env.RAM}}
+          grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%'
+          echo "---"
+
           echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
           echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
 
-  size_fork:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        board:
-          - nodemcuv2
-#          - esp32
-
-    outputs:
-      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
-      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
-      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
-      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
-
-    steps:
-#      - name: Select Python 3.7
-#        uses: actions/setup-python@v1
-#        with:
-#          python-version: '3.7'
-#          architecture: 'x64'
+#  size_fork:
+#    runs-on: ubuntu-latest
 #
-#      - name: Install PlatformIO
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        board:
+#          - nodemcuv2
+##          - esp32
+#
+#    outputs:
+#      ram-esp8266: ${{ steps.memsizecalc.outputs.ram_nodemcuv2 }}
+#      ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
+#      flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
+#      flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+#
+#    steps:
+##      - name: Select Python 3.7
+##        uses: actions/setup-python@v1
+##        with:
+##          python-version: '3.7'
+##          architecture: 'x64'
+##
+##      - name: Install PlatformIO
+##        run: |
+##          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
+##          platformio update
+##
+##      - name: Check out current build
+##        uses: actions/checkout@v2
+##
+##      - name: Run PlatformIO for ${{ matrix.board }}
+##        run: platformio run -e ${{ matrix.board }}  | tee log.txt
+#
+#       - name: dummy text
 #        run: |
-#          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
-#          platformio update
+#          echo 'Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"' >> log.txt
+#          echo 'RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)'  >> log.txt
+#          echo 'Flash: [=======   ]  72.7% (used 758907 bytes from 1044464 bytes)' >> log.txt
 #
-#      - name: Check out current build
-#        uses: actions/checkout@v2
+#      - name: Calculate Used Mem Size
+#        id: memsizecalc
+#        run: |
+#          export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+#          export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
 #
-#      - name: Run PlatformIO for ${{ matrix.board }}
-#        run: platformio run -e ${{ matrix.board }}  | tee log.txt
-
-       - name: dummy text
-        run: |
-          echo 'Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"' >> log.txt
-          echo 'RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)'  >> log.txt
-          echo 'Flash: [=======   ]  72.7% (used 758907 bytes from 1044464 bytes)' >> log.txt
-
-      - name: Calculate Used Mem Size
-        id: memsizecalc
-        run: |
-          export RAM="$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          export FLASH_SIZE="$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-
-          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
-          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
+#          echo "::set-output name=ram_${{ matrix.board }}::${{ env.RAM }}"
+#          echo "::set-output name=flash_${{ matrix.board }}::${{ env.FLASH_SIZE }}"
 
   publish_size:
     runs-on: ubuntu-latest
     needs:
       - size_master
-      - size_fork
+#      - size_fork
     steps:
       - name: publish size with pull request
         uses: jdvr/action-add-comment@main
