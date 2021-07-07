@@ -19,6 +19,7 @@ jobs:
       ram-esp32: ${{ steps.memsizecalc.outputs.ram_esp32 }}
       flash-esp8266: ${{ steps.memsizecalc.outputs.flash_nodemcuv2 }}
       flash-esp32: ${{ steps.memsizecalc.outputs.flash_esp32 }}
+      test: "TEST"
 
     steps:
       - name: Select Python 3.7
@@ -99,7 +100,8 @@ jobs:
     steps:
       - name: print env var
         run: |
-          echo "${{needs.size_master.outputs.ram-esp8266}}"
+          echo "${{needs.size_master.outputs}}"
+          echo "${{needs.size_current.outputs}}"
       - name: publish size with pull request
         uses: jdvr/action-add-comment@main
         with:
