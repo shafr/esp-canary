@@ -22,9 +22,9 @@ String getFmtDate() {
   int min = timeClient.getMinutes();
   int sec = timeClient.getSeconds();
 
-  char fullDateString[100]; // TODO - calc size
-  // TODO - correct format ?
-  // TODO - Use other than GMT format
+  char fullDateString[100];  // TODO(DIMI) - calc size
+  // TODO(DIMI) - correct format ?
+  // TODO(DIMI) - Use other than GMT format
   sprintf(fullDateString, "%s, %02d %s %02d %02d:%02d:%02d GMT",
           weekDay.c_str(), day, month.c_str(), year, hour, min, sec);
 
