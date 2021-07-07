@@ -45,12 +45,10 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          echo "FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"  >> $GITHUB_ENV
+          RAM=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
+          FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           echo "::set-output name=ram_${{ matrix.board }}::$(grep -oP '^RAM.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
-          echo "::set-output name=flash_${{ matrix.board }}::${FLASH_SIZE}"
-          echo $FLASH_SIZE
-          echo ${{ env.FLASH_SIZE }}
-          grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%'
+          echo "::set-output name=flash_${{ matrix.board }}::$FLASH_SIZE"
 
   size_current:
     runs-on: ubuntu-latest
@@ -89,8 +87,9 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
-          echo "::set-output name=ram_${{ matrix.board }}::'TEST1'"
-          echo "::set-output name=flash_${{ matrix.board }}::'TEST2'"
+          echo "::set-output name=ram_${{ matrix.board }}::TEST1"
+          export RES="1234"
+          echo "::set-output name=flash_${{ matrix.board }}::${RES}"
 
   publish_size:
     runs-on: ubuntu-latest
@@ -98,10 +97,6 @@ jobs:
       - size_master
       - size_current
     steps:
-      - name: print env var
-        run: |
-          echo "${{needs.size_master.outputs}}"
-          echo "${{needs.size_current.outputs}}"
       - name: publish size with pull request
         uses: jdvr/action-add-comment@main
         with:
