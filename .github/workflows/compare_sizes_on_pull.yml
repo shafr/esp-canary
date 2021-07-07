@@ -87,6 +87,11 @@ jobs:
       - name: Calculate Used Mem Size
         id: memsizecalc
         run: |
+          echo "log.txt"
+          echo "-------"
+          echo "-------"
+
+
           export RAM=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
           export FLASH_SIZE=$(grep -oP '^Flash.*' log.txt | grep -oEi '+([0-9]{1,2}\.[0-9]{1,2})%')"
 
