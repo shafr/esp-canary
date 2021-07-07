@@ -90,7 +90,7 @@ jobs:
 #      - name: Run PlatformIO for ${{ matrix.board }}
 #        run: platformio run -e ${{ matrix.board }}  | tee log.txt
 
-       - name: dummy text
+      - name: dummy text
         run: |
           echo 'Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"' >> log.txt
           echo 'RAM:   [======    ]  56.0% (used 45892 bytes from 81920 bytes)'  >> log.txt
