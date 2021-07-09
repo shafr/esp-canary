@@ -21,7 +21,6 @@ jobs:
 
        - name: install fuse-dev
          run:
-          fusermount -V
            ls -la /dev/loop*
            sudo apt-get install libfuse-dev
 
@@ -34,6 +33,7 @@ jobs:
        - name: Compile lfs
          run: |
            cd lfs
+           ls -la
            make
            ./lfs --help
 
