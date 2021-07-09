@@ -78,9 +78,9 @@ jobs:
         uses: jdvr/action-add-comment@main
         with:
           comment: |
-            | Board  | \|  | ESP8266 LFS | ESP32 LFS |
-            |--------|-----|-------------|-----------|
-            | Size   | \|  | $L_8        | $L_32     |
+            | Board  | ESP8266 LFS | ESP32 LFS |
+            |--------|-------------|-----------|
+            | Size   | $L_8        | $L_32     |
         env:
           GITHUB_TOKEN: ${{github.token}}
 
