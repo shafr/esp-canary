@@ -16,8 +16,8 @@ jobs:
           - esp32
 
     outputs:
-      lfs-esp8266: ${{ steps.getlfssize.outputs.lfs_nodemcuv2 }}
-      lfs-esp32: ${{ steps.getlfssize.outputs.lfs_esp32 }}
+      lfs-esp8266: ${{ steps.get_lfs_size_esp8266.outputs.lfs_nodemcuv2 }}
+      lfs-esp32: ${{ steps.get_lfs_size_esp32.outputs.lfs_esp32 }}
 
     steps:
       - name: Cache pip
@@ -53,9 +53,9 @@ jobs:
       #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
       - name: Mount drive & get actual size
         if: ${{ matrix.board == 'nodemcuv2' }}
-        id: getlfssize
+        id: get_lfs_size_esp8266
         run: |
-               export LOOP=/dev/loop6
+          export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.board}}/littlefs.bin
           mkdir -p mount
@@ -66,7 +66,7 @@ jobs:
       #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
       - name: Mount drive & get actual size
         if: ${{ matrix.board == 'esp32' }}
-        id: getlfssize
+        id: get_lfs_size_esp32
         run: |
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
