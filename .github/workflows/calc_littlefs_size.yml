@@ -46,5 +46,5 @@ jobs:
           losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
           mkdir -p mount
           ./lfs --block_size=8192 ${LOOP} mount
-          export USED_SPACE=(df -h mount | grep -v "Used" | awk '{print $3}')
+          export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
           echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
