@@ -44,13 +44,15 @@ jobs:
       - name: Check out the Release
         uses: actions/checkout@v2
 
+      - name: Change permissions for exec files
+        run: chmod +x tools/*
+
       - name: Build FS for ${{ matrix.test-platform }}
         run: platformio run -e ${{ matrix.test-platform }} -t buildfs
 
       - name: Mount drive & get actual size
         id: getlfssize
         run: |
-          chmod +x tools/*
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
