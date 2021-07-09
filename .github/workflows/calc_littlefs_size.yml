@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test-platform:
+        board:
 #          - nodemcuv2
           - esp32
 
@@ -47,18 +47,31 @@ jobs:
       - name: Change permissions for exec files
         run: chmod +x tools/*
 
-      - name: Build FS for ${{ matrix.test-platform }}
-        run: platformio run -e ${{ matrix.test-platform }} -t buildfs
-      #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
-      #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
+      - name: Build FS for ${{ matrix.board }}
+        run: platformio run -e ${{ matrix.board }} -t buildfs
 
+      #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
       - name: Mount drive & get actual size
+        if: ${{ matrix.board == 'nodemcuv2' }}
+        id: getlfssize
+        run: |
+               export LOOP=/dev/loop6
+          sudo chmod a+rw ${LOOP}
+          losetup ${LOOP} .pio/build/${{matrix.board}}/littlefs.bin
+          mkdir -p mount
+          ./tools/lfs --block_size=8192 ${LOOP} mount
+          export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
+          echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
+
+      #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
+      - name: Mount drive & get actual size
+        if: ${{ matrix.board == 'esp32' }}
         id: getlfssize
         run: |
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
-          losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
+          losetup ${LOOP} .pio/build/${{matrix.board}}/spiffs.bin
           mkdir -p mount
-          ./tools/lfs --block_size=8192 ${LOOP} mount
+          ./tools/lfs --block_size=4096 ${LOOP} mount
           export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
           echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
