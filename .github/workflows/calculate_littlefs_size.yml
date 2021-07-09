@@ -1,10 +1,13 @@
 name: Get Real LFS files size
 
+# This workflow calculates size of LFS files on a drive.
+# See post for more details: https://shafr.github.io/life/2021/07/08/real-lfs-size.html
+
 on:
   pull_request:
 
 jobs:
-  get_lfs_size:
+  get_lfs_size_origin:
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,9 +25,75 @@ jobs:
       - name: Cache pip
         uses: actions/cache@v2
         with:
-         path: ~/.cache/pip
-         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-         restore-keys: ${{ runner.os }}-pip-
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v2
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade platformio
+
+      - name: Check out master
+        uses: actions/checkout@v2
+        with:
+          repository: 'shafr/esp-canary'
+          ref: 'master'
+
+      - name: Change permissions for exec files
+        run: chmod +x tools/*
+
+      - name: Build FS for ${{ matrix.board }}
+        run: platformio run -e ${{ matrix.board }} -t buildfs
+
+      #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
+      #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
+      - name: Mount drive & get actual size
+        id: get_lfs_size
+        run: |
+          export LOOP=/dev/loop6
+          export BLOCK_SIZE=8192
+          if [ "${{ matrix.board }}" == "esp32" ]; then
+            export BLOCK_SIZE=4096
+          fi
+
+          sudo chmod a+rw ${LOOP}
+          losetup ${LOOP} .pio/build/${{matrix.board}}/**.bin
+          mkdir -p mount
+          ./tools/lfs --block_size=${BLOCK_SIZE} ${LOOP} mount
+          export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
+          echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
+
+  get_lfs_size_fork:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+          - nodemcuv2
+          - esp32
+
+    outputs:
+      lfs-esp8266: ${{ steps.get_lfs_size.outputs.lfs_nodemcuv2 }}
+      lfs-esp32: ${{ steps.get_lfs_size.outputs.lfs_esp32 }}
+
+    steps:
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
 
       - name: Cache PlatformIO
         uses: actions/cache@v2
@@ -70,7 +139,8 @@ jobs:
   publish_size:
     runs-on: ubuntu-latest
     needs:
-      - get_lfs_size
+      - get_lfs_size_fork
+      - get_lfs_size_origin
     steps:
       - name: publish size with pull request
         if: ${{ github.event_name == 'pull_request' }}
@@ -79,9 +149,13 @@ jobs:
           comment: |
             | Board  | ESP8266 LFS | ESP32 LFS |
             |--------|-------------|-----------|
-            | Size   | $L_8        | $L_32     |
+            | Origin | $L_O_8      | $L_O_32   |
+            | Fork   | $L_F_8      | $L_F_32   |
         env:
           GITHUB_TOKEN: ${{github.token}}
 
-          L_8: "${{needs.get_lfs_size.outputs.lfs-esp8266}}"
-          L_32: "${{needs.get_lfs_size.outputs.lfs-esp32}}"
+          L_O_8: "${{needs.get_lfs_size_origin.outputs.lfs-esp8266}}"
+          L_O_32: "${{needs.get_lfs_size_origin.outputs.lfs-esp32}}"
+
+          L_F_8: "${{needs.get_lfs_size_fork.outputs.lfs-esp8266}}"
+          L_F_32: "${{needs.get_lfs_size_fork.outputs.lfs-esp32}}"
