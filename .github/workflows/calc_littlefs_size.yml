@@ -20,16 +20,26 @@ jobs:
       lfs-esp32: ${{ steps.getlfssize.outputs.lfs_esp32 }}
 
     steps:
-      - name: Select Python 3.7
-        uses: actions/setup-python@v1
+      - name: Cache pip
+        uses: actions/cache@v2
         with:
-          python-version: '3.7'
-          architecture: 'x64'
+         path: ~/.cache/pip
+         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+         restore-keys: ${{ runner.os }}-pip-
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v2
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
 
       - name: Install PlatformIO
         run: |
-          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
-          platformio update
+          python -m pip install --upgrade pip
+          pip install --upgrade platformio
 
       - name: Check out the Release
         uses: actions/checkout@v2
@@ -40,7 +50,8 @@ jobs:
       - name: Mount drive & get actual size
         id: getlfssize
         run: |
-          chmod +x lfs tools/mklittlefs
+          chmod +x lfs
+          chmod +x tools/mklittlefs
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
