@@ -1,18 +1,18 @@
-name: ESP Build
+name: Get Real LFS files size
 
 on:
   push:
+  pull_request:
 
 jobs:
-  test_builds:
-
+  get_lfs_size:
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         board:
-#          - nodemcuv2
+          - nodemcuv2
           - esp32
 
     outputs:
@@ -50,22 +50,39 @@ jobs:
       - name: Build FS for ${{ matrix.board }}
         run: platformio run -e ${{ matrix.board }} -t buildfs
 
-      #TODO(DIMI): need to merge this 2 workflows in one
       #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
       #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
       - name: Mount drive & get actual size
         id: get_lfs_size
         run: |
+          export LOOP=/dev/loop6
           export BLOCK_SIZE=8192
           if [ "${{ matrix.board }}" == "esp32" ]; then
             export BLOCK_SIZE=4096
           fi
-          echo ${BLOCK_SIZE}
 
-          export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.board}}/**.bin
           mkdir -p mount
           ./tools/lfs --block_size=${BLOCK_SIZE} ${LOOP} mount
           export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
           echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
+
+  publish_size:
+    runs-on: ubuntu-latest
+    needs:
+      - get_lfs_size
+    steps:
+      - name: publish size with pull request
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: jdvr/action-add-comment@main
+        with:
+          comment: |
+            | Board  | \|  | ESP8266 LFS | ESP32 LFS |
+            |--------|-----|-------------|-----------|
+            | Fork   | \|  | $L_8        | $L_32     |
+        env:
+          GITHUB_TOKEN: ${{github.token}}
+
+          L_8: "${{needs.get_lfs_size.outputs.lfs-esp8266}}"
+          L_32: "${{needs.size_fork.outputs.lfs-esp32}}"
