@@ -40,7 +40,7 @@ jobs:
       - name: Mount drive & get actual size
         id: getlfssize
         run: |
-          chmod +x lfs
+          chmod +x lfs tools/mklittlefs
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
