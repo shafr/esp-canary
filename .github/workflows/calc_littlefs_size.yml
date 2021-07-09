@@ -30,12 +30,22 @@ jobs:
           repository: littlefs-project/littlefs-fuse
           path: lfs
 
-       - name: Compile lfs
+       - name: Compile Lfs
          run: |
            cd lfs
-           ls -la
            make
-           ./lfs --help
+
+       - name: Mount drive
+         run: |
+           sudo chmod a+rw /dev/loop9
+           losetup /dev/loop9 littlefs.bin
+           mkdir -p mount
+           ./lfs --block_size=8192 /dev/loop9 mount
+           cd mount
+           df -h .
+           df -h . | grep -v "Used" | awk '{print $3}'
+
+#loop9
 
 #      - name: Select Python 3.7
 #        uses: actions/setup-python@v1
