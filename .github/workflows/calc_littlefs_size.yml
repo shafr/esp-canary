@@ -49,6 +49,8 @@ jobs:
 
       - name: Build FS for ${{ matrix.test-platform }}
         run: platformio run -e ${{ matrix.test-platform }} -t buildfs
+      #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
+      #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
 
       - name: Mount drive & get actual size
         id: getlfssize
