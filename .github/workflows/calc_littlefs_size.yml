@@ -22,7 +22,7 @@ jobs:
        - name: install fuse-dev
          run:
            sudo apt-get install libfuse-dev &&
-           la -la /dev/loop* &&
+           ls -la /dev/loop* &&
            df -h
 
        - name: Check out lfs
@@ -39,9 +39,9 @@ jobs:
        - name: Mount drive
          run: |
            sudo chmod a+rw /dev/loop6
-           losetup /dev/loop9 littlefs.bin
+           losetup /dev/loop6 littlefs.bin
            mkdir -p mount
-           ./lfs --block_size=8192 /dev/loop9 mount
+           ./lfs --block_size=8192 /dev/loop6 mount
            cd mount
            df -h .
            df -h . | grep -v "Used" | awk '{print $3}'
