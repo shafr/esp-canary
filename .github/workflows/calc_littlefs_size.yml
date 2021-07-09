@@ -2,8 +2,7 @@ name: ESP Build
 
 on:
   push:
-    paths:
-      - 'src/**'
+
 jobs:
   test_builds:
 
