@@ -1,0 +1,23 @@
+name: VAR TEST
+
+on:
+  push:
+
+jobs:
+  test_builds:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        board:
+#          - nodemcuv2
+          - esp32
+    steps:
+      #ESP32: "tools/mklittlefs" -c resources -p 256 -b 4096 -s 1507328 .pio/build/esp32/spiffs.bin
+      - name: Mount drive & get actual size
+        if: ${{ matrix.board == 'esp32' }}
+        id: get_lfs_size_esp32
+        run: |
+          echo ${{ matrix.board }}
