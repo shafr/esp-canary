@@ -16,54 +16,30 @@ jobs:
 #          - esp32
 
     steps:
-       - name: Check out the Release
-         uses: actions/checkout@v2
+      - name: Select Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
 
-#       - name: Check out lfs
-#         uses: actions/checkout@v2
-#         with:
-#           repository: littlefs-project/littlefs-fuse
-#           path: lfs
+      - name: Install PlatformIO
+        run: |
+          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
+          platformio update
 
-#       - name: install fuse-dev
-#         run:
-#           ls -la
-#           sudo apt-get install libfuse-dev &&
-#           ls -la /dev/loop* &&
-#           df -h
+      - name: Check out the Release
+        uses: actions/checkout@v2
 
-#       - name: Compile Lfs
-#         run: |
-#           cd lfs
-#           make
+      - name: Build FS for ${{ matrix.test-platform }}
+        run: platformio run -e ${{ matrix.test-platform }} -t buildfs
 
-       - name: Mount drive
-         run: |
-           chmod +x lfs
-           export LOOP=/dev/loop6
-           sudo chmod a+rw ${LOOP}
-           losetup ${LOOP} littlefs.bin
-           mkdir -p mount
-           ./lfs --block_size=8192 ${LOOP} mount
-           cd mount
-           df -h .
-           df -h . | grep -v "Used" | awk '{print $3}'
-
-#loop9
-
-#      - name: Select Python 3.7
-#        uses: actions/setup-python@v1
-#        with:
-#          python-version: '3.7'
-#          architecture: 'x64'
-#
-#      - name: Install PlatformIO
-#        run: |
-#          pip install -U https://github.com/platformio/platformio-core/archive/master.zip
-#          platformio update
-#
-#      - name: Check out the Release
-#        uses: actions/checkout@v2
-#
-#      - name: Build FS for ${{ matrix.test-platform }}
-#        run: platformio run -e ${{ matrix.test-platform }} -t buildfs
+      - name: Mount drive & get actual size
+        run: |
+          chmod +x lfs
+          export LOOP=/dev/loop6
+          sudo chmod a+rw ${LOOP}
+          ls -la .pio/build/${{matrix.test-platform}}/littlefs.bin
+          losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
+          mkdir -p mount
+          ./lfs --block_size=8192 ${LOOP} mount
+          df -h mount | grep -v "Used" | awk '{print $3}'
