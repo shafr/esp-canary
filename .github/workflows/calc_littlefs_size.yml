@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         test-platform:
-          - nodemcuv2
+#          - nodemcuv2
           - esp32
 
     outputs:
@@ -50,12 +50,11 @@ jobs:
       - name: Mount drive & get actual size
         id: getlfssize
         run: |
-          chmod +x lfs
-          chmod +x tools/mklittlefs
+          chmod +x tools/*
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
           losetup ${LOOP} .pio/build/${{matrix.test-platform}}/littlefs.bin
           mkdir -p mount
-          ./lfs --block_size=8192 ${LOOP} mount
+          ./tools/lfs --block_size=8192 ${LOOP} mount
           export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
           echo "::set-output name=lfs_${{ matrix.board }}::${USED_SPACE}"
