@@ -21,3 +21,9 @@ jobs:
         id: get_lfs_size_esp32
         run: |
           echo ${{ matrix.board }}
+
+          if [ "${{ matrix.board }}" != "esp32" ]; then
+            echo "ESP32"
+          else
+            echo "ESP2866"
+          fi

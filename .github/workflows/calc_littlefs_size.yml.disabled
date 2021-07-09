@@ -50,6 +50,7 @@ jobs:
       - name: Build FS for ${{ matrix.board }}
         run: platformio run -e ${{ matrix.board }} -t buildfs
 
+      #TODO(DIMI): need to merge this 2 workflows in one
       #ESP8266: "mklittlefs" -c resources -p 256 -b 8192 -s 1024000 .pio/build/nodemcuv2/littlefs.bin
       - name: Mount drive & get actual size
         if: ${{ matrix.board == 'nodemcuv2' }}
@@ -70,7 +71,7 @@ jobs:
         run: |
           export LOOP=/dev/loop6
           sudo chmod a+rw ${LOOP}
-          losetup ${LOOP} .pio/build/${{matrix.board}}/spiffs.bin
+          losetup ${LOOP} .pio/build/${{matrix.board}}/**.bin
           mkdir -p mount
           ./tools/lfs --block_size=4096 ${LOOP} mount
           export USED_SPACE=$(df -h mount | grep -v "Used" | awk '{print $3}')
