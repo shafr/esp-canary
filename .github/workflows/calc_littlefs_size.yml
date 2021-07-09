@@ -16,32 +16,37 @@ jobs:
 #          - esp32
 
     steps:
-#       - name: Check out the Release
-#         uses: actions/checkout@v2
-
-       - name: install fuse-dev
-         run:
-           sudo apt-get install libfuse-dev &&
-           ls -la /dev/loop* &&
-           df -h
-
-       - name: Check out lfs
+       - name: Check out the Release
          uses: actions/checkout@v2
          with:
-          repository: littlefs-project/littlefs-fuse
-          path: lfs
+           path: pio
 
-       - name: Compile Lfs
-         run: |
-           cd lfs
-           make
+#       - name: Check out lfs
+#         uses: actions/checkout@v2
+#         with:
+#           repository: littlefs-project/littlefs-fuse
+#           path: lfs
+
+#       - name: install fuse-dev
+#         run:
+#           ls -la
+#           sudo apt-get install libfuse-dev &&
+#           ls -la /dev/loop* &&
+#           df -h
+
+#       - name: Compile Lfs
+#         run: |
+#           cd lfs
+#           make
 
        - name: Mount drive
          run: |
-           sudo chmod a+rw /dev/loop6
-           losetup /dev/loop6 littlefs.bin
+           cd pio
+           export LOOP=/dev/loop6
+           sudo chmod a+rw ${LOOP}
+           losetup ${LOOP} littlefs.bin
            mkdir -p mount
-           ./lfs --block_size=8192 /dev/loop6 mount
+           ./lfs --block_size=8192 ${LOOP} mount
            cd mount
            df -h .
            df -h . | grep -v "Used" | awk '{print $3}'
