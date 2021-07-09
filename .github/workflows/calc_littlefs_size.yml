@@ -80,9 +80,9 @@ jobs:
           comment: |
             | Board  | \|  | ESP8266 LFS | ESP32 LFS |
             |--------|-----|-------------|-----------|
-            | Fork   | \|  | $L_8        | $L_32     |
+            | Size   | \|  | $L_8        | $L_32     |
         env:
           GITHUB_TOKEN: ${{github.token}}
 
           L_8: "${{needs.get_lfs_size.outputs.lfs-esp8266}}"
-          L_32: "${{needs.size_fork.outputs.lfs-esp32}}"
+          L_32: "${{needs.get_lfs_size.outputs.lfs-esp32}}"
