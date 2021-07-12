@@ -2,7 +2,7 @@
 #ifndef _USER_CONFIG_H_
 #define _USER_CONFIG_H_
 
-#define VERSION "1.2.1"
+#define VERSION "1.2.2"
 
 //===========================================================================
 //============================= WIFI Configuration ==========================
