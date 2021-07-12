@@ -24,15 +24,15 @@ void handleAuth(AsyncWebServerRequest *request) {
 
     loginCount = 0;
 
-    AsyncWebServerResponse *response =
-        request->beginResponse(LittleFS, F("/tomcat_9/401.html"), TEXT_HTML);
+    AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/401.html.gz"), TEXT_HTML);
+    response->addHeader("Content-Encoding", "gzip");
     response->setCode(401);
     request->send(response);
     return;
   }
 
-  AsyncWebServerResponse *response =
-      request->beginResponse(LittleFS, F("/tomcat_9/500.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/500.html.gz"), TEXT_HTML);
+  response->addHeader("Content-Encoding", "gzip");
   response->setCode(500);
   request->send(response);
 }
@@ -56,8 +56,8 @@ void handleOptionsRequest(AsyncWebServerRequest *request) {
 void handle404Request(AsyncWebServerRequest *request) {
   tomcatAttackNotify(F("404"), request);
 
-  AsyncWebServerResponse *response =
-      request->beginResponse(LittleFS, F("/tomcat_9/404.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/404.html.gz"), TEXT_HTML);
+  response->addHeader("Content-Encoding", "gzip");
   response->setCode(404);
   request->send(response);
 }
@@ -65,8 +65,8 @@ void handle404Request(AsyncWebServerRequest *request) {
 void handleRootRequest(AsyncWebServerRequest *request) {
   tomcatAttackNotify(F("/ request"), request);
 
-  AsyncWebServerResponse *response =
-      request->beginResponse(LittleFS, F("/tomcat_9/index.html"), TEXT_HTML);
+  AsyncWebServerResponse *response = request->beginResponse(LittleFS, F("/tomcat_9/index.html.gz"), TEXT_HTML);
+  response->addHeader("Content-Encoding", "gzip");
   response->setCode(200);
   request->send(response);
 }
