@@ -1,24 +1,53 @@
 #include "reporting/telegram.h"
 
-AsyncTelegram bot;
-TBMessage msgGroup;
-// For cases when Telegram is not working - we should stop sending notifications
-// there, until issue is resolved (certificate, etc..)
+#ifdef ESP8266
+BearSSL::WiFiClientSecure wiFiSecureClient;
+BearSSL::Session   bearSslSession;
+BearSSL::X509List  certificate(telegram_cert);
+#endif
+
+// Using SSL=true get's flash memory to 103%
+#define USE_CLIENTSSL false
+
+#ifdef ESP32
+  #if USE_CLIENTSSL
+    #include <SSLClient.h>
+    #include "tg_certificate.h"
+    WiFiClient base_client;
+    SSLClient wiFiSecureClient(base_client, TAs, static_cast<size_t>(TAs_NUM), A0, 1, SSLClient::SSL_ERROR);
+  #else
+    #include <WiFiClientSecure.h>
+    WiFiClientSecure wiFiSecureClient;
+  #endif
+#endif
+
+
+AsyncTelegram2 bot(wiFiSecureClient);
 boolean initOK = false;
 
 void TelegramNotifier::Init() {
-  bot.setClock(CLOCK_TZ);
+#ifdef ESP8266
+  configTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+  wiFiSecureClient.setSession(&bearSslSession);
+  wiFiSecureClient.setTrustAnchors(&certificate);
+  wiFiSecureClient.setBufferSizes(1024, 1024);
+#endif
 
+#ifdef ESP32
+configTzTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+  #if !USE_CLIENTSSL
+    wiFiSecureClient.setCACert(telegram_cert);
+  #endif
+#endif
   bot.setUpdateTime(TELEGRAM_POLLING_TIME_MS);
   bot.setTelegramToken(TELEGRAM_BOT_TOKEN);
 
   Serial.println(F("\nTest Telegram connection... "));
   if (bot.begin()) {
     initOK = true;
-    msgGroup.chatId = BOT_CHAT_ID;
     Serial.println(F("Telegram connection is OK!"));
     notifier.Notify("ESP started. \r\nIP: " + WiFi.localIP().toString() +
-                    "\r\nName " + bot.userName);
+                    "\r\nName " + bot.getBotName());
   } else {
     initOK = false;
     Serial.println(F("Telegram connection is NOK!"));
@@ -30,7 +59,7 @@ void TelegramNotifier::Notify(String message) {
   if (!initOK) {
     return;
   }
-  bot.sendMessage(msgGroup, message);
+  bot.sendTo(BOT_CHAT_ID, message);
 }
 
 void TelegramNotifier::NotifyAttackOccurred(Message attackMessage) {
@@ -40,7 +69,7 @@ void TelegramNotifier::NotifyAttackOccurred(Message attackMessage) {
 
   String message = "[ " + attackMessage.source + " ] " + "[ " +
                    attackMessage.feature + " ] " + attackMessage.attackerIp;
-  bot.sendMessage(msgGroup, message);
+  bot.sendTo(BOT_CHAT_ID, message);
 }
 
 void TelegramNotifier::ResetAttackState() {
