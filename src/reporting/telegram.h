@@ -10,6 +10,7 @@
 
 #ifdef ESP32
 #include <WiFi.h>
+#include <WiFiClient.h>
 #endif
 
 #ifdef ESP8266

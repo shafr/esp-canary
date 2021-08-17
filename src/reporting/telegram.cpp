@@ -1,18 +1,44 @@
 #include "reporting/telegram.h"
 
+#ifdef ESP8266
 BearSSL::WiFiClientSecure wiFiSecureClient;
 BearSSL::Session   bearSslSession;
 BearSSL::X509List  certificate(telegram_cert);
-AsyncTelegram2 bot(wiFiSecureClient);
+#endif
 
+// Using SSL=true get's flash memory to 103%
+#define USE_CLIENTSSL false  
+
+#ifdef ESP32
+  #if USE_CLIENTSSL
+    #include <SSLClient.h>  
+    #include "tg_certificate.h"
+    WiFiClient base_client;
+    SSLClient wiFiSecureClient(base_client, TAs, (size_t)TAs_NUM, A0, 1, SSLClient::SSL_ERROR);
+  #else
+    #include <WiFiClientSecure.h>
+    WiFiClientSecure wiFiSecureClient;  
+  #endif
+#endif
+
+
+AsyncTelegram2 bot(wiFiSecureClient);
 boolean initOK = false;
 
 void TelegramNotifier::Init() {
+#ifdef ESP8266
   configTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
   wiFiSecureClient.setSession(&bearSslSession);
   wiFiSecureClient.setTrustAnchors(&certificate);
   wiFiSecureClient.setBufferSizes(1024, 1024);
+#endif  
 
+#ifdef ESP32
+configTzTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+  #if !USE_CLIENTSSL
+    wiFiSecureClient.setCACert(telegram_cert);
+  #endif
+#endif
   bot.setUpdateTime(TELEGRAM_POLLING_TIME_MS);
   bot.setTelegramToken(TELEGRAM_BOT_TOKEN);
 
