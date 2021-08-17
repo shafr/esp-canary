@@ -10,12 +10,12 @@
 
 // WIFI endpoint name where you would connect
 #ifndef WIFI_SERVER_AP_NAME
-  #define WIFI_SERVER_AP_NAME "WZA23B"
+``#define WIFI_SERVER_AP_NAME "WFT"
 #endif
 
 // WIFI endpoint password where you would connect
 #ifndef WIFI_SERVER_AP_PASSWORD
-  #define WIFI_SERVER_AP_PASSWORD "XbEv8c40vo7d9P4UGofEEH*YjL9W1HLaRmXi^6Pj%9TZ*u$ikTGC556#pcm0VhE"
+#define WIFI_SERVER_AP_PASSWORD "1234567890"
 #endif
 
 //===========================================================================
@@ -50,7 +50,7 @@
 #define TOMCAT_PORT 80
 
 // Ping simulation.
-#define PING_ENABLED false
+#define PING_ENABLED true
 
 //===========================================================================
 //============================= REPORTING-NOTIFICATIONS======================
@@ -58,7 +58,7 @@
 
 // =========== MQTT ===========================
 #define MQTT_ENABLED false
-#define MQTT_HOST "192.168.1.2"
+#define MQTT_HOST "192.168.1.1"
 #define MQTT_TOPIC "security/canary"
 #define MQTT_PORT 1883
 #define MQTT_CLIENT_ID "ESPCanary"
@@ -75,15 +75,15 @@
 
 // =========== TELEGRAM=========================
 // Enable telegram notifications:
-#define TELEGRAM_ENABLED true
+#define TELEGRAM_ENABLED false
 
 // This value you would get from @BotFather when you create new bot.
-#define TELEGRAM_BOT_TOKEN "1672625066:AAEXuAEKbmLmXLbqdo0WRjT3p06Bte5cf_4"
+#define TELEGRAM_BOT_TOKEN "XXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 // Use @myidbot (IDBot) to find out the chat ID of an individual or a group
 // If the chat is a group, the chat id is negative. If it is a single person,
 // then positive.
-#define BOT_CHAT_ID -582251956
+#define BOT_CHAT_ID -123456789
 
 // To ensure certificate validation, WiFiClientSecure needs time updated.
 // To choose correct time zone, Follow this link
