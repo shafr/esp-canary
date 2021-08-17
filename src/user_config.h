@@ -10,7 +10,7 @@
 
 // WIFI endpoint name where you would connect
 #ifndef WIFI_SERVER_AP_NAME
-``#define WIFI_SERVER_AP_NAME "WFT"
+#define WIFI_SERVER_AP_NAME "WFT"
 #endif
 
 // WIFI endpoint password where you would connect
