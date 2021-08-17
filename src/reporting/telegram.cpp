@@ -1,13 +1,17 @@
 #include "reporting/telegram.h"
 
-AsyncTelegram bot;
-TBMessage msgGroup;
-// For cases when Telegram is not working - we should stop sending notifications
-// there, until issue is resolved (certificate, etc..)
+BearSSL::WiFiClientSecure wiFiSecureClient;
+BearSSL::Session   bearSslSession;
+BearSSL::X509List  certificate(telegram_cert);
+AsyncTelegram2 bot(wiFiSecureClient);
+
 boolean initOK = false;
 
 void TelegramNotifier::Init() {
-  bot.setClock(CLOCK_TZ);
+  configTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+  wiFiSecureClient.setSession(&bearSslSession);
+  wiFiSecureClient.setTrustAnchors(&certificate);
+  wiFiSecureClient.setBufferSizes(1024, 1024);
 
   bot.setUpdateTime(TELEGRAM_POLLING_TIME_MS);
   bot.setTelegramToken(TELEGRAM_BOT_TOKEN);
@@ -15,10 +19,9 @@ void TelegramNotifier::Init() {
   Serial.println(F("\nTest Telegram connection... "));
   if (bot.begin()) {
     initOK = true;
-    msgGroup.chatId = BOT_CHAT_ID;
     Serial.println(F("Telegram connection is OK!"));
     notifier.Notify("ESP started. \r\nIP: " + WiFi.localIP().toString() +
-                    "\r\nName " + bot.userName);
+                    "\r\nName " + bot.getBotName());
   } else {
     initOK = false;
     Serial.println(F("Telegram connection is NOK!"));
@@ -30,7 +33,7 @@ void TelegramNotifier::Notify(String message) {
   if (!initOK) {
     return;
   }
-  bot.sendMessage(msgGroup, message);
+  bot.sendTo(BOT_CHAT_ID, message);
 }
 
 void TelegramNotifier::NotifyAttackOccurred(Message attackMessage) {
@@ -40,7 +43,7 @@ void TelegramNotifier::NotifyAttackOccurred(Message attackMessage) {
 
   String message = "[ " + attackMessage.source + " ] " + "[ " +
                    attackMessage.feature + " ] " + attackMessage.attackerIp;
-  bot.sendMessage(msgGroup, message);
+  bot.sendTo(BOT_CHAT_ID, message);
 }
 
 void TelegramNotifier::ResetAttackState() {
