@@ -4,12 +4,13 @@
 
 #include <Arduino.h>
 #include "user_config.h"
-#include <AsyncTelegram.h>
+#include <time.h>
+#include <AsyncTelegram2.h>
 #include "reporting/reporting.h"
-
 
 #ifdef ESP32
 #include <WiFi.h>
+#include <WiFiClient.h>
 #endif
 
 #ifdef ESP8266
