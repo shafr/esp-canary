@@ -7,17 +7,17 @@ BearSSL::X509List  certificate(telegram_cert);
 #endif
 
 // Using SSL=true get's flash memory to 103%
-#define USE_CLIENTSSL false  
+#define USE_CLIENTSSL false
 
 #ifdef ESP32
   #if USE_CLIENTSSL
-    #include <SSLClient.h>  
+    #include <SSLClient.h>
     #include "tg_certificate.h"
     WiFiClient base_client;
-    SSLClient wiFiSecureClient(base_client, TAs, (size_t)TAs_NUM, A0, 1, SSLClient::SSL_ERROR);
+    SSLClient wiFiSecureClient(base_client, TAs, static_cast<size_t>(TAs_NUM), A0, 1, SSLClient::SSL_ERROR);
   #else
     #include <WiFiClientSecure.h>
-    WiFiClientSecure wiFiSecureClient;  
+    WiFiClientSecure wiFiSecureClient;
   #endif
 #endif
 
@@ -31,7 +31,7 @@ void TelegramNotifier::Init() {
   wiFiSecureClient.setSession(&bearSslSession);
   wiFiSecureClient.setTrustAnchors(&certificate);
   wiFiSecureClient.setBufferSizes(1024, 1024);
-#endif  
+#endif
 
 #ifdef ESP32
 configTzTime(CLOCK_TZ, "time.google.com", "time.windows.com", "pool.ntp.org");

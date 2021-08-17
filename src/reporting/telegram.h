@@ -4,9 +4,9 @@
 
 #include <Arduino.h>
 #include "user_config.h"
+#include <time.h>
 #include <AsyncTelegram2.h>
 #include "reporting/reporting.h"
-#include <time.h>
 
 #ifdef ESP32
 #include <WiFi.h>
