@@ -7,7 +7,6 @@
 
 #include "user_config.h"
 #include "reporting/reporting.h"
-#include "system/ntp.h"
 
 #ifdef ESP8266
     #include <FS.h>

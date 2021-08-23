@@ -49,7 +49,6 @@ void handleOptionsRequest(AsyncWebServerRequest *request) {
   response->addHeader(F("Allow"), F("GET, HEAD, POST, OPTIONS"));
   response->setContentLength(0);
 
-  response->addHeader(F("Date"), getFmtDate());
   request->send(response);
 }
 

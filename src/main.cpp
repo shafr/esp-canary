@@ -16,7 +16,6 @@
 #include "system/util.h"
 #include "simulation/tomcat.h"
 #include "reporting/reporting.h"
-#include "system/ntp.h"
 #include "system/ota.h"
 
 #if defined(ESP8266) && PING_ENABLED
