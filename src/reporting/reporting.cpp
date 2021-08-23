@@ -8,16 +8,6 @@ String attackerIpAddress = "";
 std::vector<String> messages;
 std::vector<Message> attackMessages;
 
-#if MQTT_ENABLED
-#include "reporting/mqtt.h"
-MqttNotifier mqttNotifier;
-#endif
-
-#if EMAIL_ENABLED
-#include "reporting/email.h"
-EmailNotifier emailNotifier;
-#endif
-
 #if TELEGRAM_ENABLED
 #include "reporting/telegram.h"
 TelegramNotifier telegramNotifier;
@@ -27,14 +17,6 @@ TelegramNotifier telegramNotifier;
 ConsoleLogger consoleLog;
 
 void Notifier::Init() {
-#if MQTT_ENABLED
-  mqttNotifier.Init();
-#endif
-
-#if EMAIL_ENABLED
-  emailNotifier.Init();
-#endif
-
 #if TELEGRAM_ENABLED
   telegramNotifier.Init();
 #endif
@@ -49,12 +31,6 @@ void Notifier::NotifyAttackOccurred(Message attackMessage) {
 void Notifier::sendNotify(String message) {
   consoleLog.Notify(message);
 
-#if MQTT_ENABLED
-  mqttNotifier.Notify(message);
-#endif
-#if EMAIL_ENABLED
-  emailNotifier.Notify(message);
-#endif
 #if TELEGRAM_ENABLED
   telegramNotifier.Notify(message);
 #endif
@@ -62,24 +38,12 @@ void Notifier::sendNotify(String message) {
 void Notifier::sendNotifyAttackOccurred(Message attackMessage) {
   consoleLog.NotifyAttackOccurred(attackMessage);
 
-#if MQTT_ENABLED
-  mqttNotifier.NotifyAttackOccurred(attackMessage);
-#endif
-#if EMAIL_ENABLED
-  emailNotifier.NotifyAttackOccurred(attackMessage);
-#endif
 #if TELEGRAM_ENABLED
   telegramNotifier.NotifyAttackOccurred(attackMessage);
 #endif
 }
 void Notifier::ResetAttackState() {
   consoleLog.ResetAttackState();
-#if MQTT_ENABLED
-  mqttNotifier.ResetAttackState();
-#endif
-#if EMAIL_ENABLED
-  emailNotifier.ResetAttackState();
-#endif
 #if TELEGRAM_ENABLED
   telegramNotifier.ResetAttackState();
 #endif

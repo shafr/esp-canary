@@ -56,23 +56,6 @@
 //============================= REPORTING-NOTIFICATIONS======================
 //===========================================================================
 
-// =========== MQTT ===========================
-#define MQTT_ENABLED false
-#define MQTT_HOST "192.168.1.1"
-#define MQTT_TOPIC "security/canary"
-#define MQTT_PORT 1883
-#define MQTT_CLIENT_ID "ESPCanary"
-#define MQTT_USER "Canary"
-#define MQTT_PASSWORD "NDCU74EJoh2N69GRhMfc"
-
-// =========== EMAIL ===========================
-#define EMAIL_ENABLED false
-#define SMTP_HOST "smtp.google.com"
-#define SMTP_PORT 465
-#define AUTHOR_EMAIL "sender@gmail.com"
-#define AUTHOR_PASSWORD "sender_password"
-#define EMAIL_TARGET_RECEPIENT "recepient@gmail.com"
-
 // =========== TELEGRAM=========================
 // Enable telegram notifications:
 #define TELEGRAM_ENABLED false
