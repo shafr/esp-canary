@@ -7,9 +7,13 @@
 
 ## What 
 
-This is simple `ESP-8266` or `ESP-32`-based canary application that acts as a server on local network and notifies you if it is being accessed or scanned.
+This is simple `ESP-8266` or `ESP-32`-based canary application that:
+* connects to a local Wifi:
+* acts as a Tomcat server 
+* listens to a different Ping type requests on local network
+* notifies you if it is being accessed or scanned via `Telegram`
 
-Ideally Nmap scan of services should return same results as real server. Any type of scan or connection attempt should notify you.
+Before [#27](https://github.com/shafr/esp-canary/pull/27) it had also MQTT / E-mail capabilities, but I found that unused on one side and uses to much memory & there were no sense of having canary that would store access attempts for later investigation. It has to be instant - so you can react as soon as something happens.
 
 ## Why
 My home network had grown exponentially with each added device: laptops, phones, nas, RPi's, smart-home devices. Even with correctly configured firewall - each of them poses a security threat. 
@@ -27,9 +31,6 @@ The question was not `if` but `when` this would happen.
 * Update `src/user_config.h` contents with your settings
 * Upload file system image using platformio - `PlatformIO: Upload file system image` or `pio run -t uploadfs`
 * Upload sketch using `PlatformIO: upload`
-
-### Home Assistant:
-![Lovelace](web-res/lovelace-image/lovelace.png)
 
 Configuration:
 [Home-Assistant configuration](web-res/ha-config.md)
